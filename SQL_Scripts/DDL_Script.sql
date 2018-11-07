@@ -5,7 +5,7 @@ CREATE TABLE Users
    );
    
 CREATE TABLE Service_center
-  (sc_id INTEGER,
+  (sc_id VARCHAR(50),
    name VARCHAR(50) NOT NULL,
    tel VARCHAR(10),
    addr VARCHAR(50),
@@ -14,14 +14,14 @@ CREATE TABLE Service_center
 
 CREATE TABLE Employees
   (eid INTEGER,
-   email VARCHAR(50) Unique,
+   email VARCHAR(50) UNIQUE,
    name VARCHAR(50),
    tel VARCHAR(10),
    addr VARCHAR(50),
    wage INTEGER,
    freq INTEGER,
    s_date DATE,
-   service_centre_id INTEGER,
+   service_centre_id VARCHAR(50),
   PRIMARY KEY (eid),
   FOREIGN KEY (email)
    REFERENCES Users,
@@ -72,13 +72,20 @@ CREATE TABLE Mechanic
    );
    
 CREATE TABLE Customers
-  (email VARCHAR(50),
+  (
+   id VARCHAR(50) UNIQUE,
+   email VARCHAR(50),
    name VARCHAR(50),
    tel VARCHAR(10),
    addr VARCHAR(50),
+   sc_id VARCHAR(50),
   PRIMARY KEY (email),
+  
   FOREIGN KEY (email)
-   REFERENCES Users
+   REFERENCES Users,   
+   
+   FOREIGN KEY (sc_id)
+   REFERENCES Service_center
    );
    
 
@@ -98,7 +105,7 @@ FOREIGN KEY(vehicle_id) REFERENCES Vehicles
 );
 
 CREATE TABLE Owns
-  (plate_no INTEGER,
+  (plate_no VARCHAR(50),
    last_rec_mileage INTEGER,
    last_repair_date DATE,
    purchase_date DATE,
@@ -212,16 +219,6 @@ CREATE TABLE Repair_uses
    REFERENCES Customers
    );
 
-CREATE TABLE Vehicle_service_center
-  (plate_no INTEGER NOT NULL,
-   sc_id INTEGER NOT NULL,
-  PRIMARY KEY (plate_no,sc_id),
-   FOREIGN KEY (plate_no)
-   REFERENCES Owns,
-   FOREIGN KEY (sc_id)
-   REFERENCES Service_center
-   );
-
 CREATE TABLE Parts
   (part_id INTEGER,
    name VARCHAR(50) NOT NULL,
@@ -271,7 +268,7 @@ CREATE TABLE Orders
 CREATE TABLE Service_center_order
   (service_center_order_id INTEGER,
    requester_service_center_inventory_id INTEGER NOT NULL,
-   service_center_provider_id INTEGER NOT NULL,
+   service_center_provider_id VARCHAR(50) NOT NULL,
    order_id INTEGER NOT NULL,
   PRIMARY KEY (service_center_order_id),
    FOREIGN KEY (requester_service_center_inventory_id)
@@ -298,7 +295,7 @@ CREATE TABLE Distributor_order
 
 CREATE TABLE Inventory
   (inventory_id INTEGER,
-   service_center_id INTEGER NOT NULL,
+   service_center_id VARCHAR(50) NOT NULL,
    parts_to_make_id INTEGER NOT NULL,
    current_quantity INTEGER,
    min_order_thold INTEGER,
