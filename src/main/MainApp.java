@@ -20,21 +20,21 @@ public class MainApp {
 //			
 //			connObject.insertQuery("INSERT INTO TRYING1 " + "VALUES ('Colombian', 101, 7.99, 0, 0)");
 			
-//			rs = connObject.selectQuery("SELECT COF_NAME, PRICE FROM TRYING1");
-//
-//			while (rs.next()) {
-//				String s = rs.getString("COF_NAME");
-//				float n = rs.getFloat("PRICE");
-//				System.out.println(s + "   " + n);
-//			}
+			rs = connObject.selectQuery("SELECT COF_NAME, PRICE FROM COFFEES1");
+
+			while (rs.next()) {
+				String s = rs.getString("COF_NAME");
+				float n = rs.getFloat("PRICE");
+				System.out.println(s + "   " + n);
+			}
 //			******************************************
-			Scanner s = new Scanner(System.in);
-			
-			System.out.println("Welcome!!");
-			System.out.println("Enter user name:");
-			String username = s.nextLine();
-			System.out.println("Enter password:");
-			String password = s.nextLine();
+//			Scanner s = new Scanner(System.in);
+//			
+//			System.out.println("Welcome!!");
+//			System.out.println("Enter user name:");
+//			String username = s.nextLine();
+//			System.out.println("Enter password:");
+//			String password = s.nextLine();
 			
 //			now do stuff
 			
