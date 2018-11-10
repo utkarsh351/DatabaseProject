@@ -1,27 +1,27 @@
 CREATE TABLE Users
-  (email VARCHAR(50),
-   password VARCHAR(20),
+  (email VARCHAR(300),
+   password VARCHAR(100),
   PRIMARY KEY (email)
    );
    
 CREATE TABLE Service_center
-  (sc_id VARCHAR(50),
-   name VARCHAR(50) NOT NULL,
-   tel VARCHAR(10),
-   addr VARCHAR(50),
+  (sc_id VARCHAR(300),
+   name VARCHAR(300) NOT NULL,
+   tel VARCHAR(100),
+   addr VARCHAR(300),
   PRIMARY KEY (sc_id)
    );
 
 CREATE TABLE Employees
   (eid INTEGER,
-   email VARCHAR(50) UNIQUE,
-   name VARCHAR(50),
-   tel VARCHAR(10),
-   addr VARCHAR(50),
+   email VARCHAR(300) UNIQUE,
+   name VARCHAR(300),
+   tel VARCHAR(100),
+   addr VARCHAR(300),
    wage INTEGER,
-   freq INTEGER,
+   freq VARCHAR(100),
    s_date DATE,
-   service_centre_id VARCHAR(50),
+   service_centre_id VARCHAR(300),
   PRIMARY KEY (eid),
   FOREIGN KEY (email)
    REFERENCES Users,
@@ -72,12 +72,12 @@ CREATE TABLE Mechanic
    );
    
 CREATE TABLE Customers
-  (id VARCHAR(50) UNIQUE,
-   email VARCHAR(50),
-   name VARCHAR(50),
-   tel VARCHAR(10),
-   addr VARCHAR(50),
-   sc_id VARCHAR(50),
+  (id VARCHAR(300) UNIQUE,
+   email VARCHAR(300),
+   name VARCHAR(300),
+   tel VARCHAR(100),
+   addr VARCHAR(300),
+   sc_id VARCHAR(300),
   PRIMARY KEY (email),
   FOREIGN KEY (email)
    REFERENCES Users,   
@@ -88,26 +88,26 @@ CREATE TABLE Customers
 
 CREATE TABLE Vehicles
   (vehicle_id INTEGER,
-   make VARCHAR(50),
-   model VARCHAR(10),
-   year VARCHAR(50),
+   make VARCHAR(300),
+   model VARCHAR(100),
+   year VARCHAR(300),
   PRIMARY KEY (vehicle_id)
    );
    
 CREATE TABLE Make
 (vehicle_id INTEGER,
-make VARCHAR(50),
+make VARCHAR(300),
 PRIMARY KEY (make),
 FOREIGN KEY(vehicle_id) REFERENCES Vehicles
 );
 
 CREATE TABLE Owns
-  (plate_no VARCHAR(50),
+  (plate_no VARCHAR(300),
    last_rec_mileage INTEGER,
    last_repair_date DATE,
    purchase_date DATE,
    vehicle_id INTEGER NOT NULL,
-   email VARCHAR(50) NOT NULL,
+   email VARCHAR(300) NOT NULL,
   PRIMARY KEY (plate_no),
     FOREIGN KEY (vehicle_id)
    REFERENCES Vehicles,
@@ -118,10 +118,10 @@ CREATE TABLE Owns
 CREATE TABLE Schedule
   (schedule_id INTEGER,
    start_time TIMESTAMP,
-   customer_plate_no VARCHAR(50) NOT NULL,
+   customer_plate_no VARCHAR(300) NOT NULL,
    mechanic_id INTEGER NOT NULL,
    end_time TIMESTAMP,
-   status VARCHAR(20),
+   status VARCHAR(100),
   PRIMARY KEY (schedule_id),
    FOREIGN KEY (customer_plate_no)
    REFERENCES Owns,
@@ -131,13 +131,13 @@ CREATE TABLE Schedule
    
 CREATE TABLE Maintenance
   (mid INTEGER,
-   maintenance_type VARCHAR(20),
+   maintenance_type VARCHAR(100),
   PRIMARY KEY (mid)
    );
    
 CREATE TABLE Repair
   (rid INTEGER,
-   name VARCHAR(20),
+   name VARCHAR(100),
    diagnostic_cost INTEGER,
   PRIMARY KEY (rid)
    );
@@ -164,14 +164,14 @@ CREATE TABLE Repair_schedule
    
 CREATE TABLE Charge_type
   (charge_type_id INTEGER,
-   charge_type VARCHAR(20),
+   charge_type VARCHAR(100),
    rate INTEGER,
   PRIMARY KEY (charge_type_id)
    );
    
 CREATE TABLE Service
   (sid INTEGER,
-   name VARCHAR(20),
+   name VARCHAR(100),
    charge_type_id INTEGER NOT NULL,
    hours_to_complete INTEGER,
   PRIMARY KEY (sid),
@@ -203,28 +203,16 @@ CREATE TABLE Repair_uses
    REFERENCES Repair
    );
    
-  CREATE TABLE Invoice
-  (plate_no VARCHAR(50) NOT NULL,
-   schedule_id INTEGER NOT NULL,
-   customer_email VARCHAR(50),
-  PRIMARY KEY (plate_no,schedule_id),
-   FOREIGN KEY (plate_no)
-   REFERENCES Owns,
-   FOREIGN KEY (schedule_id)
-   REFERENCES Schedule,
-   FOREIGN KEY (customer_email)
-   REFERENCES Customers
-   );
 
 CREATE TABLE Parts
   (part_id INTEGER,
-   name VARCHAR(50) NOT NULL,
-	PRIMARY KEY (part_id)
+   name VARCHAR(300) NOT NULL,
+  PRIMARY KEY (part_id)
    );
    
 CREATE TABLE Parts_to_make
 (parts_to_make_id INTEGER,
-  make VARCHAR(50),
+  make VARCHAR(300),
   part_id INTEGER,
   unit_price FLOAT NOT NULL,
   warranty Integer,
@@ -236,7 +224,7 @@ CREATE TABLE Parts_to_make
 
 CREATE TABLE Distributor
   (distributor_id INTEGER,
-   dname VARCHAR(50) NOT NULL,
+   dname VARCHAR(300) NOT NULL,
   PRIMARY KEY (distributor_id)
    );
    
@@ -263,7 +251,7 @@ CREATE TABLE Orders
 
 CREATE TABLE Inventory
   (inventory_id INTEGER,
-   service_center_id VARCHAR(50) NOT NULL,
+   service_center_id VARCHAR(300) NOT NULL,
    parts_to_make_id INTEGER NOT NULL,
    current_quantity INTEGER,
    min_order_thold INTEGER,
@@ -302,7 +290,7 @@ CREATE TABLE Notification
    CREATE TABLE Service_center_order
   (service_center_order_id INTEGER,
    requester_center_inventory_id INTEGER NOT NULL,
-   service_center_provider_id VARCHAR(50) NOT NULL,
+   service_center_provider_id VARCHAR(300) NOT NULL,
    order_id INTEGER NOT NULL,
   PRIMARY KEY (service_center_order_id),
    FOREIGN KEY (requester_center_inventory_id)
@@ -327,8 +315,15 @@ CREATE TABLE Distributor_order
    REFERENCES Orders
    );
    
---   If anything you update put a ---- line and then write here so that it can be 
--- changed in the database as well. 
--- don't just make the change in above tables. Always write separately
-
-   
+  CREATE TABLE Invoice
+  (plate_no VARCHAR(300) NOT NULL,
+   schedule_id INTEGER NOT NULL,
+   customer_email VARCHAR(300),
+  PRIMARY KEY (plate_no,schedule_id),
+   FOREIGN KEY (plate_no)
+   REFERENCES Owns,
+   FOREIGN KEY (schedule_id)
+   REFERENCES Schedule,
+   FOREIGN KEY (customer_email)
+   REFERENCES Customers
+   );
