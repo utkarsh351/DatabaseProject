@@ -20,7 +20,9 @@ public class MainApp {
 //			
 //			connObject.insertQuery("INSERT INTO TRYING1 " + "VALUES ('Colombian', 101, 7.99, 0, 0)");
 			
-			rs = connObject.selectQuery("SELECT COF_NAME, PRICE FROM COFFEES1");
+//			connObject.insertQuery("INSERT INTO TRYING1 " + "VALUES ('1', 1, 7.99, 0, 0)");
+			
+			rs = connObject.selectQuery("SELECT COF_NAME, PRICE FROM TRYING1");
 
 			while (rs.next()) {
 				String s = rs.getString("COF_NAME");

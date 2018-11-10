@@ -1,4 +1,4 @@
-#Intering in Service Center
+--#Intering in Service Center
 INSERT into Service_center
 Values(
 	"S0001",
@@ -7,7 +7,7 @@ Values(
 	"Address: 437 Fayetteville St., Raleigh, NC 27601"
 );
 
-#Inserting in Manager
+--#Inserting in Manager
 INSERT into Users
 Values(
 	"lacohen@acme.com",
@@ -32,7 +32,7 @@ Values(
 	950932130
 );
 
-#Inserting into Customer and their Vehicles [eg for Ethan Hunt]
+--#Inserting into Customer and their Vehicles [eg for Ethan Hunt]
 INSERT into Users
 Values(
 	"ethanhunt@gmail.com",
