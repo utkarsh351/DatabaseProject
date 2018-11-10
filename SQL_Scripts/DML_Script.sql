@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
---#Intering in Service Center
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 INSERT into Service_center
 Values(
 	"S0001",
@@ -82,7 +78,6 @@ Values(
 	"11000",
 	"month",
 	"2016-08-15",
-<<<<<<< HEAD
 	"S0001"
 );
 INSERT into Employees
@@ -95,27 +90,10 @@ Values(
 	"8000",
 	"month",
 	"2017-12-04",
-=======
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 	"S0001"
 );
 INSERT into Employees
 Values(
-<<<<<<< HEAD
-=======
-	634622236,
-	"wimartin@acme.com",
-	"Willis Martin",
-	"213-988-2011",
-	"465 Aviation Way, Raleigh, NC 27601",
-	"8000",
-	"month",
-	"2017-12-04",
-	"S0001"
-);
-INSERT into Employees
-Values(
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 	557279280,
 	"jagloss@acme.com",
 	"Jacob Gloss",
@@ -153,19 +131,11 @@ Values(
 INSERT into Employees
 Values(
 	557279282,
-<<<<<<< HEAD
 	"rorichmond@acme.com",
 	"Roland Richmond",
 	"829843373",
 	"1951 Little Acres Lane, Raleigh, NC 27513",
 	"30",
-=======
-	"erfowler@acme.com",
-	"Roland Richmond",
-	"829843373",
-	"1951 Little Acres Lane, Raleigh, NC 27513",
-	"35",
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 	"hour",
 	"2017-12-28",
 	"S0001"
@@ -194,10 +164,7 @@ Values(
 	"2017-04-15",
 	"S0002"
 );
-<<<<<<< HEAD
 
-=======
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 INSERT into Employees
 Values(
 	911639633,
@@ -234,10 +201,7 @@ Values(
 	"2016-07-06",
 	"S0002"
 );
-<<<<<<< HEAD
 
-=======
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 INSERT into Employees
 Values(
 	310773348,
@@ -316,11 +280,7 @@ Values(
 );
 INSERT into Customers
 Values(
-<<<<<<< HEAD
 	"1002",
-=======
-	"1002"
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 	"jarvis@gmail.com",
 	"Robert Downey Jr.",
 	"9989877791",
@@ -329,11 +289,7 @@ Values(
 );
 INSERT into Customers
 Values(
-<<<<<<< HEAD
 	"1003",
-=======
-	"1003"
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 	"lovestory@gmail.com",
 	"Taylor Swift",
 	"8179827199",
@@ -342,11 +298,7 @@ Values(
 );
 INSERT into Customers
 Values(
-<<<<<<< HEAD
 	"1004",
-=======
-	"1004"
->>>>>>> 9eeb62aefe0883ff1942d73f9fc8a577955de60b
 	"venus@gmail.com",
 	"Serena Williams",
 	"8714791879",
