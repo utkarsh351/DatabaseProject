@@ -72,18 +72,15 @@ CREATE TABLE Mechanic
    );
    
 CREATE TABLE Customers
-  (
-   id VARCHAR(50) UNIQUE,
+  (id VARCHAR(50) UNIQUE,
    email VARCHAR(50),
    name VARCHAR(50),
    tel VARCHAR(10),
    addr VARCHAR(50),
    sc_id VARCHAR(50),
   PRIMARY KEY (email),
-  
   FOREIGN KEY (email)
    REFERENCES Users,   
-   
    FOREIGN KEY (sc_id)
    REFERENCES Service_center
    );
@@ -121,7 +118,7 @@ CREATE TABLE Owns
 CREATE TABLE Schedule
   (schedule_id INTEGER,
    start_time TIMESTAMP,
-   customer_plate_no INTEGER NOT NULL,
+   customer_plate_no VARCHAR(50) NOT NULL,
    mechanic_id INTEGER NOT NULL,
    end_time TIMESTAMP,
    status VARCHAR(20),
@@ -207,7 +204,7 @@ CREATE TABLE Repair_uses
    );
    
   CREATE TABLE Invoice
-  (plate_no INTEGER NOT NULL,
+  (plate_no VARCHAR(50) NOT NULL,
    schedule_id INTEGER NOT NULL,
    customer_email VARCHAR(50),
   PRIMARY KEY (plate_no,schedule_id),
@@ -222,13 +219,11 @@ CREATE TABLE Repair_uses
 CREATE TABLE Parts
   (part_id INTEGER,
    name VARCHAR(50) NOT NULL,
-   
-  PRIMARY KEY (part_id)
+	PRIMARY KEY (part_id)
    );
    
 CREATE TABLE Parts_to_make
-(
-  parts_to_make_id INTEGER,
+(parts_to_make_id INTEGER,
   make VARCHAR(50),
   part_id INTEGER,
   unit_price FLOAT NOT NULL,
@@ -238,6 +233,7 @@ CREATE TABLE Parts_to_make
   FOREIGN KEY (make) REFERENCES Make,
   FOREIGN KEY (part_id) REFERENCES Parts
 );
+
 CREATE TABLE Distributor
   (distributor_id INTEGER,
    dname VARCHAR(50) NOT NULL,
@@ -264,34 +260,6 @@ CREATE TABLE Orders
   PRIMARY KEY (order_id),
   CHECK (status IN ('pending','complete','delayed'))
    );
-   
-CREATE TABLE Service_center_order
-  (service_center_order_id INTEGER,
-   requester_service_center_inventory_id INTEGER NOT NULL,
-   service_center_provider_id VARCHAR(50) NOT NULL,
-   order_id INTEGER NOT NULL,
-  PRIMARY KEY (service_center_order_id),
-   FOREIGN KEY (requester_service_center_inventory_id)
-   REFERENCES Inventory,
-   FOREIGN KEY (service_center_provider_id)
-   REFERENCES Service_center,
-   FOREIGN KEY (order_id)
-   REFERENCES Orders
-   );
-   
-CREATE TABLE Distributor_order
-  (distributor_order_id INTEGER,
-   requester_service_center_inventory_id INTEGER NOT NULL,
-   distributor_id INTEGER NOT NULL,
-   order_id INTEGER NOT NULL,
-  PRIMARY KEY (distributor_order_id),
-   FOREIGN KEY (requester_service_center_inventory_id)
-   REFERENCES Inventory,
-   FOREIGN KEY (distributor_id)
-   REFERENCES Distributor,
-   FOREIGN KEY (order_id)
-   REFERENCES Orders
-   );
 
 CREATE TABLE Inventory
   (inventory_id INTEGER,
@@ -300,8 +268,7 @@ CREATE TABLE Inventory
    current_quantity INTEGER,
    min_order_thold INTEGER,
    min_quant_thold INTEGER,
-   
-  PRIMARY KEY (inventory_id),
+   PRIMARY KEY (inventory_id),
    FOREIGN KEY (service_center_id)
    REFERENCES Service_center,
    FOREIGN KEY (parts_to_make_id)
@@ -331,3 +298,37 @@ CREATE TABLE Notification
    FOREIGN KEY (order_id)
    REFERENCES Orders
    );
+
+   CREATE TABLE Service_center_order
+  (service_center_order_id INTEGER,
+   requester_center_inventory_id INTEGER NOT NULL,
+   service_center_provider_id VARCHAR(50) NOT NULL,
+   order_id INTEGER NOT NULL,
+  PRIMARY KEY (service_center_order_id),
+   FOREIGN KEY (requester_center_inventory_id)
+   REFERENCES Inventory,
+   FOREIGN KEY (service_center_provider_id)
+   REFERENCES Service_center,
+   FOREIGN KEY (order_id)
+   REFERENCES Orders
+   );
+   
+CREATE TABLE Distributor_order
+  (distributor_order_id INTEGER,
+   requester_center_inventory_id INTEGER NOT NULL,
+   distributor_id INTEGER NOT NULL,
+   order_id INTEGER NOT NULL,
+  PRIMARY KEY (distributor_order_id),
+   FOREIGN KEY (requester_center_inventory_id)
+   REFERENCES Inventory,
+   FOREIGN KEY (distributor_id)
+   REFERENCES Distributor,
+   FOREIGN KEY (order_id)
+   REFERENCES Orders
+   );
+   
+--   If anything you update put a ---- line and then write here so that it can be 
+-- changed in the database as well. 
+-- don't just make the change in above tables. Always write separately
+
+   
