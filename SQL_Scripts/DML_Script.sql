@@ -324,54 +324,62 @@ Values(
 	'S0002'
 );
 
+INSERT into Make
+Values(
+    'Toyota'
+);
+
+INSERT into Make
+Values(
+    'Honda'
+);
+
+INSERT into Make
+Values(
+    'Nissan'
+);
+
 INSERT into Vehicles
 Values(
 	1,
    'Honda',
-   'Civic',
-   '2009'
+   'Civic'
 );
 INSERT into Vehicles
 Values(
 	2,
 	'Toyota',
-	'Prius',
-	'2007'
+	'Prius'
 );
 INSERT into Vehicles
 Values(
 	3,
 	'Nissan',
-	'Altima',
-	'2001'
+	'Altima'
 );
 INSERT into Vehicles
 Values(
 	4,
 	'Honda',
-	'Accord',
-	'2015'
+	'Accord'
 );
 INSERT into Vehicles
 Values(
 	5,
 	'Nissan',
-	'Rogue',
-	'2014'
+	'Rogue'
 );
 INSERT into Vehicles
 Values(
 	6,
 	'Honda',
-	'Accord',
-	'2009'
+	'Accord'
 );
 INSERT into Vehicles
 Values(
 	7,
 	'Toyota',
-	'Prius',
-	'2013'
+	'Prius'
 );
 
 INSERT into Owns
@@ -381,7 +389,8 @@ Values(
   	Date '2018-9-10',
     Date '2009-12-24',
     1,
-    'ethanhunt@gmail.com'
+    'ethanhunt@gmail.com',
+    '2009'
 );
 INSERT into Owns
 Values(
@@ -390,7 +399,8 @@ Values(
   	Date '2018-8-6',
     Date '2011-01-02',
     2,
-    'ethanhunt@gmail.com'
+    'ethanhunt@gmail.com',
+    '2007'
 );
 INSERT into Owns
 Values(
@@ -399,7 +409,8 @@ Values(
   	Date '2018-02-11',
     Date '2002-09-07',
     3,
-    'jarvis@gmail.com'
+    'jarvis@gmail.com',
+    '2001'
 );
 INSERT into Owns
 Values(
@@ -408,7 +419,8 @@ Values(
   	NULL,
     Date '2015-12-09',
     4,
-    'lovestory@gmail.com'
+    'lovestory@gmail.com',
+    '2015'
 );
 INSERT into Owns
 Values(
@@ -417,7 +429,8 @@ Values(
   	Date '2018-02-11',
     Date '2016-05-11',
     5,
-    'lovestory@gmail.com'
+    'lovestory@gmail.com',
+    '2014'
 );
 INSERT into Owns
 Values(
@@ -426,7 +439,8 @@ Values(
   	Date '2017-09-01',
     Date '2010-04-14',
     6,
-    'venus@gmail.com'
+    'venus@gmail.com',
+    '2009'
 );
 INSERT into Owns
 Values(
@@ -435,7 +449,8 @@ Values(
   	Date '2016-11-11',
     Date '2013-03-01',
     7,
-    'venus@gmail.com'
+    'venus@gmail.com',
+    '2013'
 );
 
 INSERT into Parts
@@ -532,24 +547,6 @@ INSERT into Parts
 Values(
     19,
     'Wiper Fluid'
-);
-
-INSERT into Make
-Values(
-    1,
-    'Toyota'
-);
-
-INSERT into Make
-Values(
-    2,
-    'Honda'
-);
-
-INSERT into Make
-Values(
-    3,
-    'Nissan'
 );
 
 INSERT into Parts_to_make
@@ -1687,7 +1684,7 @@ Values(
 );
 INSERT into Supplies
 Values(
-  94,
+  95,
   3,
   38,
   2
@@ -1695,135 +1692,2237 @@ Values(
 
 INSERT into Supplies
 Values(
-  95,
+  96,
   3,
   39,
   2
 );
 INSERT into Supplies
 Values(
-  96,
+  97,
   NULL,
   40,
   2
 );
 INSERT into Supplies
 Values(
-  97,
+  98,
   NULL,
   41,
   2
 );
 INSERT into Supplies
 Values(
-  98,
+  99,
   4,
   42,
   2
 );
 INSERT into Supplies
 Values(
-  99,
+  100,
   5,
   43,
   2
 );
 INSERT into Supplies
 Values(
-  100,
+  101,
   NULL,
   44,
   2
 );
 INSERT into Supplies
 Values(
-  101,
+  102,
   3,
   45,
   2
 );
 INSERT into Supplies
 Values(
-  102,
+  103,
   4,
   46,
   2
 );
 INSERT into Supplies
 Values(
-  103,
+  104,
   2,
   47,
   2
 );
 INSERT into Supplies
 Values(
-  104,
+  105,
   NULL,
   48,
   2
 );
 INSERT into Supplies
 Values(
-  105,
+  106,
   NULL,
   49,
   2
 );
 INSERT into Supplies
 Values(
-  106,
+  107,
   NULL,
   50,
   2
 );
 INSERT into Supplies
 Values(
-  107,
+  108,
   NULL,
   51,
   2
 );
 INSERT into Supplies
 Values(
-  108,
+  109,
   NULL,
   52,
   2
 );
 INSERT into Supplies
 Values(
-  109,
+  110,
   NULL,
   53,
   2
 );
 INSERT into Supplies
 Values(
-  110,
+  111,
   5,
   54,
   2
 );
 INSERT into Supplies
 Values(
-  111,
+  112,
   3,
   55,
   2
 );
 INSERT into Supplies
 Values(
-  112,
+  113,
   NULL,
   56,
   2
 );
 INSERT into Supplies
 Values(
-  113,
+  114,
   3,
   57,
   2
 );
 
+INSERT into Inventory
+Values(
+  1,
+  'S0001',
+  1,
+  13,
+  2,
+  5
+);
+INSERT into Inventory
+Values(
+  2,
+  'S0001',
+  2,
+  18,
+  5,
+  7
+);
+INSERT into Inventory
+Values(
+  3,
+  'S0001',
+  3,
+  10,
+  2,
+  5
+);
+INSERT into Inventory
+Values(
+  4,
+  'S0001',
+  4,
+  4,
+  4,
+  6
+);
+INSERT into Inventory
+Values(
+  5,
+  'S0001',
+  5,
+  18,
+  4,
+  3
+);
+INSERT into Inventory
+Values(
+  6,
+  'S0001',
+  6,
+  12,
+  2,
+  5
+);
+INSERT into Inventory
+Values(
+  7,
+  'S0001',
+  7,
+  11,
+  1,
+  5
+);
+INSERT into Inventory
+Values(
+  8,
+  'S0001',
+  8,
+  13,
+  2,
+  4
+);
+INSERT into Inventory
+Values(
+  9,
+  'S0001',
+  9,
+  15,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  10,
+  'S0001',
+  10,
+  5,
+  5,
+  5
+);
+INSERT into Inventory
+Values(
+  11,
+  'S0001',
+  11,
+  8,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  12,
+  'S0001',
+  12,
+  2,
+  1,
+  8
+);
+INSERT into Inventory
+Values(
+  13,
+  'S0001',
+  13,
+  1,
+  1,
+  4
+);
+INSERT into Inventory
+Values(
+  14,
+  'S0001',
+  14,
+  15,
+  4,
+  2
+);
+INSERT into Inventory
+Values(
+  15,
+  'S0001',
+  15,
+  2,
+  1,
+  5
+);
+INSERT into Inventory
+Values(
+  16,
+  'S0001',
+  16,
+  15,
+  4,
+  5
+);
+INSERT into Inventory
+Values(
+  17,
+  'S0001',
+  17,
+  3,
+  1,
+  5
+);
+INSERT into Inventory
+Values(
+  18,
+  'S0001',
+  18,
+  12,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  19,
+  'S0001',
+  19,
+  12,
+  7,
+  5
+);
+
+INSERT into Inventory
+Values(
+  20,
+  'S0001',
+  20,
+  43,
+  20,
+  5
+);
+INSERT into Inventory
+Values(
+  21,
+  'S0001',
+  21,
+  8,
+  5,
+  7
+);
+INSERT into Inventory
+Values(
+  22,
+  'S0001',
+  22,
+  20,
+  20,
+  5
+);
+INSERT into Inventory
+Values(
+  23,
+  'S0001',
+  23,
+  14,
+  4,
+  6
+);
+INSERT into Inventory
+Values(
+  24,
+  'S0001',
+  24,
+  8,
+  4,
+  3
+);
+INSERT into Inventory
+Values(
+  25,
+  'S0001',
+  25,
+  22,
+  20,
+  5
+);
+INSERT into Inventory
+Values(
+  26,
+  'S0001',
+  26,
+  31,
+  10,
+  5
+);
+INSERT into Inventory
+Values(
+  27,
+  'S0001',
+  27,
+  23,
+  23,
+  4
+);
+INSERT into Inventory
+Values(
+  28,
+  'S0001',
+  28,
+  35,
+  30,
+  5
+);
+INSERT into Inventory
+Values(
+  29,
+  'S0001',
+  29,
+  15,
+  5,
+  5
+);
+INSERT into Inventory
+Values(
+  30,
+  'S0001',
+  30,
+  18,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  31,
+  'S0001',
+  31,
+  12,
+  10,
+  8
+);
+INSERT into Inventory
+Values(
+  32,
+  'S0001',
+  32,
+  11,
+  4,
+  4
+);
+INSERT into Inventory
+Values(
+  33,
+  'S0001',
+  33,
+  55,
+  48,
+  2
+);
+INSERT into Inventory
+Values(
+  34,
+  'S0001',
+  34,
+  12,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  35,
+  'S0001',
+  35,
+  42,
+  42,
+  5
+);
+INSERT into Inventory
+Values(
+  36,
+  'S0001',
+  36,
+  13,
+  11,
+  5
+);
+INSERT into Inventory
+Values(
+  37,
+  'S0001',
+  37,
+  12,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  38,
+  'S0001',
+  38,
+  12,
+  5,
+  5
+);
+
+INSERT into Inventory
+Values(
+  39,
+  'S0001',
+  39,
+  33,
+  20,
+  5
+);
+INSERT into Inventory
+Values(
+  40,
+  'S0001',
+  40,
+  38,
+  5,
+  7
+);
+INSERT into Inventory
+Values(
+  41,
+  'S0001',
+  41,
+  30,
+  20,
+  5
+);
+INSERT into Inventory
+Values(
+  42,
+  'S0001',
+  42,
+  34,
+  4,
+  6
+);
+INSERT into Inventory
+Values(
+  43,
+  'S0001',
+  43,
+  38,
+  4,
+  3
+);
+INSERT into Inventory
+Values(
+  44,
+  'S0001',
+  44,
+  32,
+  20,
+  5
+);
+INSERT into Inventory
+Values(
+  45,
+  'S0001',
+  45,
+  31,
+  10,
+  5
+);
+INSERT into Inventory
+Values(
+  46,
+  'S0001',
+  46,
+  33,
+  23,
+  4
+);
+INSERT into Inventory
+Values(
+  47,
+  'S0001',
+  47,
+  35,
+  30,
+  5
+);
+INSERT into Inventory
+Values(
+  48,
+  'S0001',
+  48,
+  35,
+  5,
+  5
+);
+INSERT into Inventory
+Values(
+  49,
+  'S0001',
+  49,
+  38,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  50,
+  'S0001',
+  50,
+  32,
+  10,
+  8
+);
+INSERT into Inventory
+Values(
+  51,
+  'S0001',
+  51,
+  31,
+  4,
+  4
+);
+INSERT into Inventory
+Values(
+  52,
+  'S0001',
+  52,
+  35,
+  18,
+  2
+);
+INSERT into Inventory
+Values(
+  53,
+  'S0001',
+  53,
+  32,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  54,
+  'S0001',
+  54,
+  35,
+  12,
+  5
+);
+INSERT into Inventory
+Values(
+  55,
+  'S0001',
+  55,
+  33,
+  11,
+  5
+);
+INSERT into Inventory
+Values(
+  56,
+  'S0001',
+  56,
+  32,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  57,
+  'S0001',
+  57,
+  12,
+  5,
+  5
+);
+
+INSERT into Inventory
+Values(
+  58,
+  'S0002',
+  1,
+  26,
+  5,
+  6
+);
+INSERT into Inventory
+Values(
+  59,
+  'S0002',
+  2,
+  27,
+  6,
+  10
+);
+INSERT into Inventory
+Values(
+  60,
+  'S0002',
+  3,
+  24,
+  2,
+  3
+);
+INSERT into Inventory
+Values(
+  61,
+  'S0002',
+  4,
+  25,
+  3,
+  3
+);
+INSERT into Inventory
+Values(
+  62,
+  'S0002',
+  5,
+  20,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  63,
+  'S0002',
+  6,
+  22,
+  2,
+  6
+);
+INSERT into Inventory
+Values(
+  64,
+  'S0002',
+  7,
+  29,
+  4,
+  5
+);
+INSERT into Inventory
+Values(
+  65,
+  'S0002',
+  8,
+  21,
+  2,
+  4
+);
+INSERT into Inventory
+Values(
+  66,
+  'S0002',
+  9,
+  20,
+  3,
+  4
+);
+INSERT into Inventory
+Values(
+  67,
+  'S0002',
+  10,
+  26,
+  20,
+  5
+);
+INSERT into Inventory
+Values(
+  68,
+  'S0002',
+  11,
+  20,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  69,
+  'S0002',
+  12,
+  28,
+  6,
+  3
+);
+INSERT into Inventory
+Values(
+  70,
+  'S0002',
+  13,
+  21,
+  4,
+  5
+);
+INSERT into Inventory
+Values(
+  71,
+  'S0002',
+  14,
+  21,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  72,
+  'S0002',
+  15,
+  27,
+  6,
+  4
+);
+INSERT into Inventory
+Values(
+  73,
+  'S0002',
+  16,
+  20,
+  2,
+  4
+);
+INSERT into Inventory
+Values(
+  74,
+  'S0002',
+  17,
+  25,
+  6,
+  6
+);
+INSERT into Inventory
+Values(
+  75,
+  'S0002',
+  18,
+  11,
+  3,
+  6
+);
+INSERT into Inventory
+Values(
+  76,
+  'S0002',
+  19,
+  16,
+  13,
+  5
+);
+
+INSERT into Inventory
+Values(
+  77,
+  'S0002',
+  20,
+  46,
+  35,
+  6
+);
+INSERT into Inventory
+Values(
+  78,
+  'S0002',
+  21,
+  7,
+  6,
+  10
+);
+INSERT into Inventory
+Values(
+  79,
+  'S0002',
+  22,
+  64,
+  52,
+  3
+);
+INSERT into Inventory
+Values(
+  80,
+  'S0002',
+  23,
+  15,
+  3,
+  3
+);
+INSERT into Inventory
+Values(
+  81,
+  'S0002',
+  24,
+  20,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  82,
+  'S0002',
+  25,
+  42,
+  42,
+  6
+);
+INSERT into Inventory
+Values(
+  83,
+  'S0002',
+  26,
+  29,
+  24,
+  5
+);
+INSERT into Inventory
+Values(
+  84,
+  'S0002',
+  27,
+  21,
+  12,
+  4
+);
+INSERT into Inventory
+Values(
+  85,
+  'S0002',
+  28,
+  30,
+  23,
+  4
+);
+INSERT into Inventory
+Values(
+  86,
+  'S0002',
+  29,
+  26,
+  10,
+  5
+);
+INSERT into Inventory
+Values(
+  87,
+  'S0002',
+  30,
+  70,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  88,
+  'S0002',
+  31,
+  8,
+  6,
+  3
+);
+INSERT into Inventory
+Values(
+  89,
+  'S0002',
+  32,
+  31,
+  24,
+  5
+);
+INSERT into Inventory
+Values(
+  90,
+  'S0002',
+  33,
+  81,
+  73,
+  5
+);
+INSERT into Inventory
+Values(
+  91,
+  'S0002',
+  34,
+  17,
+  6,
+  4
+);
+INSERT into Inventory
+Values(
+  92,
+  'S0002',
+  35,
+  50,
+  32,
+  4
+);
+INSERT into Inventory
+Values(
+  93,
+  'S0002',
+  36,
+  15,
+  6,
+  6
+);
+INSERT into Inventory
+Values(
+  94,
+  'S0002',
+  37,
+  11,
+  3,
+  6
+);
+INSERT into Inventory
+Values(
+  95,
+  'S0002',
+  38,
+  16,
+  13,
+  5
+);
+
+INSERT into Inventory
+Values(
+  96,
+  'S0002',
+  39,
+  16,
+  5,
+  6
+);
+INSERT into Inventory
+Values(
+  97,
+  'S0002',
+  40,
+  17,
+  6,
+  10
+);
+INSERT into Inventory
+Values(
+  98,
+  'S0002',
+  41,
+  14,
+  5,
+  3
+);
+INSERT into Inventory
+Values(
+  99,
+  'S0002',
+  42,
+  15,
+  3,
+  3
+);
+INSERT into Inventory
+Values(
+  100,
+  'S0002',
+  43,
+  10,
+  3,
+  5
+);
+INSERT into Inventory
+Values(
+  101,
+  'S0002',
+  44,
+  12,
+  4,
+  6
+);
+INSERT into Inventory
+Values(
+  102,
+  'S0002',
+  45,
+  19,
+  4,
+  5
+);
+INSERT into Inventory
+Values(
+  103,
+  'S0002',
+  46,
+  11,
+  2,
+  4
+);
+INSERT into Inventory
+Values(
+  104,
+  'S0002',
+  47,
+  10,
+  3,
+  4
+);
+INSERT into Inventory
+Values(
+  105,
+  'S0002',
+  48,
+  16,
+  10,
+  5
+);
+INSERT into Inventory
+Values(
+  106,
+  'S0002',
+  49,
+  10,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  107,
+  'S0002',
+  50,
+  18,
+  6,
+  3
+);
+INSERT into Inventory
+Values(
+  108,
+  'S0002',
+  51,
+  11,
+  4,
+  5
+);
+INSERT into Inventory
+Values(
+  109,
+  'S0002',
+  52,
+  11,
+  7,
+  5
+);
+INSERT into Inventory
+Values(
+  110,
+  'S0002',
+  53,
+  17,
+  6,
+  4
+);
+INSERT into Inventory
+Values(
+  111,
+  'S0002',
+  54,
+  10,
+  2,
+  4
+);
+INSERT into Inventory
+Values(
+  112,
+  'S0002',
+  55,
+  15,
+  6,
+  6
+);
+INSERT into Inventory
+Values(
+  113,
+  'S0002',
+  56,
+  11,
+  3,
+  6
+);
+INSERT into Inventory
+Values(
+  114,
+  'S0002',
+  57,
+  16,
+  13,
+  5
+);
+---------------------------------------
+INSERT into Charge_type
+Values(
+   'Low',
+   '50'
+   );
+
+INSERT into Charge_type
+Values(
+   'High',
+   '65'
+   );
+
+INSERT into Service
+Values(
+	1,
+   'Air filter change',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	2,
+   'Battery replacement',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	3,
+   'Brake check',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	4,
+   'Brake repair',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	5,
+   'Camshaft replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	6,
+   'Catalytic convertor replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	7,
+   'Coolant recycle',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	8,
+   'Drive belt replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	9,
+   'Engine oil change',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	10,
+   'Gearbox repair',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	11,
+   'Headlights replacement',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	12,
+   'Oil filter change',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	13,
+   'Piston replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	14,
+   'Power steering check',
+   'Low',
+   0.25
+);
+INSERT into Service
+Values(
+	15,
+   'Spark plugs replacement',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	16,
+   'Suspension check',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	17,
+   'Tail lights replacement',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	18,
+   'Turn lights replacement',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	19,
+   'Valve replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	20,
+   'Wheel alignment',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	21,
+   'Wiper check',
+   'Low',
+   0.25
+);
+
+INSERT into Involves
+Values  (1,
+   1,
+   1,
+   1,
+   1
+   );
+
+INSERT into Involves
+Values  (2,
+   1,
+   1,
+   2,
+   1
+   );
+INSERT into Involves
+Values  (3,
+   1,
+   1,
+   3,
+   1
+   );
+INSERT into Involves
+Values  (4,
+   1,
+   1,
+   4,
+   2
+   );
+INSERT into Involves
+Values  (5,
+   1,
+   1,
+   5,
+   1
+   );
+INSERT into Involves
+Values  (6,
+   1,
+   1,
+   6,
+   3
+   );
+
+INSERT into Involves
+Values  (7,
+   2,
+   3,
+   1,
+   1
+   );
+
+INSERT into Involves
+Values  (8,
+   2,
+   3,
+   2,
+   1
+   );
+INSERT into Involves
+Values  (9,
+   2,
+   3,
+   3,
+   1
+   );
+INSERT into Involves
+Values  (10,
+   2,
+   3,
+   4,
+   1
+   );
+INSERT into Involves
+Values  (11,
+   2,
+   3,
+   5,
+   1
+   );
+INSERT into Involves
+Values  (12,
+   2,
+   3,
+   6,
+   2
+   );
+INSERT into Involves
+Values  (13,
+   3,
+   4,
+   1,
+   1
+   );
+INSERT into Involves
+Values  (14,
+   3,
+   4,
+   2,
+   1
+   );
+INSERT into Involves
+Values  (15,
+   3,
+   4,
+   3,
+   1
+   );
+INSERT into Involves
+Values  (16,
+   3,
+   4,
+   4,
+   1
+   );
+INSERT into Involves
+Values  (17,
+   3,
+   4,
+   5,
+   1
+   );
+INSERT into Involves
+Values  (18,
+   3,
+   4,
+   6,
+   2
+   );
+INSERT into Involves
+Values  (19,
+   4,
+   5,
+   1,
+   4
+   );
+INSERT into Involves
+ Values (20,
+   4,
+   5,
+   2,
+   4
+   );
+INSERT into Involves
+Values  (21,
+   4,
+   5,
+   3,
+   4
+   );
+INSERT into Involves
+Values  (22,
+   4,
+   5,
+   4,
+   4
+   );
+INSERT into Involves
+Values  (23,
+   4,
+   5,
+   5,
+   4
+   );
+INSERT into Involves 
+Values (24,
+   4,
+   5,
+   6,
+   4
+   );
+INSERT into Involves 
+Values (25,
+   5,
+   6,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (26,
+   5,
+   6,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (27,
+   5,
+   6,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (28,
+   5,
+   6,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (29,
+   5,
+   6,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (30,
+   5,
+   6,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (31,
+   6,
+   7,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (32,
+   6,
+   7,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (33,
+   6,
+   7,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (34,
+   6,
+   7,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (35,
+   6,
+   7,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (36,
+   6,
+   7,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (37,
+   7,
+   8,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (38,
+   7,
+   8,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (39,
+   7,
+   8,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (40,
+   7,
+   8,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (41,
+   7,
+   8,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (42,
+   7,
+   8,
+   6,
+   2
+   );
+
+INSERT into Involves 
+Values (43,
+   8,
+   9,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (44,
+   8,
+   9,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (45,
+   8,
+   9,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (46,
+   8,
+   9,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (47,
+   8,
+   9,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (48,
+   8,
+   9,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (49,
+   9,
+   10,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (50,
+   9,
+   10,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (51,
+   9,
+   10,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (52,
+   9,
+   10,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (53,
+   9,
+   10,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (54,
+   9,
+   10,
+   6,
+   3
+   );
+INSERT into Involves 
+Values (55,
+   10,
+   11,
+   1,
+   6
+   );
+INSERT into Involves 
+Values (56,
+   10,
+   11,
+   2,
+   6
+   );
+INSERT into Involves 
+Values (57,
+   10,
+   11,
+   3,
+   12
+   );
+INSERT into Involves 
+Values (58,
+   10,
+   11,
+   4,
+   7
+   );
+INSERT into Involves 
+Values (59,
+   10,
+   11,
+   5,
+   7
+   );
+INSERT into Involves 
+Values (60,
+   10,
+   11,
+   6,
+   9
+   );
+INSERT into Involves 
+Values (61,
+   11,
+   12,
+   1,
+   2
+   );
+INSERT into Involves 
+Values (62,
+   11,
+   12,
+   2,
+   2
+   );
+INSERT into Involves 
+Values (63,
+   11,
+   12,
+   3,
+   2
+   );
+INSERT into Involves 
+Values (64,
+   11,
+   12,
+   4,
+   2
+   );
+INSERT into Involves 
+Values (65,
+   11,
+   12,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (66,
+   11,
+   12,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (67,
+   12,
+   13,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (68,
+   12,
+   13,
+   2,
+   1
+   );
+
+INSERT into Involves 
+Values (69,
+   12,
+   13,
+   3,
+   1
+   );
+
+INSERT into Involves 
+Values (70,
+   12,
+   13,
+   4,
+   1
+   );
+
+INSERT into Involves 
+Values (71,
+   12,
+   13,
+   5,
+   1
+   );
+
+INSERT into Involves 
+Values (72,
+   12,
+   13,
+   6,
+   2
+   );
+
+INSERT into Involves 
+Values (73,
+   13,
+   14,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (74,
+   13,
+   14,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (75,
+   13,
+   14,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (76,
+   13,
+   14,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (77,
+   13,
+   14,
+   5,
+   6
+   );
+INSERT into Involves 
+Values (78,
+   13,
+   14,
+   6,
+   8
+   );
+INSERT into Involves 
+Values (79,
+   14,
+   15,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (80,
+   14,
+   15,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (81,
+   14,
+   15,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (82,
+   14,
+   15,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (83,
+   14,
+   15,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (84,
+   14,
+   15,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (85,
+   15,
+   16,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (86,
+   15,
+   16,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (87,
+   15,
+   16,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (88,
+   15,
+   16,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (89,
+   15,
+   16,
+   5,
+   6
+   );
+INSERT into Involves 
+Values (90,
+   15,
+   16,
+   6,
+   8
+   );
+INSERT into Involves 
+Values (91,
+   16,
+   17,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (92,
+   16,
+   17,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (93,
+   16,
+   17,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (94,
+   16,
+   17,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (95,
+   16,
+   17,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (96,
+   16,
+   17,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (97,
+   17,
+   12,
+   1,
+   2
+   );
+INSERT into Involves 
+Values (98,
+   17,
+   12,
+   2,
+   2
+   );
+INSERT into Involves 
+Values (99,
+   17,
+   12,
+   3,
+   2
+   );
+INSERT into Involves 
+Values (100,
+   17,
+   12,
+   4,
+   2
+   );
+INSERT into Involves 
+Values (101,
+   17,
+   12,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (102,
+   17,
+   12,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (103,
+   18,
+   12,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (104,
+   18,
+   12,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (105,
+   18,
+   12,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (106,
+   18,
+   12,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (107,
+   18,
+   12,
+   5,
+   4
+   );
+INSERT into Involves 
+Values (108,
+   18,
+   12,
+   6,
+   4
+   );
+INSERT into Involves 
+Values (109,
+   19,
+   18,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (110,
+   19,
+   18,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (111,
+   19,
+   18,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (112,
+   19,
+   18,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (113,
+   19,
+   18,
+   5,
+   6
+   );
+INSERT into Involves 
+Values (114,
+   19,
+   18,
+   6,
+   8
+   );
+INSERT into Involves 
+Values (115,
+   20,
+   2,
+   1,
+   2
+   );
+INSERT into Involves 
+Values (116,
+   20,
+   2,
+   2,
+   2
+   );
+INSERT into Involves 
+Values (117,
+   20,
+   2,
+   3,
+   2
+   );
+INSERT into Involves 
+Values (118,
+   20,
+   2,
+   4,
+   2
+   );
+INSERT into Involves 
+Values (119,
+   20,
+   2,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (120,
+   20,
+   2,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (121,
+   21,
+   19,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (122,
+   21,
+   19,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (123,
+   21,
+   19,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (124,
+   21,
+   19,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (125,
+   21,
+   19,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (126,
+   21,
+   19,
+   6,
+   1
+   );

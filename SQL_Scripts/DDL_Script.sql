@@ -85,21 +85,18 @@ CREATE TABLE Customers
    REFERENCES Service_center
    );
    
+CREATE TABLE Make
+  (make VARCHAR(300),
+  PRIMARY KEY (make)
+   );
 
 CREATE TABLE Vehicles
   (vehicle_id INTEGER,
    make VARCHAR(300),
    model VARCHAR(100),
-   year VARCHAR(300),
-  PRIMARY KEY (vehicle_id)
+  PRIMARY KEY (vehicle_id),
+  FOREIGN KEY(make) REFERENCES Make
    );
-   
-CREATE TABLE Make
-(vehicle_id INTEGER,
-make VARCHAR(300),
-PRIMARY KEY (make),
-FOREIGN KEY(vehicle_id) REFERENCES Vehicles
-);
 
 CREATE TABLE Owns
   (plate_no VARCHAR(300),
@@ -108,6 +105,7 @@ CREATE TABLE Owns
    purchase_date DATE,
    vehicle_id INTEGER NOT NULL,
    email VARCHAR(300) NOT NULL,
+   car_make_year VARCHAR(300),
   PRIMARY KEY (plate_no),
     FOREIGN KEY (vehicle_id)
    REFERENCES Vehicles,
@@ -163,19 +161,19 @@ CREATE TABLE Repair_schedule
    );
    
 CREATE TABLE Charge_type
-  (charge_type_id INTEGER,
+(
    charge_type VARCHAR(100),
    rate INTEGER,
-  PRIMARY KEY (charge_type_id)
+  PRIMARY KEY (charge_type)
    );
    
 CREATE TABLE Service
   (sid INTEGER,
    name VARCHAR(100),
-   charge_type_id INTEGER NOT NULL,
-   hours_to_complete INTEGER,
+   charge_type VARCHAR(100) NOT NULL,
+   hours_to_complete DECIMAL,
   PRIMARY KEY (sid),
-   FOREIGN KEY (charge_type_id)
+   FOREIGN KEY (charge_type)
    REFERENCES Charge_type
    );
    
@@ -254,8 +252,8 @@ CREATE TABLE Inventory
    service_center_id VARCHAR(300) NOT NULL,
    parts_to_make_id INTEGER NOT NULL,
    current_quantity INTEGER,
-   min_order_thold INTEGER,
-   min_quant_thold INTEGER,
+   min_inventory_thold INTEGER,
+   min_order_quantity INTEGER,
    PRIMARY KEY (inventory_id),
    FOREIGN KEY (service_center_id)
    REFERENCES Service_center,
