@@ -437,3 +437,577 @@ Values(
     7,
     'venus@gmail.com'
 );
+
+INSERT into Parts
+Values(
+    1,
+    'Air Filter'
+);
+INSERT into Parts
+Values(
+    2,
+    'Axel Rod'
+);
+INSERT into Parts
+Values(
+    3,
+    'Battery'
+);
+INSERT into Parts
+Values(
+    4,
+    'Brake Fluid'
+);
+INSERT into Parts
+Values(
+    5,
+    'Brake Shoes'
+);
+INSERT into Parts
+Values(
+    6,
+    'Camshaft'
+);
+INSERT into Parts
+Values(
+    7,
+    'Catalytic converter'
+);
+INSERT into Parts
+Values(
+    8,
+    'Coolant'
+);
+INSERT into Parts
+Values(
+    9,
+    'Drive belt'
+);
+INSERT into Parts
+Values(
+    10,
+    'Engine oil'
+);
+INSERT into Parts
+Values(
+    11,
+    'Gears'
+);
+INSERT into Parts
+Values(
+    12,
+    'Light assembly'
+);
+INSERT into Parts
+Values(
+    13,
+    'Oil Filter'
+);
+INSERT into Parts
+Values(
+    14,
+    'Piston'
+);
+INSERT into Parts
+Values(
+    15,
+    'Power Steering Fluid'
+);
+INSERT into Parts
+Values(
+    16,
+    'Spark plug'
+);
+INSERT into Parts
+Values(
+    17,
+    'Suspension fluid'
+);
+INSERT into Parts
+Values(
+    18,
+    'Valve'
+);
+INSERT into Parts
+Values(
+    19,
+    'Wiper Fluid'
+);
+
+INSERT into Make
+Values(
+    1,
+    'Toyota'
+);
+
+INSERT into Make
+Values(
+    2,
+    'Honda'
+);
+
+INSERT into Make
+Values(
+    3,
+    'Nissan'
+);
+
+INSERT into Parts_to_make
+Values(
+  1,
+  'Toyota',
+  1,
+  11,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  2,
+  'Toyota',
+  2,
+  123,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  3,
+  'Toyota',
+  3,
+  63,
+  6
+);
+INSERT into Parts_to_make
+Values(
+  4,
+  'Toyota',
+  4,
+  24,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  5,
+  'Toyota',
+  5,
+  62,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  6,
+  'Toyota',
+  6,
+  1428,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  7,
+  'Toyota',
+  7,
+  801,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  8,
+  'Toyota',
+  8,
+  63,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  9,
+  'Toyota',
+  9,
+  528,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  10,
+  'Toyota',
+  10,
+  63,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  11,
+  'Toyota',
+  11,
+  523,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  12,
+  'Toyota',
+  12,
+  617,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  13,
+  'Toyota',
+  13,
+  36,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  14,
+  'Toyota',
+  14,
+  1256,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  15,
+  'Toyota',
+  15,
+  17,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  16,
+  'Toyota',
+  16,
+  64,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  17,
+  'Toyota',
+  17,
+  70,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  18,
+  'Toyota',
+  18,
+  1338,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  19,
+  'Toyota',
+  19,
+  28,
+  NULL
+);
+
+INSERT into Parts_to_make
+Values(
+  20,
+  'Honda',
+  1,
+  59,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  21,
+  'Honda',
+  2,
+  141,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  22,
+  'Honda',
+  3,
+  79,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  23,
+  'Honda',
+  4,
+  75,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  24,
+  'Honda',
+  5,
+  41,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  25,
+  'Honda',
+  6,
+  511,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  26,
+  'Honda',
+  7,
+  716,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  27,
+  'Honda',
+  8,
+  10,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  28,
+  'Honda',
+  9,
+  1443,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  29,
+  'Honda',
+  10,
+  27,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  30,
+  'Honda',
+  11,
+  1344,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  31,
+  'Honda',
+  12,
+  1342,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  32,
+  'Honda',
+  13,
+  42,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  33,
+  'Honda',
+  14,
+  1145,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  34,
+  'Honda',
+  15,
+  24,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  35,
+  'Honda',
+  16,
+  50,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  36,
+  'Honda',
+  17,
+  77,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  37,
+  'Honda',
+  18,
+  1261,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  38,
+  'Honda',
+  19,
+  56,
+  NULL
+);
+
+INSERT into Parts_to_make
+Values(
+  39,
+  'Nissan',
+  1,
+  61,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  40,
+  'Nissan',
+  2,
+  241,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  41,
+  'Nissan',
+  3,
+  14,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  42,
+  'Nissan',
+  4,
+  16,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  43,
+  'Nissan',
+  5,
+  47,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  44,
+  'Nissan',
+  6,
+  1295,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  45,
+  'Nissan',
+  7,
+  589,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  46,
+  'Nissan',
+  8,
+  39,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  47,
+  'Nissan',
+  9,
+  1084,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  48,
+  'Nissan',
+  10,
+  14,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  49,
+  'Nissan',
+  11,
+  1176,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  50,
+  'Nissan',
+  12,
+  1367,
+  2
+);
+INSERT into Parts_to_make
+Values(
+  51,
+  'Nissan',
+  13,
+  61,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  52,
+  'Nissan',
+  14,
+  1341,
+  3
+);
+INSERT into Parts_to_make
+Values(
+  53,
+  'Nissan',
+  15,
+  20,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  54,
+  'Nissan',
+  16,
+  11,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  55,
+  'Nissan',
+  17,
+  32,
+  NULL
+);
+INSERT into Parts_to_make
+Values(
+  56,
+  'Nissan',
+  18,
+  1013,
+  1
+);
+INSERT into Parts_to_make
+Values(
+  57,
+  'Nissan',
+  19,
+  31,
+  NULL
+);
+
