@@ -1011,3 +1011,819 @@ Values(
   NULL
 );
 
+INSERT into Distributor
+Values(
+  1,
+  'D1'
+);
+INSERT into Distributor
+Values(
+  2,
+  'D2'
+);
+
+
+INSERT into Supplies
+Values(
+  1,
+  NULL,
+  1,
+  1
+);
+INSERT into Supplies
+Values(
+  2,
+  5,
+  2,
+  1
+);
+INSERT into Supplies
+Values(
+  3,
+  4,
+  3,
+  1
+);
+INSERT into Supplies
+Values(
+  4,
+  NULL,
+  4,
+  1
+);
+INSERT into Supplies
+Values(
+  5,
+  NULL,
+  5,
+  1
+);
+INSERT into Supplies
+Values(
+  6,
+  4,
+  6,
+  1
+);
+INSERT into Supplies
+Values(
+  7,
+  NULL,
+  7,
+  1
+);
+INSERT into Supplies
+Values(
+  8,
+  NULL,
+  8,
+  1
+);
+INSERT into Supplies
+Values(
+  9,
+  NULL,
+  9,
+  1
+);
+INSERT into Supplies
+Values(
+  10,
+  2,
+  10,
+  1
+);
+INSERT into Supplies
+Values(
+  11,
+  5,
+  11,
+  1
+);
+INSERT into Supplies
+Values(
+  12,
+  3,
+  12,
+  1
+);
+INSERT into Supplies
+Values(
+  13,
+  4,
+  13,
+  1
+);
+INSERT into Supplies
+Values(
+  14,
+  2,
+  14,
+  1
+);
+INSERT into Supplies
+Values(
+  15,
+  5,
+  15,
+  1
+);
+INSERT into Supplies
+Values(
+  16,
+  NULL,
+  16,
+  1
+);
+INSERT into Supplies
+Values(
+  17,
+  NULL,
+  17,
+  1
+);
+INSERT into Supplies
+Values(
+  18,
+  3,
+  18,
+  1
+);
+INSERT into Supplies
+Values(
+  19,
+  NULL,
+  19,
+  1
+);
+
+INSERT into Supplies
+Values(
+  20,
+  NULL,
+  20,
+  1
+);
+INSERT into Supplies
+Values(
+  21,
+  5,
+  22,
+  1
+);
+INSERT into Supplies
+Values(
+  22,
+  4,
+  22,
+  1
+);
+INSERT into Supplies
+Values(
+  23,
+  NULL,
+  23,
+  1
+);
+INSERT into Supplies
+Values(
+  24,
+  NULL,
+  24,
+  1
+);
+INSERT into Supplies
+Values(
+  25,
+  4,
+  25,
+  1
+);
+INSERT into Supplies
+Values(
+  26,
+  NULL,
+  26,
+  1
+);
+INSERT into Supplies
+Values(
+  27,
+  NULL,
+  27,
+  1
+);
+INSERT into Supplies
+Values(
+  28,
+  NULL,
+  28,
+  1
+);
+INSERT into Supplies
+Values(
+  29,
+  2,
+  29,
+  1
+);
+INSERT into Supplies
+Values(
+  30,
+  5,
+  30,
+  1
+);
+INSERT into Supplies
+Values(
+  31,
+  3,
+  31,
+  1
+);
+INSERT into Supplies
+Values(
+  32,
+  4,
+  32,
+  1
+);
+INSERT into Supplies
+Values(
+  33,
+  2,
+  33,
+  1
+);
+INSERT into Supplies
+Values(
+  34,
+  5,
+  34,
+  1
+);
+INSERT into Supplies
+Values(
+  35,
+  NULL,
+  35,
+  1
+);
+INSERT into Supplies
+Values(
+  36,
+  NULL,
+  36,
+  1
+);
+INSERT into Supplies
+Values(
+  37,
+  3,
+  37,
+  1
+);
+INSERT into Supplies
+Values(
+  38,
+  NULL,
+  38,
+  1
+);
+
+INSERT into Supplies
+Values(
+  39,
+  NULL,
+  39,
+  1
+);
+INSERT into Supplies
+Values(
+  40,
+  5,
+  40,
+  1
+);
+INSERT into Supplies
+Values(
+  41,
+  4,
+  41,
+  1
+);
+INSERT into Supplies
+Values(
+  42,
+  NULL,
+  42,
+  1
+);
+INSERT into Supplies
+Values(
+  43,
+  NULL,
+  43,
+  1
+);
+INSERT into Supplies
+Values(
+  44,
+  4,
+  44,
+  1
+);
+INSERT into Supplies
+Values(
+  45,
+  NULL,
+  45,
+  1
+);
+INSERT into Supplies
+Values(
+  46,
+  NULL,
+  46,
+  1
+);
+INSERT into Supplies
+Values(
+  47,
+  NULL,
+  47,
+  1
+);
+INSERT into Supplies
+Values(
+  48,
+  2,
+  48,
+  1
+);
+INSERT into Supplies
+Values(
+  49,
+  5,
+  49,
+  1
+);
+INSERT into Supplies
+Values(
+  50,
+  3,
+  50,
+  1
+);
+INSERT into Supplies
+Values(
+  51,
+  4,
+  51,
+  1
+);
+INSERT into Supplies
+Values(
+  52,
+  2,
+  52,
+  1
+);
+INSERT into Supplies
+Values(
+  53,
+  5,
+  53,
+  1
+);
+INSERT into Supplies
+Values(
+  54,
+  NULL,
+  54,
+  1
+);
+INSERT into Supplies
+Values(
+  55,
+  NULL,
+  55,
+  1
+);
+INSERT into Supplies
+Values(
+  56,
+  3,
+  56,
+  1
+);
+INSERT into Supplies
+Values(
+  57,
+  NULL,
+  57,
+  1
+);
+
+INSERT into Supplies
+Values(
+  58,
+  3,
+  1,
+  2
+);
+INSERT into Supplies
+Values(
+  59,
+  NULL,
+  2,
+  2
+);
+INSERT into Supplies
+Values(
+  60,
+  NULL,
+  3,
+  2
+);
+INSERT into Supplies
+Values(
+  61,
+  4,
+  4,
+  2
+);
+INSERT into Supplies
+Values(
+  62,
+  5,
+  5,
+  2
+);
+INSERT into Supplies
+Values(
+  63,
+  NULL,
+  6,
+  2
+);
+INSERT into Supplies
+Values(
+  64,
+  3,
+  7,
+  2
+);
+INSERT into Supplies
+Values(
+  65,
+  4,
+  8,
+  2
+);
+INSERT into Supplies
+Values(
+  66,
+  2,
+  9,
+  2
+);
+INSERT into Supplies
+Values(
+  67,
+  NULL,
+  10,
+  2
+);
+INSERT into Supplies
+Values(
+  68,
+  NULL,
+  11,
+  2
+);
+INSERT into Supplies
+Values(
+  69,
+  NULL,
+  12,
+  2
+);
+INSERT into Supplies
+Values(
+  70,
+  NULL,
+  13,
+  2
+);
+INSERT into Supplies
+Values(
+  71,
+  NULL,
+  14,
+  2
+);
+INSERT into Supplies
+Values(
+  72,
+  NULL,
+  15,
+  2
+);
+INSERT into Supplies
+Values(
+  73,
+  5,
+  16,
+  2
+);
+INSERT into Supplies
+Values(
+  74,
+  3,
+  17,
+  2
+);
+INSERT into Supplies
+Values(
+  75,
+  NULL,
+  18,
+  2
+);
+INSERT into Supplies
+Values(
+  76,
+  3,
+  19,
+  2
+);
+
+INSERT into Supplies
+Values(
+  77,
+  3,
+  20,
+  2
+);
+INSERT into Supplies
+Values(
+  78,
+  NULL,
+  21,
+  2
+);
+INSERT into Supplies
+Values(
+  79,
+  NULL,
+  22,
+  2
+);
+INSERT into Supplies
+Values(
+  80,
+  4,
+  23,
+  2
+);
+INSERT into Supplies
+Values(
+  81,
+  5,
+  24,
+  2
+);
+INSERT into Supplies
+Values(
+  82,
+  NULL,
+  25,
+  2
+);
+INSERT into Supplies
+Values(
+  83,
+  3,
+  26,
+  2
+);
+INSERT into Supplies
+Values(
+  84,
+  4,
+  27,
+  2
+);
+INSERT into Supplies
+Values(
+  85,
+  2,
+  28,
+  2
+);
+INSERT into Supplies
+Values(
+  86,
+  NULL,
+  29,
+  2
+);
+INSERT into Supplies
+Values(
+  87,
+  NULL,
+  30,
+  2
+);
+INSERT into Supplies
+Values(
+  88,
+  NULL,
+  31,
+  2
+);
+INSERT into Supplies
+Values(
+  89,
+  NULL,
+  32,
+  2
+);
+INSERT into Supplies
+Values(
+  90,
+  NULL,
+  33,
+  2
+);
+INSERT into Supplies
+Values(
+  91,
+  NULL,
+  34,
+  2
+);
+INSERT into Supplies
+Values(
+  92,
+  5,
+  35,
+  2
+);
+INSERT into Supplies
+Values(
+  93,
+  3,
+  36,
+  2
+);
+INSERT into Supplies
+Values(
+  94,
+  NULL,
+  37,
+  2
+);
+INSERT into Supplies
+Values(
+  94,
+  3,
+  38,
+  2
+);
+
+INSERT into Supplies
+Values(
+  95,
+  3,
+  39,
+  2
+);
+INSERT into Supplies
+Values(
+  96,
+  NULL,
+  40,
+  2
+);
+INSERT into Supplies
+Values(
+  97,
+  NULL,
+  41,
+  2
+);
+INSERT into Supplies
+Values(
+  98,
+  4,
+  42,
+  2
+);
+INSERT into Supplies
+Values(
+  99,
+  5,
+  43,
+  2
+);
+INSERT into Supplies
+Values(
+  100,
+  NULL,
+  44,
+  2
+);
+INSERT into Supplies
+Values(
+  101,
+  3,
+  45,
+  2
+);
+INSERT into Supplies
+Values(
+  102,
+  4,
+  46,
+  2
+);
+INSERT into Supplies
+Values(
+  103,
+  2,
+  47,
+  2
+);
+INSERT into Supplies
+Values(
+  104,
+  NULL,
+  48,
+  2
+);
+INSERT into Supplies
+Values(
+  105,
+  NULL,
+  49,
+  2
+);
+INSERT into Supplies
+Values(
+  106,
+  NULL,
+  50,
+  2
+);
+INSERT into Supplies
+Values(
+  107,
+  NULL,
+  51,
+  2
+);
+INSERT into Supplies
+Values(
+  108,
+  NULL,
+  52,
+  2
+);
+INSERT into Supplies
+Values(
+  109,
+  NULL,
+  53,
+  2
+);
+INSERT into Supplies
+Values(
+  110,
+  5,
+  54,
+  2
+);
+INSERT into Supplies
+Values(
+  111,
+  3,
+  55,
+  2
+);
+INSERT into Supplies
+Values(
+  112,
+  NULL,
+  56,
+  2
+);
+INSERT into Supplies
+Values(
+  113,
+  3,
+  57,
+  2
+);
+
