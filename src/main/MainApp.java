@@ -108,8 +108,8 @@ public class MainApp {
 		System.out.println("2. Update Profile");
 		System.out.println("3. Go Back");
 
+		Scanner s = new Scanner(System.in);
 		while (true) {
-			Scanner s = new Scanner(System.in);
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
@@ -127,30 +127,32 @@ public class MainApp {
 	public static void customerViewProfilePage() {
 		try {
 			ResultSet rs = functObject.getCustomerInfo(userInfoObject.email);
-			System.out.println("A. " + rs.getString("id"));
-			System.out.println("B. " + rs.getString("name"));
-			System.out.println("C. " + rs.getString("addr"));
-			System.out.println("D. " + rs.getString("email"));
-			System.out.println("E. " + rs.getString("tel"));
-			System.out.println("F. ");
-			ResultSet rs2 = functObject.getCustomerCars(userInfoObject.email);
-			while (rs2.next()) {
-				String s = rs.getString("make") + rs.getString("model");
-				System.out.println(s);
-			}
-			System.out.println("1. Go Back");
-			Scanner s = new Scanner(System.in);
-			while (true) {
-				String selected_option = s.nextLine();
+			while (rs.next()) {
+				System.out.println("A. " + rs.getString("id"));
+				System.out.println("B. " + rs.getString("name"));
+				System.out.println("C. " + rs.getString("addr"));
+				System.out.println("D. " + rs.getString("email"));
+				System.out.println("E. " + rs.getString("tel"));
+				System.out.println("F. ");
+				ResultSet rs2 = functObject.getCustomerCars(userInfoObject.email);
+				while (rs2.next()) {
+					String s = rs2.getString("make") + " " +  rs2.getString("model");
+					System.out.println(s);
+				}
+				System.out.println("1. Go Back");
+				Scanner s = new Scanner(System.in);
+				while (true) {
+					String selected_option = s.nextLine();
 
-				if (selected_option.equals("1")) {
-					customerProfilePage();
-				} else {
-					System.out.println("Choose a valid option");
+					if (selected_option.equals("1")) {
+						customerProfilePage();
+					} else {
+						System.out.println("Choose a valid option");
+					}
 				}
 			}
 		} catch (Throwable e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 

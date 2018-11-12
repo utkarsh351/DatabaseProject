@@ -55,7 +55,7 @@ public class utilitiesFunctions {
 //	view profile
 	public static ResultSet getCustomerInfo(String email) {
 		try {
-			rs = connObject.selectQuery("SELECT * FROM Customers where email='" + email);
+			rs = connObject.selectQuery("SELECT * FROM Customers WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -65,7 +65,7 @@ public class utilitiesFunctions {
 	
 	public static ResultSet getCustomerCars(String email) {
 		try {
-			rs = connObject.selectQuery("SELECT * FROM Owns O1 JOIN Vehicles V1 ON O1.vehicle_id=V1.vehicle_id where email='" + email);
+			rs = connObject.selectQuery("SELECT * FROM Owns O1 JOIN Vehicles V1 ON O1.vehicle_id=V1.vehicle_id WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -79,7 +79,7 @@ public class utilitiesFunctions {
 	}
 	public static ResultSet updateCustomerName(String email,String name) {
 		try {
-			rs = connObject.selectQuery("UPDATE Customers SET name=" + name + "WHERE email=" + email);
+			rs = connObject.selectQuery("UPDATE Customers SET name='" + name + "' " + "WHERE email='" + email + "'" );
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -88,7 +88,7 @@ public class utilitiesFunctions {
 	}
 	public static ResultSet updateCustomerPassword(String email,String password) {
 		try {
-			rs = connObject.selectQuery("UPDATE Users SET password=" + password + "WHERE email=" + email);
+			rs = connObject.selectQuery("UPDATE Users SET password='" + password + "' " + "WHERE email='" + email+ "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -97,7 +97,7 @@ public class utilitiesFunctions {
 	}
 	public static ResultSet updateCustomerAddress(String email, String addr) {
 		try {
-			rs = connObject.selectQuery("UPDATE Customers SET addr=" + addr + "WHERE email=" + email);
+			rs = connObject.selectQuery("UPDATE Customers SET addr='" + addr + "' " + "WHERE email='" + email+ "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -106,7 +106,7 @@ public class utilitiesFunctions {
 	}
 	public static ResultSet updateCustomerPhoneNumber(String email,String tel) {
 		try {
-			rs = connObject.selectQuery("UPDATE Customers SET tel=" + tel + "WHERE email=" + email);
+			rs = connObject.selectQuery("UPDATE Customers SET tel='" + tel + "' " + "WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
