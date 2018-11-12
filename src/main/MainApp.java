@@ -93,9 +93,9 @@ public class MainApp {
 			} else if (selected_option.equals("2")) {
 				registerCar();
 			} else if (selected_option.equals("3")) {
-
+				customerServicePage();
 			} else if (selected_option.equals("4")) {
-
+				customerInvoice();
 			} else if (selected_option.equals("5")) {
 
 			} else {
