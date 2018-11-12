@@ -4573,4 +4573,29 @@ Values (14,
    'C',
    44000,
    3);
-   
+
+
+---- TRIGGERS HERE || Write INSERT statements above this
+create sequence Emp_id_seq START WITH 999204784;
+
+create trigger trg_emp_id
+before insert on Employees
+for each row
+begin
+  select Emp_id_seq.nextval
+  into :new.eid
+  from dual;
+end;
+/
+
+create sequence Cust_id_seq START WITH 1006;
+
+create trigger trg_cust_id
+before insert on Customers
+for each row
+begin
+  select Cust_id_seq.nextval
+  into :new.id
+  from dual;
+end;
+/
