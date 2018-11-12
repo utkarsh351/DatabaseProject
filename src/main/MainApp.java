@@ -60,10 +60,10 @@ public class MainApp {
 		System.out.println("2.Go Back");
 
 		int option = s.nextInt();
-		
-		if(option == 1) {
+
+		if (option == 1) {
 			boolean ans = functObject.createUser(email, password, name, addr, phone);
-			if(ans==false) {
+			if (ans == false) {
 				System.out.println("Email already exists");
 				signup();
 			} else {
@@ -76,7 +76,7 @@ public class MainApp {
 			signup();
 		}
 	}
-	
+
 	public static void customerLandingPage() {
 		System.out.println("1. Profile");
 		System.out.println("2. Register Car");
@@ -103,7 +103,7 @@ public class MainApp {
 			}
 		}
 	}
-	
+
 	public static void registerCar() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter licence plate:");
@@ -120,14 +120,15 @@ public class MainApp {
 		String lastServiceDate = s.nextLine();
 		System.out.println("Enter current milage:");
 		int currMilage = s.nextInt();
-		
+
 		System.out.println("1.Register");
 		System.out.println("2.Go Back");
-		
+
 		int option = s.nextInt();
-		if(option == 1) {
-			boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage, lastServiceDate, userInfoObject.email);
-			if(ans) {
+		if (option == 1) {
+			boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage, lastServiceDate,
+					userInfoObject.email);
+			if (ans) {
 				customerLandingPage();
 			} else {
 				System.out.println("Wrong Input");
@@ -140,6 +141,8 @@ public class MainApp {
 			registerCar();
 		}
 	}
+
+	// Customer Profile
 
 	public static void customerProfilePage() {
 		System.out.println("1. View Profile");
@@ -174,19 +177,19 @@ public class MainApp {
 				System.out.println("F. ");
 				ResultSet rs2 = functObject.getCustomerCars(userInfoObject.email);
 				while (rs2.next()) {
-					String s = rs2.getString("make") + " " +  rs2.getString("model");
+					String s = rs2.getString("make") + " " + rs2.getString("model");
 					System.out.println(s);
 				}
-				System.out.println("1. Go Back");
-				Scanner s = new Scanner(System.in);
-				while (true) {
-					String selected_option = s.nextLine();
+			}
+			System.out.println("1. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
 
-					if (selected_option.equals("1")) {
-						customerProfilePage();
-					} else {
-						System.out.println("Choose a valid option");
-					}
+				if (selected_option.equals("1")) {
+					customerProfilePage();
+				} else {
+					System.out.println("Choose a valid option");
 				}
 			}
 		} catch (Throwable e) {
@@ -235,6 +238,381 @@ public class MainApp {
 		}
 	}
 
+	// Customer Service
+
+	public static void customerServicePage() {
+		System.out.println("1. View Service History");
+		System.out.println("2. Schedule Service");
+		System.out.println("3. Reschedule Service");
+		System.out.println("4. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				customerServiceHistoryPage();
+			} else if (selected_option.equals("2")) {
+				customerScheduleService();
+			} else if (selected_option.equals("3")) {
+				customerRescheduleServicePage1();
+			} else if (selected_option.equals("4")) {
+				customerLandingPage();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	public static void customerServiceHistoryPage() {
+		try {
+			// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+			while (rs.next()) {
+				System.out.println("A. " + rs.getString("id"));
+				System.out.println("B. " + rs.getString("plate_no"));
+				System.out.println("C. " + rs.getString("service_type"));
+				System.out.println("D. " + rs.getString("mechanic"));
+				System.out.println("E. " + rs.getString("start_time"));
+				System.out.println("E. " + rs.getString("end_time"));
+				System.out.println("E. " + rs.getString("status"));
+				System.out.println("F. ");
+			}
+			System.out.println("1. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					customerServicePage();
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void customerScheduleService() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("Enter licence plate:");
+		String licencePlate = s.nextLine();
+		System.out.println("Enter current milage:");
+		int currMilage = s.nextInt();
+		System.out.println("Mechanic name:");
+		String make = s.nextLine();
+
+		System.out.println("1.Schedule Maintenance");
+		System.out.println("2.Schedule Repair");
+		System.out.println("3.Go Back");
+
+		Scanner s2 = new Scanner(System.in);
+		while (true) {
+			String selected_option = s2.nextLine();
+			if (selected_option.equals("1")) {
+				customerScheduleMaintenancePage1();
+			} else if (selected_option.equals("2")) {
+				customerScheduleRepairPage1();
+			} else if (selected_option.equals("3")) {
+				customerServicePage();
+			} else {
+				System.out.println("Wrong Input");
+				registerCar();
+			}
+		}
+	}
+
+	// Customer Maintenance Schedule
+
+	public static void customerScheduleMaintenancePage1() {
+		System.out.println("1. Find Service Date");
+		System.out.println("2. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				customerScheduleMaintenancePage2();
+				// find two earliest dates
+			} else if (selected_option.equals("2")) {
+				customerScheduleService();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	public static void customerScheduleMaintenancePage2() {
+		// Display
+		// 1. Date 1 available with Mechanic name selected(if selected)
+		// 2. Date 2 available with Mechanic name selected(if selected)
+		System.out.println("1. Schedule on Date");
+		System.out.println("2. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				Scanner s2 = new Scanner(System.in);
+				while (true) {
+					String dateOption = s2.nextLine();
+
+					if (dateOption.equals("1")) {
+						// Schedule for date 1
+
+					} else if (dateOption.equals("2")) {
+						// Schedule for date 2
+					} else {
+						System.out.println("Choose a valid option");
+
+					}
+				}
+			} else if (selected_option.equals("2")) {
+				customerScheduleMaintenancePage1();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	// Customer Repair Schedule
+
+	public static void customerScheduleRepairPage1() {
+		System.out.println("1. Engine knock");
+		System.out.println("2. Car drifts in a particular direction");
+		System.out.println("3. Battery does not hold charge");
+		System.out.println("4. Black/unclean exhaust");
+		System.out.println("5. A/C-Heater not lamps not working");
+		System.out.println("6. Headlamps/Taillamps not working");
+		System.out.println("7. Check engine light");
+		System.out.println("8. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				// create and display diagnostic report showing list of causes and parts needed
+				// find two earliest dates
+				// send to repair page 2
+				// if repair date cannot be found due to insufficient parts, place an order
+				// show message to user to try after particular date calculated with expected
+				// date of delivery
+				// if an existing order can fulfill the requirement, but show a message to the
+				// user asking him to try again after a
+				// specific date. After showing the message, go back to Customer: Schedule
+				// Service page
+			} else if (selected_option.equals("2")) {
+				// refer to first comment
+			} else if (selected_option.equals("3")) {
+				// refer to first comment
+			} else if (selected_option.equals("4")) {
+				// refer to first comment
+			} else if (selected_option.equals("5")) {
+				// refer to first comment
+			} else if (selected_option.equals("6")) {
+				// refer to first comment
+			} else if (selected_option.equals("7")) {
+				// refer to first comment
+			} else if (selected_option.equals("8")) {
+				customerScheduleService();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	public static void customerScheduleRepairPage2() {
+		// Display
+		// 1. Date 1 available with Mechanic name selected(if selected)
+		// 2. Date 2 available with Mechanic name selected(if selected)
+		System.out.println("1. Repair on Date");
+		System.out.println("2. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				Scanner s2 = new Scanner(System.in);
+				while (true) {
+					String dateOption = s2.nextLine();
+
+					if (dateOption.equals("1")) {
+						// Schedule for date 1
+						// create a new service record for repair service on the
+						// chosen date, and go back to Customer:Schedule Service page
+					} else if (dateOption.equals("2")) {
+						// Schedule for date 2
+						// create a new service record for repair service on the
+						// chosen date, and go back to Customer:Schedule Service page
+					} else {
+						System.out.println("Choose a valid option");
+					}
+				}
+			} else if (selected_option.equals("2")) {
+				customerScheduleRepairPage1();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	// Customer Reschedule Service
+
+	public static void customerRescheduleServicePage1() {
+		// Display
+		// 1. License Plate, Service ID, Service Date, Service Type, Service Details
+		// 2. License Plate, Service ID, Service Date, Service Type, Service Details
+		// etc
+		System.out.println("1. Pick a service");
+		System.out.println("2. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+
+				Scanner s2 = new Scanner(System.in);
+				while (true) {
+					System.out.println("Enter a Service ID:");
+					String service_id = s2.nextLine();
+
+					// Check if service_id is valid
+//					if (valid(service_id)) {
+//						// find two earliest dates
+//						customerRescheduleServicePage2();
+//					} else {
+//						System.out.println("Choose a valid option");
+//					}
+				}
+			} else if (selected_option.equals("2")) {
+				customerScheduleService();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	public static void customerRescheduleServicePage2() {
+		// Display
+		// 1. Date 1 available with Mechanic name selected(if selected)
+		// 2. Date 2 available with Mechanic name selected(if selected)
+		System.out.println("1. Reschedule Date");
+		System.out.println("2. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				Scanner s2 = new Scanner(System.in);
+				while (true) {
+					String dateOption = s2.nextLine();
+
+					if (dateOption.equals("1")) {
+						// Schedule for date 1
+						// existing service to the chosen date making necessary
+						// adjustments to the parts commitment in the inventory, and go
+						// back to Customer: Service page
+
+					} else if (dateOption.equals("2")) {
+						// Schedule for date 2
+						// existing service to the chosen date making necessary
+						// adjustments to the parts commitment in the inventory, and go
+						// back to Customer: Service page
+					} else {
+						System.out.println("Choose a valid option");
+
+					}
+				}
+			} else if (selected_option.equals("2")) {
+				customerRescheduleServicePage1();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	// Customer Invoice
+
+	public static void customerInvoice() {
+		try {
+			// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+			while (rs.next()) {
+				System.out.println("A. " + rs.getString("service_id"));
+				System.out.println("B. " + rs.getString("service_start_date"));
+				System.out.println("C. " + rs.getString("service_end_date"));
+				System.out.println("D. " + rs.getString("plate_no"));
+				System.out.println("E. " + rs.getString("service_type"));
+				System.out.println("E. " + rs.getString("mechanic_name"));
+				System.out.println("E. " + rs.getInt("total_service_cost"));
+				System.out.println("F. ");
+			}
+			System.out.println("1. View Invoice Details");
+			System.out.println("2. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					//add stuff
+				} else if (selected_option.equals("2")) {
+					customerLandingPage();
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void customerViewInvoiceDetails() {
+		try {
+			System.out.println("Enter Service ID");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String service_id = s.nextLine();
+
+				//if (vaild(service_id)) {
+					// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+					while (rs.next()) {
+						System.out.println("A. " + rs.getString("service_id"));
+						System.out.println("B. " + rs.getString("service_start_date"));
+						System.out.println("C. " + rs.getString("service_end_date"));
+						System.out.println("D. " + rs.getString("plate_no"));
+						System.out.println("E. " + rs.getString("service_type"));
+						System.out.println("E. " + rs.getString("mechanic_name"));
+						System.out.println("E. " + rs.getInt("total_service_cost"));
+						System.out.println("F. ");
+					}
+					break;
+				//} 
+				//else {
+					//System.out.println("Choose a valid option");
+				//}
+			}
+
+			System.out.println("1. Go Back");
+			Scanner s2 = new Scanner(System.in);
+			while (true) {
+				String selected_option = s2.nextLine();
+
+				if (selected_option.equals("1")) {
+					customerInvoice();
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void mainMenu() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("1.Login");
