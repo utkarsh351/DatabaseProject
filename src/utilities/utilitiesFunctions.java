@@ -6,10 +6,43 @@ import main.connection;
 
 public class utilitiesFunctions {
 	static ResultSet rs = null;
-	connection connObject = new connection();
+	static connection connObject = new connection();
 	
 	public static boolean validUser(String username, String password) {
-		return true;
+		try {
+			rs = connObject.selectQuery("SELECT email FROM Users where email='"+username +"' And "+ "password='"+password+"'");
+			if (!rs.next()) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (Throwable e) {
+//			e.printStackTrace();
+			System.out.println("Wrong Username or password");
+			return false;
+		}
+		
+	}
+	
+	public static String getRole(String email) {
+		try {
+			rs = connObject.selectQuery("SELECT email FROM Employees e, Manager m where e.email='"+email +"' " + "and m.manager_id=e.eid");
+			if (!rs.next()) {
+				rs = connObject.selectQuery("SELECT email FROM Employees e, Receptionist r where e.email='"+email +"' " + "and r.receptionist_id=e.eid");
+				if (!rs.next()) {
+					return "customer";
+				} else {
+					return "receptionist";
+				}
+			} else {
+				return "manager";
+			}
+		} catch (Throwable e) {
+//			e.printStackTrace();
+			System.out.println("Wrong Username or password");
+			return "";
+		}
+		
 	}
 
 	public static boolean createUser(String email, String password, String name, String add, String ph) {
