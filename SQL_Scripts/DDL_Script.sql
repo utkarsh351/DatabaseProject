@@ -221,7 +221,7 @@ CREATE TABLE Parts_to_make
 );
 
 CREATE TABLE Distributor
-  (distributor_id INTEGER,
+  (distributor_id VARCHAR(300),
    dname VARCHAR(300) NOT NULL,
   PRIMARY KEY (distributor_id)
    );
@@ -230,11 +230,11 @@ CREATE TABLE Supplies
   (supply_id INTEGER,
    window INTEGER,
    parts_to_make_id INTEGER NOT NULL,
-   distibutor_id INTEGER NOT NULL,
+   distributor_id VARCHAR(300) NOT NULL,
   PRIMARY KEY (supply_id),
    FOREIGN KEY (parts_to_make_id)
    REFERENCES Parts_to_make,
-   FOREIGN KEY (distibutor_id)
+   FOREIGN KEY (distributor_id)
    REFERENCES Distributor
    );
    
@@ -302,7 +302,7 @@ CREATE TABLE Notification
 CREATE TABLE Distributor_order
   (distributor_order_id INTEGER,
    requester_center_inventory_id INTEGER NOT NULL,
-   distributor_id INTEGER NOT NULL,
+   distributor_id VARCHAR(300) NOT NULL,
    order_id INTEGER NOT NULL,
   PRIMARY KEY (distributor_order_id),
    FOREIGN KEY (requester_center_inventory_id)

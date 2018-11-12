@@ -22,12 +22,11 @@ public class MainApp {
 			
 //			connObject.insertQuery("INSERT INTO TRYING1 " + "VALUES ('1', 1, 7.99, 0, 0)");
 			
-			rs = connObject.selectQuery("SELECT COF_NAME, PRICE FROM TRYING1");
+			rs = connObject.selectQuery("SELECT email FROM Users");
 
 			while (rs.next()) {
-				String s = rs.getString("COF_NAME");
-				float n = rs.getFloat("PRICE");
-				System.out.println(s + "   " + n);
+				String s = rs.getString("email");
+				System.out.println(s);
 			}
 //			******************************************
 //			Scanner s = new Scanner(System.in);
