@@ -2855,4 +2855,1074 @@ Values(
   13,
   5
 );
+---------------------------------------
+INSERT into Charge_type
+Values(
+   'Low',
+   '50'
+   );
 
+INSERT into Charge_type
+Values(
+   'High',
+   '65'
+   );
+
+INSERT into Service
+Values(
+	1,
+   'Air filter change',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	2,
+   'Battery replacement',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	3,
+   'Brake check',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	4,
+   'Brake repair',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	5,
+   'Camshaft replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	6,
+   'Catalytic convertor replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	7,
+   'Coolant recycle',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	8,
+   'Drive belt replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	9,
+   'Engine oil change',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	10,
+   'Gearbox repair',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	11,
+   'Headlights replacement',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	12,
+   'Oil filter change',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	13,
+   'Piston replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	14,
+   'Power steering check',
+   'Low',
+   0.25
+);
+INSERT into Service
+Values(
+	15,
+   'Spark plugs replacement',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	16,
+   'Suspension check',
+   'Low',
+   0.25
+);
+
+INSERT into Service
+Values(
+	17,
+   'Tail lights replacement',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	18,
+   'Turn lights replacement',
+   'Low',
+   0.5
+);
+
+INSERT into Service
+Values(
+	19,
+   'Valve replacement',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	20,
+   'Wheel alignment',
+   'High',
+   1.0
+);
+
+INSERT into Service
+Values(
+	21,
+   'Wiper check',
+   'Low',
+   0.25
+);
+
+INSERT into Involves
+Values  (1,
+   1,
+   1,
+   1,
+   1
+   );
+
+INSERT into Involves
+Values  (2,
+   1,
+   1,
+   2,
+   1
+   );
+INSERT into Involves
+Values  (3,
+   1,
+   1,
+   3,
+   1
+   );
+INSERT into Involves
+Values  (4,
+   1,
+   1,
+   4,
+   2
+   );
+INSERT into Involves
+Values  (5,
+   1,
+   1,
+   5,
+   1
+   );
+INSERT into Involves
+Values  (6,
+   1,
+   1,
+   6,
+   3
+   );
+
+INSERT into Involves
+Values  (7,
+   2,
+   3,
+   1,
+   1
+   );
+
+INSERT into Involves
+Values  (8,
+   2,
+   3,
+   2,
+   1
+   );
+INSERT into Involves
+Values  (9,
+   2,
+   3,
+   3,
+   1
+   );
+INSERT into Involves
+Values  (10,
+   2,
+   3,
+   4,
+   1
+   );
+INSERT into Involves
+Values  (11,
+   2,
+   3,
+   5,
+   1
+   );
+INSERT into Involves
+Values  (12,
+   2,
+   3,
+   6,
+   2
+   );
+INSERT into Involves
+Values  (13,
+   3,
+   4,
+   1,
+   1
+   );
+INSERT into Involves
+Values  (14,
+   3,
+   4,
+   2,
+   1
+   );
+INSERT into Involves
+Values  (15,
+   3,
+   4,
+   3,
+   1
+   );
+INSERT into Involves
+Values  (16,
+   3,
+   4,
+   4,
+   1
+   );
+INSERT into Involves
+Values  (17,
+   3,
+   4,
+   5,
+   1
+   );
+INSERT into Involves
+Values  (18,
+   3,
+   4,
+   6,
+   2
+   );
+INSERT into Involves
+Values  (19,
+   4,
+   5,
+   1,
+   4
+   );
+INSERT into Involves
+ Values (20,
+   4,
+   5,
+   2,
+   4
+   );
+INSERT into Involves
+Values  (21,
+   4,
+   5,
+   3,
+   4
+   );
+INSERT into Involves
+Values  (22,
+   4,
+   5,
+   4,
+   4
+   );
+INSERT into Involves
+Values  (23,
+   4,
+   5,
+   5,
+   4
+   );
+INSERT into Involves 
+Values (24,
+   4,
+   5,
+   6,
+   4
+   );
+INSERT into Involves 
+Values (25,
+   5,
+   6,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (26,
+   5,
+   6,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (27,
+   5,
+   6,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (28,
+   5,
+   6,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (29,
+   5,
+   6,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (30,
+   5,
+   6,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (31,
+   6,
+   7,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (32,
+   6,
+   7,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (33,
+   6,
+   7,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (34,
+   6,
+   7,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (35,
+   6,
+   7,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (36,
+   6,
+   7,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (37,
+   7,
+   8,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (38,
+   7,
+   8,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (39,
+   7,
+   8,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (40,
+   7,
+   8,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (41,
+   7,
+   8,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (42,
+   7,
+   8,
+   6,
+   2
+   );
+
+INSERT into Involves 
+Values (43,
+   8,
+   9,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (44,
+   8,
+   9,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (45,
+   8,
+   9,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (46,
+   8,
+   9,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (47,
+   8,
+   9,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (48,
+   8,
+   9,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (49,
+   9,
+   10,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (50,
+   9,
+   10,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (51,
+   9,
+   10,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (52,
+   9,
+   10,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (53,
+   9,
+   10,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (54,
+   9,
+   10,
+   6,
+   3
+   );
+INSERT into Involves 
+Values (55,
+   10,
+   11,
+   1,
+   6
+   );
+INSERT into Involves 
+Values (56,
+   10,
+   11,
+   2,
+   6
+   );
+INSERT into Involves 
+Values (57,
+   10,
+   11,
+   3,
+   12
+   );
+INSERT into Involves 
+Values (58,
+   10,
+   11,
+   4,
+   7
+   );
+INSERT into Involves 
+Values (59,
+   10,
+   11,
+   5,
+   7
+   );
+INSERT into Involves 
+Values (60,
+   10,
+   11,
+   6,
+   9
+   );
+INSERT into Involves 
+Values (61,
+   11,
+   12,
+   1,
+   2
+   );
+INSERT into Involves 
+Values (62,
+   11,
+   12,
+   2,
+   2
+   );
+INSERT into Involves 
+Values (63,
+   11,
+   12,
+   3,
+   2
+   );
+INSERT into Involves 
+Values (64,
+   11,
+   12,
+   4,
+   2
+   );
+INSERT into Involves 
+Values (65,
+   11,
+   12,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (66,
+   11,
+   12,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (67,
+   12,
+   13,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (68,
+   12,
+   13,
+   2,
+   1
+   );
+
+INSERT into Involves 
+Values (69,
+   12,
+   13,
+   3,
+   1
+   );
+
+INSERT into Involves 
+Values (70,
+   12,
+   13,
+   4,
+   1
+   );
+
+INSERT into Involves 
+Values (71,
+   12,
+   13,
+   5,
+   1
+   );
+
+INSERT into Involves 
+Values (72,
+   12,
+   13,
+   6,
+   2
+   );
+
+INSERT into Involves 
+Values (73,
+   13,
+   14,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (74,
+   13,
+   14,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (75,
+   13,
+   14,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (76,
+   13,
+   14,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (77,
+   13,
+   14,
+   5,
+   6
+   );
+INSERT into Involves 
+Values (78,
+   13,
+   14,
+   6,
+   8
+   );
+INSERT into Involves 
+Values (79,
+   14,
+   15,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (80,
+   14,
+   15,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (81,
+   14,
+   15,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (82,
+   14,
+   15,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (83,
+   14,
+   15,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (84,
+   14,
+   15,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (85,
+   15,
+   16,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (86,
+   15,
+   16,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (87,
+   15,
+   16,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (88,
+   15,
+   16,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (89,
+   15,
+   16,
+   5,
+   6
+   );
+INSERT into Involves 
+Values (90,
+   15,
+   16,
+   6,
+   8
+   );
+INSERT into Involves 
+Values (91,
+   16,
+   17,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (92,
+   16,
+   17,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (93,
+   16,
+   17,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (94,
+   16,
+   17,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (95,
+   16,
+   17,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (96,
+   16,
+   17,
+   6,
+   1
+   );
+INSERT into Involves 
+Values (97,
+   17,
+   12,
+   1,
+   2
+   );
+INSERT into Involves 
+Values (98,
+   17,
+   12,
+   2,
+   2
+   );
+INSERT into Involves 
+Values (99,
+   17,
+   12,
+   3,
+   2
+   );
+INSERT into Involves 
+Values (100,
+   17,
+   12,
+   4,
+   2
+   );
+INSERT into Involves 
+Values (101,
+   17,
+   12,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (102,
+   17,
+   12,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (103,
+   18,
+   12,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (104,
+   18,
+   12,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (105,
+   18,
+   12,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (106,
+   18,
+   12,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (107,
+   18,
+   12,
+   5,
+   4
+   );
+INSERT into Involves 
+Values (108,
+   18,
+   12,
+   6,
+   4
+   );
+INSERT into Involves 
+Values (109,
+   19,
+   18,
+   1,
+   4
+   );
+INSERT into Involves 
+Values (110,
+   19,
+   18,
+   2,
+   4
+   );
+INSERT into Involves 
+Values (111,
+   19,
+   18,
+   3,
+   4
+   );
+INSERT into Involves 
+Values (112,
+   19,
+   18,
+   4,
+   4
+   );
+INSERT into Involves 
+Values (113,
+   19,
+   18,
+   5,
+   6
+   );
+INSERT into Involves 
+Values (114,
+   19,
+   18,
+   6,
+   8
+   );
+INSERT into Involves 
+Values (115,
+   20,
+   2,
+   1,
+   2
+   );
+INSERT into Involves 
+Values (116,
+   20,
+   2,
+   2,
+   2
+   );
+INSERT into Involves 
+Values (117,
+   20,
+   2,
+   3,
+   2
+   );
+INSERT into Involves 
+Values (118,
+   20,
+   2,
+   4,
+   2
+   );
+INSERT into Involves 
+Values (119,
+   20,
+   2,
+   5,
+   2
+   );
+INSERT into Involves 
+Values (120,
+   20,
+   2,
+   6,
+   2
+   );
+INSERT into Involves 
+Values (121,
+   21,
+   19,
+   1,
+   1
+   );
+INSERT into Involves 
+Values (122,
+   21,
+   19,
+   2,
+   1
+   );
+INSERT into Involves 
+Values (123,
+   21,
+   19,
+   3,
+   1
+   );
+INSERT into Involves 
+Values (124,
+   21,
+   19,
+   4,
+   1
+   );
+INSERT into Involves 
+Values (125,
+   21,
+   19,
+   5,
+   1
+   );
+INSERT into Involves 
+Values (126,
+   21,
+   19,
+   6,
+   1
+   );
