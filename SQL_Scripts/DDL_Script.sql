@@ -51,9 +51,9 @@ CREATE TABLE Payment_record
    );
 
 CREATE TABLE Manager
-  (mananger_id INTEGER,
-  PRIMARY KEY (mananger_id),
-  FOREIGN KEY (mananger_id)
+  (manager_id INTEGER,
+  PRIMARY KEY (manager_id),
+  FOREIGN KEY (manager_id)
    REFERENCES Employees
    );
    
@@ -102,10 +102,10 @@ CREATE TABLE Owns
   (plate_no VARCHAR(300),
    last_rec_mileage INTEGER,
    last_repair_date DATE,
-   purchase_date DATE,
+   purchase_date DATE NOT NUll,
    vehicle_id INTEGER NOT NULL,
    email VARCHAR(300) NOT NULL,
-   car_make_year VARCHAR(300),
+   car_make_year VARCHAR(300) NOT NULL,
   PRIMARY KEY (plate_no),
     FOREIGN KEY (vehicle_id)
    REFERENCES Vehicles,
@@ -324,3 +324,4 @@ CREATE TABLE Distributor_order
    FOREIGN KEY (customer_email)
    REFERENCES Customers
    );
+
