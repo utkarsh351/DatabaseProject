@@ -26,7 +26,7 @@ public class connection {
 			
 		} catch (Throwable e) {
 			System.out.println("************************CONNECTION FAILED**************************");
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
@@ -36,7 +36,7 @@ public class connection {
 			stmt.executeUpdate(query);
 		} catch (Throwable e) {
 			System.out.println("************************CREATE TABLE FAILED**************************");
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
@@ -46,7 +46,7 @@ public class connection {
 			stmt.executeUpdate(query);
 		} catch (Throwable e) {
 			System.out.println("************************INSERT QUERY FAILED**************************");
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
@@ -55,8 +55,8 @@ public class connection {
 		try {
 			rs = stmt.executeQuery(query);
 		} catch (Throwable e) {
-			System.out.println("************************INSERT QUERY FAILED**************************");
-			e.printStackTrace();
+			System.out.println("************************SELECT QUERY FAILED**************************");
+//			e.printStackTrace();
 		}
 		
 		return rs;
@@ -80,7 +80,7 @@ public class connection {
 				conn.close();
 			} catch (Throwable e) {
 				System.out.println("************************CONNECTION CLOSE FAILED**************************");
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 	}
@@ -91,7 +91,7 @@ public class connection {
 				st.close();
 			} catch (Throwable e) {
 				System.out.println("************************STATEMENT CLOSE FAILED**************************");
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 	}
@@ -102,7 +102,7 @@ public class connection {
 				rs.close();
 			} catch (Throwable e) {
 				System.out.println("************************RESULTSET CLOSE FAILED**************************");
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 		}
 	}
