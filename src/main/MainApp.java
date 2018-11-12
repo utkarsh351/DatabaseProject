@@ -43,7 +43,7 @@ public class MainApp {
 	public static void signup() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter email:");
-		String username = s.nextLine();
+		String email = s.nextLine();
 		System.out.println("Enter password:");
 		String password = s.nextLine();
 		System.out.println("Enter name:");
@@ -58,9 +58,9 @@ public class MainApp {
 		
 		int option = s.nextInt();
 		if(option == 1) {
-			boolean ans = functObject.validUser(username, password);
+			boolean ans = functObject.createUser(email, password, name, addr, phone);
 			if(ans==false) {
-				System.out.println("Wrong Input");
+				System.out.println("Email already exists");
 				signup();
 			} else {
 				login();
@@ -70,6 +70,43 @@ public class MainApp {
 		} else {
 			System.out.println("Wrong Input");
 			signup();
+		}
+	}
+	
+	public static void registerCar() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("Enter licence plate:");
+		String licencePlate = s.nextLine();
+		System.out.println("Enter purchase date: (Format YYYY-MM-DD eg. 2015-12-09)");
+		String purchaseDate = s.nextLine();
+		System.out.println("Enter make:");
+		String make = s.nextLine();
+		System.out.println("Enter model:");
+		String model = s.nextLine();
+		System.out.println("Enter year:(Format YYYY eg. 2018)");
+		String year = s.nextLine();
+		System.out.println("Enter current milage:");
+		int currMilage = s.nextInt();
+		System.out.println("Enter lastServiceDate: (Format YYYY-MM-DD eg. 2015-12-09)");
+		String lastServiceDate = s.nextLine();
+		
+		System.out.println("1.Register");
+		System.out.println("2.Go Back");
+		
+		int option = s.nextInt();
+		if(option == 1) {
+			boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage, lastServiceDate, userInfoObject.email);
+			if(ans) {
+//				customerLandingPage();
+			} else {
+				System.out.println("Wrong Input");
+				registerCar();
+			}
+		} else if (option == 2) {
+//			customerLandingPage();
+		} else {
+			System.out.println("Wrong Input");
+			registerCar();
 		}
 	}
 	

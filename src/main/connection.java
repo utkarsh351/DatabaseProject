@@ -31,23 +31,25 @@ public class connection {
 	}
 	
 //	call this function to create table. pass create statement as a string in query
-	public void createTable(String query) {
+	public int  createTable(String query) {
 		try {
-			stmt.executeUpdate(query);
+			return stmt.executeUpdate(query);
 		} catch (Throwable e) {
 			System.out.println("************************CREATE TABLE FAILED**************************");
 //			e.printStackTrace();
 		}
+		return -1;
 	}
 	
 //	call this function to insert queries. pass insert statement as a string in query
-	public void insertQuery(String query) {
+	public int insertQuery(String query) {
 		try {
-			stmt.executeUpdate(query);
+			return stmt.executeUpdate(query);
 		} catch (Throwable e) {
 			System.out.println("************************INSERT QUERY FAILED**************************");
 //			e.printStackTrace();
 		}
+		return -1;
 	}
 	
 //	call this function for select queries. pass select statement as a string in query
