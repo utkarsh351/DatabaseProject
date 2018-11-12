@@ -51,7 +51,7 @@ CREATE TABLE Payment_record
    );
 
 CREATE TABLE Manager
-  (mananger_id INTEGER,
+  (manager_id INTEGER,
   PRIMARY KEY (mananger_id),
   FOREIGN KEY (mananger_id)
    REFERENCES Employees
