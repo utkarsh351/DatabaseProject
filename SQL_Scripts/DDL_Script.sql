@@ -51,9 +51,9 @@ CREATE TABLE Payment_record
    );
 
 CREATE TABLE Manager
-  (mananger_id INTEGER,
-  PRIMARY KEY (mananger_id),
-  FOREIGN KEY (mananger_id)
+  (manager_id INTEGER,
+  PRIMARY KEY (manager_id),
+  FOREIGN KEY (manager_id)
    REFERENCES Employees
    );
    
@@ -100,7 +100,7 @@ CREATE TABLE Vehicles
 
 CREATE TABLE Owns
   (plate_no VARCHAR(300),
-   last_rec_mileage INTEGER NOT NULL,
+   last_rec_mileage INTEGER,
    last_repair_date DATE,
    purchase_date DATE NOT NUll,
    vehicle_id INTEGER NOT NULL,
@@ -325,26 +325,3 @@ CREATE TABLE Distributor_order
    REFERENCES Customers
    );
 
-create sequence Emp_id_seq START WITH 999204784;
-
-create trigger trg_emp_id
-before insert on Employees
-for each row
-begin
-  select Emp_id_seq.nextval
-  into :new.eid
-  from dual;
-end;
-/
-
-create sequence Cust_id_seq START WITH 1006;
-
-create trigger trg_cust_id
-before insert on Customers
-for each row
-begin
-  select Cust_id_seq.nextval
-  into :new.id
-  from dual;
-end;
-/
