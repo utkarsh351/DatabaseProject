@@ -128,9 +128,8 @@ CREATE TABLE Schedule
    );
    
 CREATE TABLE Maintenance
-  (mid INTEGER,
-   maintenance_type VARCHAR(100),
-  PRIMARY KEY (mid)
+  (maintenance_type VARCHAR(100),
+  PRIMARY KEY (maintenance_type)
    );
    
 CREATE TABLE Repair
@@ -142,11 +141,11 @@ CREATE TABLE Repair
    
 CREATE TABLE Maintenance_schedule
   (maintenance_schedule_id INTEGER,
-   mid INTEGER NOT NULL,
+   m_type  VARCHAR(100) NOT NULL,
   PRIMARY KEY (maintenance_schedule_id),
     FOREIGN KEY (maintenance_schedule_id)
    REFERENCES Schedule,
-   FOREIGN KEY (mid)
+   FOREIGN KEY (m_type)
    REFERENCES Maintenance
    );
    
@@ -171,7 +170,7 @@ CREATE TABLE Service
   (sid INTEGER,
    name VARCHAR(100),
    charge_type VARCHAR(100) NOT NULL,
-   hours_to_complete DECIMAL,
+   hours_to_complete DECIMAL(5,3),
   PRIMARY KEY (sid),
    FOREIGN KEY (charge_type)
    REFERENCES Charge_type
@@ -179,13 +178,13 @@ CREATE TABLE Service
    
 CREATE TABLE Maintenance_uses
   (sid INTEGER NOT NULL,
-   mid INTEGER NOT NULL,
+   m_type VARCHAR(100) NOT NULL,
    miles INTEGER NOT NULL,
    vehicle_id INTEGER NOT NULL,
-  PRIMARY KEY (sid,mid),
+  PRIMARY KEY (sid,m_type,vehicle_id),
    FOREIGN KEY (sid)
    REFERENCES Service,
-   FOREIGN KEY (mid)
+   FOREIGN KEY (m_type)
    REFERENCES Maintenance,
    FOREIGN KEY(vehicle_id) 
    REFERENCES Vehicles
