@@ -49,7 +49,57 @@ public class utilitiesFunctions {
 	}
 
 	public static boolean createUser(String email, String password, String name, String add, String ph) {
-		return true;
+		try {
+			int ans = connObject.insertQuery("Insert into Users Values('"+ email +"','" + password + "')");
+			if(ans!=1) {
+				System.out.println("Email already exists.");
+				return false;
+			} else {
+				ans = connObject.insertQuery("Insert into Customers(id, email, name, tel, addr, sc_id) Values('1231','"+ email +"','" + name + "','"+ph+"','"+add+"','S0001')");
+				if (ans!=1) {
+					System.out.println("Error occured while adding to customer table!");
+					return false;
+				} else {
+					return true;
+				}
+			}
+		} catch (Throwable e) {
+//			e.printStackTrace();
+			System.out.println("Error occured!");
+			return false;
+		}
+	}
+	
+	public static boolean addCar(String licencePlate, String purchaseDate, String make, String model, String year, int currMilage, String lastServiceDate, String email) {
+		try {
+			rs = connObject.selectQuery("SELECT vehicle_id FROM Vehicles v where v.make='"+make +"' " + "and v.model='"+model+"'");
+			int vehicle_id=0;
+			if (!rs.next()) {
+				System.out.println("Make Model doesn't exists");
+				return false;
+			} else {
+				vehicle_id = rs.getInt("vehicle_id");
+				int ans = 0;
+				if(lastServiceDate.equals("")) {
+					ans = connObject.insertQuery("Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
+							+ "Values('"+ licencePlate +"','" + currMilage +"',NULL, Date '"+purchaseDate+"','"+vehicle_id+"','"+email+"','"+make+"')");
+				} else {
+					ans = connObject.insertQuery("Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
+							+ "Values('"+ licencePlate +"','" + currMilage + "', Date '"+ lastServiceDate + "',Date '"+purchaseDate+"','"+vehicle_id+"','"+email+"','"+make+"')");
+				}
+				
+				if (ans!=1) {
+					System.out.println("Error occured while adding to vehicle table!");
+					return false;
+				} else {
+					return true;
+				}
+			}
+		} catch (Throwable e) {
+//			e.printStackTrace();
+			System.out.println("Error occured!");
+			return false;
+		}
 	}
 
 //	view profile
