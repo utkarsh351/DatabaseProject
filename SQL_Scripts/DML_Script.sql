@@ -342,8 +342,8 @@ Values(
 INSERT into Vehicles
 Values(
 	1,
-   'Honda',
-   'Civic'
+   'Toyota',
+   'Corolla'
 );
 INSERT into Vehicles
 Values(
@@ -354,8 +354,8 @@ Values(
 INSERT into Vehicles
 Values(
 	3,
-	'Nissan',
-	'Altima'
+	'Honda',
+	'Civic'
 );
 INSERT into Vehicles
 Values(
@@ -367,19 +367,13 @@ INSERT into Vehicles
 Values(
 	5,
 	'Nissan',
-	'Rogue'
+	'Altima'
 );
 INSERT into Vehicles
 Values(
 	6,
-	'Honda',
-	'Accord'
-);
-INSERT into Vehicles
-Values(
-	7,
-	'Toyota',
-	'Prius'
+	'Nissan',
+	'Rogue'
 );
 
 INSERT into Owns
@@ -388,7 +382,7 @@ Values(
   	90452,
   	Date '2018-9-10',
     Date '2009-12-24',
-    1,
+    3,
     'ethanhunt@gmail.com',
     '2009'
 );
@@ -404,11 +398,11 @@ Values(
 );
 INSERT into Owns
 Values(
-    'RM-1212',
+    'IRM-1212',
   	210452,
   	Date '2018-02-11',
     Date '2002-09-07',
-    3,
+    5,
     'jarvis@gmail.com',
     '2001'
 );
@@ -428,7 +422,7 @@ Values(
   	31209,
   	Date '2018-02-11',
     Date '2016-05-11',
-    5,
+    6,
     'lovestory@gmail.com',
     '2014'
 );
@@ -438,7 +432,7 @@ Values(
   	60452,
   	Date '2017-09-01',
     Date '2010-04-14',
-    6,
+    4,
     'venus@gmail.com',
     '2009'
 );
@@ -448,7 +442,7 @@ Values(
   	19876,
   	Date '2016-11-11',
     Date '2013-03-01',
-    7,
+    2,
     'venus@gmail.com',
     '2013'
 );
@@ -1018,7 +1012,6 @@ Values(
   'D0002',
   'D2'
 );
-
 
 INSERT into Supplies
 Values(
@@ -3926,3 +3919,658 @@ Values (126,
    6,
    1
    );
+--------------------------
+   
+INSERT into Maintenance 
+Values ('A');
+INSERT into Maintenance 
+Values ('B');
+INSERT into Maintenance 
+Values ('C');
+--------------------------
+
+--Toyota Corolla
+
+INSERT into Maintenance_uses 
+Values (9,
+   'A',
+   5000,
+   1);
+INSERT into Maintenance_uses 
+Values (7,
+   'A',
+   5000,
+   1);
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'B',
+   25000,
+   1);
+INSERT into Maintenance_uses 
+Values (7,
+   'B',
+   25000,
+   1);
+INSERT into Maintenance_uses 
+Values (1,
+   'B',
+   25000,
+   1);
+INSERT into Maintenance_uses 
+Values (12,
+   'B',
+   25000,
+   1);
+INSERT into Maintenance_uses 
+Values (3,
+   'B',
+   25000,
+   1);
+INSERT into Maintenance_uses 
+Values (21,
+   'B',
+   25000,
+   1);
+INSERT into Maintenance_uses 
+Values (15,
+   'B',
+   25000,
+   1);
+
+INSERT into Maintenance_uses 
+Values (9,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (7,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (1,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (12,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (3,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (21,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (15,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (16,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (4,
+   'C',
+   45000,
+   1);
+INSERT into Maintenance_uses 
+Values (14,
+   'C',
+   45000,
+   1);
+   
+--Toyota Prius
+
+INSERT into Maintenance_uses 
+Values (9,
+   'A',
+   10000,
+   2);
+INSERT into Maintenance_uses 
+Values (12,
+   'A',
+   10000,
+   2);
+INSERT into Maintenance_uses 
+Values (7,
+   'A',
+   10000,
+   2);
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'B',
+   28000,
+   2);
+INSERT into Maintenance_uses 
+Values (12,
+   'B',
+   28000,
+   2);
+INSERT into Maintenance_uses 
+Values (7,
+   'B',
+   28000,
+   2);
+INSERT into Maintenance_uses 
+Values (1,
+   'B',
+   28000,
+   2);
+INSERT into Maintenance_uses 
+Values (3,
+   'B',
+   28000,
+   2);
+INSERT into Maintenance_uses 
+Values (21,
+   'B',
+   28000,
+   2);
+INSERT into Maintenance_uses 
+Values (15,
+   'B',
+   28000,
+   2);
+INSERT into Maintenance_uses 
+Values (2,
+   'B',
+   28000,
+   2);
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (12,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (7,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (1,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (3,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (21,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (15,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (16,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (4,
+   'C',
+   58000,
+   2);
+INSERT into Maintenance_uses 
+Values (14,
+   'C',
+   58000,
+   2);
+   
+--Nissan Altima
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'A',
+   10000,
+   5);
+INSERT into Maintenance_uses 
+Values (1,
+   'A',
+   10000,
+   5);  
+INSERT into Maintenance_uses 
+Values (12,
+   'A',
+   10000,
+   5);
+INSERT into Maintenance_uses 
+Values (7,
+   'A',
+   10000,
+   5); 
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'B',
+   25000,
+   5);
+INSERT into Maintenance_uses 
+Values (1,
+   'B',
+   25000,
+   5);  
+INSERT into Maintenance_uses 
+Values (12,
+   'B',
+   25000,
+   5);
+INSERT into Maintenance_uses 
+Values (7,
+   'B',
+   25000,
+   5);
+INSERT into Maintenance_uses 
+Values (3,
+   'B',
+   25000,
+   5); 
+INSERT into Maintenance_uses 
+Values (21,
+   'B',
+   25000,
+   5);
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'C',
+   50000,
+   5);
+INSERT into Maintenance_uses 
+Values (1,
+   'C',
+   50000,
+   5);  
+INSERT into Maintenance_uses 
+Values (12,
+   'C',
+   50000,
+   5);
+INSERT into Maintenance_uses 
+Values (7,
+   'C',
+   50000,
+   5);
+INSERT into Maintenance_uses 
+Values (3,
+   'C',
+   50000,
+   5); 
+INSERT into Maintenance_uses 
+Values (21,
+   'C',
+   50000,
+   5);
+INSERT into Maintenance_uses 
+Values (16,
+   'C',
+   50000,
+   5);
+INSERT into Maintenance_uses 
+Values (4,
+   'C',
+   50000,
+   5);
+INSERT into Maintenance_uses 
+Values (14,
+   'C',
+   50000,
+   5);
+INSERT into Maintenance_uses 
+Values (15,
+   'C',
+   50000,
+   5);
+   
+--Nissam Rogue
+
+INSERT into Maintenance_uses 
+Values (9,
+   'A',
+   10000,
+   6);
+INSERT into Maintenance_uses 
+Values (1,
+   'A',
+   10000,
+   6); 
+INSERT into Maintenance_uses 
+Values (14,
+   'A',
+   10000,
+   6);
+INSERT into Maintenance_uses 
+Values (12,
+   'A',
+   10000,
+   6);
+INSERT into Maintenance_uses 
+Values (7,
+   'A',
+   10000,
+   6); 
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'B',
+   37000,
+   6);
+INSERT into Maintenance_uses 
+Values (1,
+   'B',
+   37000,
+   6); 
+INSERT into Maintenance_uses 
+Values (14,
+   'B',
+   37000,
+   6);
+INSERT into Maintenance_uses 
+Values (12,
+   'B',
+   37000,
+   6);
+INSERT into Maintenance_uses 
+Values (7,
+   'B',
+   37000,
+   6); 
+INSERT into Maintenance_uses 
+Values (16,
+   'B',
+   37000,
+   6);
+INSERT into Maintenance_uses 
+Values (21,
+   'B',
+   37000,
+   6);
+INSERT into Maintenance_uses 
+Values (15,
+   'B',
+   37000,
+   6);
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'C',
+   70000,
+   6);
+INSERT into Maintenance_uses 
+Values (1,
+   'C',
+   70000,
+   6); 
+INSERT into Maintenance_uses 
+Values (14,
+   'C',
+   70000,
+   6);
+INSERT into Maintenance_uses 
+Values (12,
+   'C',
+   70000,
+   6);
+INSERT into Maintenance_uses 
+Values (7,
+   'C',
+   70000,
+   6); 
+INSERT into Maintenance_uses 
+Values (16,
+   'C',
+   70000,
+   6);
+INSERT into Maintenance_uses 
+Values (21,
+   'C',
+   70000,
+   6);
+INSERT into Maintenance_uses 
+Values (15,
+   'C',
+   70000,
+   6);
+   
+--Honda Accord
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'A',
+   15000,
+   4);
+INSERT into Maintenance_uses 
+Values (1,
+   'A',
+   15000,
+   4); 
+INSERT into Maintenance_uses 
+Values (12,
+   'A',
+   15000,
+   4);
+INSERT into Maintenance_uses 
+Values (7,
+   'A',
+   15000,
+   4); 
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'B',
+   37000,
+   4);
+INSERT into Maintenance_uses 
+Values (1,
+   'B',
+   37000,
+   4); 
+INSERT into Maintenance_uses 
+Values (12,
+   'B',
+   37000,
+   4);
+INSERT into Maintenance_uses 
+Values (7,
+   'B',
+   37000,
+   4);  
+INSERT into Maintenance_uses 
+Values (3,
+   'B',
+   37000,
+   4); 
+INSERT into Maintenance_uses 
+Values (21,
+   'B',
+   37000,
+   4); 
+INSERT into Maintenance_uses 
+Values (15,
+   'B',
+   37000,
+   4); 
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'C',
+   67000,
+   4);
+INSERT into Maintenance_uses 
+Values (1,
+   'C',
+   67000,
+   4); 
+INSERT into Maintenance_uses 
+Values (12,
+   'C',
+   67000,
+   4);
+INSERT into Maintenance_uses 
+Values (7,
+   'C',
+   67000,
+   4);  
+INSERT into Maintenance_uses 
+Values (3,
+   'C',
+   67000,
+   4); 
+INSERT into Maintenance_uses 
+Values (21,
+   'C',
+   67000,
+   4); 
+INSERT into Maintenance_uses 
+Values (15,
+   'C',
+   67000,
+   4);
+INSERT into Maintenance_uses 
+Values (16,
+   'C',
+   67000,
+   4);
+INSERT into Maintenance_uses 
+Values (4,
+   'C',
+   67000,
+   4);
+INSERT into Maintenance_uses 
+Values (14,
+   'C',
+   67000,
+   4);
+  
+--Honda Civic
+
+INSERT into Maintenance_uses 
+Values (9,
+   'A',
+   14000,
+   3);
+INSERT into Maintenance_uses 
+Values (3,
+   'A',
+   14000,
+   3);
+INSERT into Maintenance_uses 
+Values (7,
+   'A',
+   14000,
+   3); 
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'B',
+   29000,
+   3);
+INSERT into Maintenance_uses 
+Values (3,
+   'B',
+   29000,
+   3);
+INSERT into Maintenance_uses 
+Values (7,
+   'B',
+   29000,
+   3);
+INSERT into Maintenance_uses 
+Values (1,
+   'B',
+   29000,
+   3);
+INSERT into Maintenance_uses 
+Values (12,
+   'B',
+   29000,
+   3);
+INSERT into Maintenance_uses 
+Values (4,
+   'B',
+   29000,
+   3);
+INSERT into Maintenance_uses 
+Values (21,
+   'B',
+   29000,
+   3);
+INSERT into Maintenance_uses 
+Values (15,
+   'B',
+   29000,
+   3);
+   
+INSERT into Maintenance_uses 
+Values (9,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (3,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (7,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (1,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (12,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (4,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (21,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (15,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (16,
+   'C',
+   44000,
+   3);
+INSERT into Maintenance_uses 
+Values (14,
+   'C',
+   44000,
+   3);
+   
