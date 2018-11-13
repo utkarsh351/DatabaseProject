@@ -21,12 +21,14 @@ CREATE TABLE Employees
    wage INTEGER,
    freq VARCHAR(100),
    s_date DATE,
+   role VARCHAR(300),
    service_centre_id VARCHAR(300),
   PRIMARY KEY (eid),
   FOREIGN KEY (email)
    REFERENCES Users,
   FOREIGN KEY (service_centre_id )
-   REFERENCES Service_center
+   REFERENCES Service_center,
+     CHECK (role IN ('manager','receptionist','mechanic'))
    );
 
 CREATE TABLE Payment_cycle
@@ -48,27 +50,6 @@ CREATE TABLE Payment_record
    REFERENCES Employees,
     FOREIGN KEY (pcid)
    REFERENCES Payment_cycle
-   );
-
-CREATE TABLE Manager
-  (manager_id INTEGER,
-  PRIMARY KEY (manager_id),
-  FOREIGN KEY (manager_id)
-   REFERENCES Employees
-   );
-   
-CREATE TABLE Receptionist
-  (receptionist_id INTEGER,
-  PRIMARY KEY (receptionist_id),
-  FOREIGN KEY (receptionist_id)
-   REFERENCES Employees
-   );
-   
-CREATE TABLE Mechanic
-  (mechanic_id INTEGER,
-  PRIMARY KEY (mechanic_id),
-  FOREIGN KEY (mechanic_id)
-   REFERENCES Employees
    );
    
 CREATE TABLE Customers
@@ -124,7 +105,7 @@ CREATE TABLE Schedule
    FOREIGN KEY (customer_plate_no)
    REFERENCES Owns,
    FOREIGN KEY (mechanic_id)
-   REFERENCES Mechanic
+   REFERENCES Employees
    );
    
 CREATE TABLE Maintenance
@@ -134,7 +115,8 @@ CREATE TABLE Maintenance
    
 CREATE TABLE Repair
   (rid INTEGER,
-   name VARCHAR(100),
+   repair_name VARCHAR(100),
+   diagnostic_name VARCHAR(100),
    diagnostic_cost INTEGER,
   PRIMARY KEY (rid)
    );

@@ -96,6 +96,7 @@ Values(
 	'11000',
 	'month',
 	Date '2016-08-15',
+	'manager',
 	'S0001'
 );
 INSERT into Employees
@@ -108,6 +109,7 @@ Values(
 	'8000',
 	'month',
 	Date '2017-12-04',
+	'receptionist',
 	'S0001'
 );
 INSERT into Employees
@@ -120,6 +122,7 @@ Values(
 	'30',
 	'hour',
 	Date '2018-07-29',
+	'mechanic',
 	'S0001'
 );
 INSERT into Employees
@@ -132,6 +135,7 @@ Values(
 	'40',
 	'hour',
 	Date '2015-02-09',
+	'mechanic',
 	'S0001'
 );
 INSERT into Employees
@@ -144,6 +148,7 @@ Values(
 	'35',
 	'hour',
 	Date '2016-05-01',
+	'mechanic',
 	'S0001'
 );
 INSERT into Employees
@@ -156,6 +161,7 @@ Values(
 	'30',
 	'hour',
 	Date '2017-12-28',
+	'mechanic',
 	'S0001'
 );
 INSERT into Employees
@@ -168,6 +174,7 @@ Values(
 	'34',
 	'hour',
 	Date '2017-04-12',
+	'mechanic',
 	'S0001'
 );
 INSERT into Employees
@@ -180,6 +187,7 @@ Values(
 	'12000',
 	'month',
 	Date '2017-04-15',
+	'manager',
 	'S0002'
 );
 
@@ -193,6 +201,7 @@ Values(
 	'9000',
 	'month',
 	Date '2010-01-04',
+	'receptionist',
 	'S0002'
 );
 INSERT into Employees
@@ -205,6 +214,7 @@ Values(
 	'35',
 	'hour',
 	Date '2017-01-26',
+	'mechanic',
 	'S0002'
 );
 INSERT into Employees
@@ -217,6 +227,7 @@ Values(
 	'40',
 	'hour',
 	Date '2016-07-06',
+	'mechanic',
 	'S0002'
 );
 
@@ -230,6 +241,7 @@ Values(
 	'40',
 	'hour',
 	Date '2013-10-29',
+	'mechanic',
 	'S0002'
 );
 INSERT into Employees
@@ -242,6 +254,7 @@ Values(
 	'30',
 	'hour',
 	Date '2018-10-13',
+	'mechanic',
 	'S0002'
 );
 INSERT into Employees
@@ -254,12 +267,8 @@ Values(
 	'30',
 	'hour',
 	Date '2017-03-29',
+	'mechanic',
 	'S0002'
-);
-
-INSERT into Manager
-Values(
-	950932130
 );
 
 --#Inserting into Customer and their Vehicles [eg for Ethan Hunt]
