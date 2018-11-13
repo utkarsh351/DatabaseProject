@@ -39,6 +39,22 @@ public class utilitiesFunctions {
 		}
 
 	}
+	
+	// does Employee exist
+		public static boolean doesEmployeeExists(int emp_id) {
+			try {
+				rs = connObject.selectQuery("SELECT email FROM Employees where eid='" + emp_id + "'");
+				if (!rs.next()) {
+					return false;
+				} else {
+					return true;
+				}
+			} catch (Throwable e) {
+				System.out.println("Wrong Username");
+				return false;
+			}
+
+		}
 
 	public static String getRole(String email) {
 		try {
@@ -213,7 +229,7 @@ public class utilitiesFunctions {
 	public static ResultSet getEmployeeInfo(String email) {
 		try {
 			rs = connObject.selectQuery(
-					"SELECT eid,s_date,email,E.addr AS e_addr,E.tel AS e_tel ,wage,freq,E.name AS e_name,SC.name AS sc_name FROM Employees E JOIN Service_center SC ON E.service_centre_id=SC.sc_id WHERE email='"
+					"SELECT eid,s_date,service_centre_id,email,E.addr AS e_addr,E.tel AS e_tel ,wage,freq,E.name AS e_name,SC.name AS sc_name FROM Employees E JOIN Service_center SC ON E.service_centre_id=SC.sc_id WHERE email='"
 							+ email + "'");
 			return rs;
 		} catch (Throwable e) {
@@ -312,4 +328,22 @@ public class utilitiesFunctions {
 		}
 	}
 
+	// get Employee info
+		public static ResultSet getInventory(String sc_id) {
+			try {
+				rs = connObject.selectQuery(
+						"Select P.part_id AS part_id, P.name, Q.current_quantity," + 
+						"Q.unit_price,Q.make,Q.min_inventory_thold,Q.min_order_quantity " + 
+						"FROM (SELECT * " + 
+						"FROM Inventory I " + 
+						"JOIN Parts_to_make PM ON I.parts_to_make_id=PM.parts_to_make_id) Q " + 
+						"JOIN Parts P ON P.part_id=Q.part_id " + 
+						"WHERE service_center_id=';"
+								+ sc_id + "'");
+				return rs;
+			} catch (Throwable e) {
+				System.out.println("Wrong Service Center Id");
+				return rs;
+			}
+		}
 }

@@ -275,9 +275,8 @@ public class MainApp {
 				System.out.println("C. " + rs.getString("service_type"));
 				System.out.println("D. " + rs.getString("mechanic"));
 				System.out.println("E. " + rs.getString("start_time"));
-				System.out.println("E. " + rs.getString("end_time"));
-				System.out.println("E. " + rs.getString("status"));
-				System.out.println("F. ");
+				System.out.println("F. " + rs.getString("end_time"));
+				System.out.println("G. " + rs.getString("status"));
 			}
 			System.out.println("1. Go Back");
 			Scanner s = new Scanner(System.in);
@@ -613,53 +612,61 @@ public class MainApp {
 
 	// Manager
 	public static void managerLandingPage() {
-		System.out.println("1. Profile");
-		System.out.println("2. View Customer Profile");
-		System.out.println("3. Add New Employees");
-		System.out.println("4. Payroll");
-		System.out.println("5. Inventory");
-		System.out.println("6. Orders");
-		System.out.println("7. Notifications");
-		System.out.println("8. New Car Model");
-		System.out.println("9. Car Service Details");
-		System.out.println("10. Service History");
-		System.out.println("11. Invoices");
-		System.out.println("12. Logout");
-
-		Scanner s = new Scanner(System.in);
-		while (true) {
-			String selected_option = s.nextLine();
-
-			if (selected_option.equals("1")) {
-				employeeProfilePage();
-			} else if (selected_option.equals("2")) {
-				employeeViewCustomerProfilePage();
-			} else if (selected_option.equals("3")) {
-				managerAddNewEmployees();
-			} else if (selected_option.equals("4")) {
-				customerInvoice();
-			} else if (selected_option.equals("5")) {
-				// add Stuff
-			} else if (selected_option.equals("6")) {
-				// add Stuff
-			} else if (selected_option.equals("7")) {
-				// add Stuff
-			} else if (selected_option.equals("8")) {
-				// add Stuff
-			} else if (selected_option.equals("9")) {
-				// add Stuff
-			} else if (selected_option.equals("10")) {
-				// add Stuff
-			} else if (selected_option.equals("11")) {
-				// add Stuff
-			} else if (selected_option.equals("12")) {
-				// add Stuff
-			} else {
-				System.out.println("Choose a valid option");
+		try {
+			ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+			while (rs.next()) {
+				userInfoObject.service_centre_id = rs.getString("service_centre_id");
 			}
+			System.out.println("1. Profile");
+			System.out.println("2. View Customer Profile");
+			System.out.println("3. Add New Employees");
+			System.out.println("4. Payroll");
+			System.out.println("5. Inventory");
+			System.out.println("6. Orders");
+			System.out.println("7. Notifications");
+			System.out.println("8. New Car Model");
+			System.out.println("9. Car Service Details");
+			System.out.println("10. Service History");
+			System.out.println("11. Invoices");
+			System.out.println("12. Logout");
+
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					employeeProfilePage();
+				} else if (selected_option.equals("2")) {
+					employeeViewCustomerProfilePage();
+				} else if (selected_option.equals("3")) {
+					managerAddNewEmployees();
+				} else if (selected_option.equals("4")) {
+					customerInvoice();
+				} else if (selected_option.equals("5")) {
+					managerInventoryPage();
+				} else if (selected_option.equals("6")) {
+					// add Stuff
+				} else if (selected_option.equals("7")) {
+					// add Stuff
+				} else if (selected_option.equals("8")) {
+					// add Stuff
+				} else if (selected_option.equals("9")) {
+					// add Stuff
+				} else if (selected_option.equals("10")) {
+					// add Stuff
+				} else if (selected_option.equals("11")) {
+					// add Stuff
+				} else if (selected_option.equals("12")) {
+					// add Stuff
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
-	
+
 	public static void managerAddNewEmployees() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter Name:");
@@ -682,8 +689,7 @@ public class MainApp {
 
 		int option = s.nextInt();
 		if (option == 1) {
-			 functObject.addEmpolyee(emp_name, addr, email, tel, role, s_date,
-					wage,userInfoObject.service_centre_id);
+			functObject.addEmpolyee(emp_name, addr, email, tel, role, s_date, wage, userInfoObject.service_centre_id);
 		} else if (option == 2) {
 			managerLandingPage();
 		} else {
@@ -691,7 +697,76 @@ public class MainApp {
 			managerAddNewEmployees();
 		}
 	}
-	
+
+	public static void managerPayrollPage() {
+		try {
+			System.out.println("Enter employee ID:");
+			Scanner s2 = new Scanner(System.in);
+			while (true) {
+				int employee_id = s2.nextInt();
+				if (functObject.doesEmployeeExists(employee_id)) {
+					// ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
+					while (rs.next()) {
+						System.out.println("A. " + rs.getString("paycheck_date"));
+						System.out.println("B. " + rs.getString("pay_period"));
+						System.out.println("C. " + rs.getInt("eid"));
+						System.out.println("D. " + rs.getString("name"));
+						System.out.println("E. " + rs.getInt("wage"));
+						System.out.println("F. " + rs.getString("freq"));
+						System.out.println("G. " + rs.getInt("units"));
+						System.out.println("H. " + rs.getString("current_earnings"));
+						System.out.println("I. " + rs.getString("year_earnings"));
+					}
+					break;
+				} else {
+					System.out.println("Enter a valid employee id");
+				}
+			}
+			System.out.println("1. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					managerLandingPage();
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void managerInventoryPage() {
+		try {
+			ResultSet rs = functObject.getInventory(userInfoObject.service_centre_id);
+			while (rs.next()) {
+				System.out.println("A. " + rs.getInt("part_id"));
+				System.out.println("B. " + rs.getString("name") + " " + rs.getString("make"));
+				System.out.println("C. " + rs.getInt("current_quantity"));
+				System.out.println("D. " + rs.getInt("unit_price"));
+				System.out.println("E. " + rs.getInt("min_inventory_thold"));
+				System.out.println("F. " + rs.getInt("min_order_quantity"));
+				System.out.println(" ");
+			}
+			System.out.println("1. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					managerLandingPage();
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
 	// Receptionist
 	public static void receptionistLandingPage() {
 		System.out.println("1. Profile");
@@ -846,7 +921,6 @@ public class MainApp {
 		}
 	}
 
-	
 	// Employee Profile
 	public static void employeeProfilePage() {
 		System.out.println("1. View Profile");
@@ -876,7 +950,6 @@ public class MainApp {
 	public static void employeeViewProfilePage() {
 		try {
 			ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
-			userInfoObject.service_centre_id=rs.getString("service_centre_id");
 			while (rs.next()) {
 				System.out.println("A. " + rs.getString("eid"));
 				System.out.println("B. " + rs.getString("e_name"));
