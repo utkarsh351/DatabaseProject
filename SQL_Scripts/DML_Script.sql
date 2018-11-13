@@ -1,3 +1,41 @@
+---- Pre Insert TRIGGERS HERE || Write INSERT statements below this section ------
+create sequence Schedule_id_seq;
+
+create trigger trg_schedule_id
+before insert on Schedule
+for each row
+begin
+  select Schedule_id_seq.nextval
+  into :new.schedule_id 
+  from dual;
+end;
+/
+
+create sequence Maintain_schedule_id_seq;
+
+create trigger trg_maintain_schedule_id
+before insert on Maintenance_schedule
+for each row
+begin
+  select Maintain_schedule_id_seq.nextval
+  into :new.maintenance_schedule_id
+  from dual;
+end;
+/
+
+create sequence Repair_schedule_id_seq;
+
+create trigger trg_repair_schedule_id
+before insert on Repair_schedule
+for each row
+begin
+  select Repair_schedule_id_seq.nextval
+  into :new.repair_schedule_id
+  from dual;
+end;
+/
+-------------------------------------------------------
+
 INSERT into Service_center
 Values(
 	'S0001',
@@ -4583,8 +4621,397 @@ Values (14,
    44000,
    3);
 
+INSERT into Repair
+Values(
+  1,
+  'Engine knock',
+  'Timing issue',
+  75
+);
 
----- TRIGGERS HERE || Write INSERT statements above this
+INSERT into Repair
+Values(
+  2,
+  'Car drifts in a particular direction',
+  'Wheel alignment issue',
+  50
+);
+
+INSERT into Repair
+Values(
+  3,
+  'Battery does not hold charge',
+  '​​Battery needs replacement',
+  25
+);
+
+INSERT into Repair
+Values(
+  4,
+  'Black/unclean exhaust',
+  '​​​​Bad catalytic convertor and filters',
+  75
+);
+
+INSERT into Repair
+Values(
+  5,
+  'A/C-Heater not working',
+  '​​​​Drive belt damaged, coolant not enough, weak battery',
+  50
+);
+
+INSERT into Repair
+Values(
+  6,
+  'Headlamps/Tail lamps not working',
+  '​​​​Light assembly damaged',
+  30
+);
+
+INSERT into Repair
+Values(
+  7,
+  'Check engine light',
+  '​​​​Gearbox and Torque convertor issue',
+  100
+);
+
+INSERT into Repair_uses
+Values(
+  8,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  15,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  5,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  19,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  20,
+  2
+);
+
+INSERT into Repair_uses
+Values(
+  2,
+  3
+);
+
+INSERT into Repair_uses
+Values(
+  1,
+  4
+);
+
+INSERT into Repair_uses
+Values(
+  12,
+  4
+);
+
+INSERT into Repair_uses
+Values(
+  6,
+  4
+);
+
+INSERT into Repair_uses
+Values(
+  8,
+  5
+);
+INSERT into Repair_uses
+Values(
+  7,
+  5
+);
+INSERT into Repair_uses
+Values(
+  2,
+  5
+);
+
+INSERT into Repair_uses
+Values(
+  11,
+  6
+);
+
+INSERT into Repair_uses
+Values(
+  17,
+  6
+);
+
+INSERT into Repair_uses
+Values(
+  18,
+  6
+);
+
+INSERT into Repair_uses
+Values(
+  13,
+  7
+);
+
+INSERT into Repair_uses
+Values(
+  10,
+  7
+);
+
+INSERT into Repair_uses
+Values(
+  5,
+  7
+);
+INSERT into Repair_uses
+Values(
+  19,
+  7
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2018-09-10 10:00:00',
+  'XYZ-5643',
+  557279280,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2018-02-25 09:00:00',
+  'XYZ-5643',
+  557279281,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2017-10-15 08:00:00',
+  'XYZ-5643',
+  183683346,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2018-08-06 08:00:00',
+  'AHS-3132',
+  557279282,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2018-05-15 10:30:00',
+  'AHS-3132',
+  557279283,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2018-01-28 12:00:00',
+  'AHS-3132',
+  557279283,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2018-02-11 08:30:00',
+  'IRM-1212',
+  557279281,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2017-12-10 09:30:00',
+  'IRM-1212',
+  557279281,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2017-01-20 10:00:00',
+  'IRM-1212',
+  557279281,
+  'complete'
+);
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2018-02-11 08:30:00',
+  'DEL-8888',
+  187658163,
+  'complete'
+);
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2016-11-05 09:00:00',
+  'DEL-8888',
+  401671897,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2017-09-01 09:00:00',
+  'P11-212A',
+  590424694,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2014-06-15 08:30:00',
+  'P11-212A',
+  310773348,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2016-11-11 08:30:00',
+  'WIM-BLE5',
+  310773348,
+  'complete'
+);
+
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2016-01-02 14:00:00',
+  'WIM-BLE5',
+  401671897,
+  'complete'
+);
+INSERT into Schedule
+Values(
+  1,
+  TIMESTAMP '2015-09-30 11:00:00',
+  'WIM-BLE5',
+  401671897,
+  'complete'
+);
+
+INSERT into Repair_schedule
+Values(
+  4,
+  3
+);
+INSERT into Repair_schedule
+Values(
+  11,
+  6
+);
+INSERT into Repair_schedule
+Values(
+  15,
+  5
+);
+INSERT into Repair_schedule
+Values(
+  16,
+  1
+);
+
+INSERT into Maintenance_schedule
+Values(
+  1,
+  'C'
+);
+
+INSERT into Maintenance_schedule
+Values(
+  2,
+  'B'
+);
+INSERT into Maintenance_schedule
+Values(
+  3,
+  'C'
+);
+INSERT into Maintenance_schedule
+Values(
+  5,
+  'B'
+);
+INSERT into Maintenance_schedule
+Values(
+  6,
+  'A'
+);
+INSERT into Maintenance_schedule
+Values(
+  7,
+  'A'
+);
+INSERT into Maintenance_schedule
+Values(
+  8,
+  'C'
+);
+INSERT into Maintenance_schedule
+Values(
+  9,
+  'B'
+);
+INSERT into Maintenance_schedule
+Values(
+  10,
+  'A'
+);
+INSERT into Maintenance_schedule
+Values(
+  12,
+  'B'
+);
+INSERT into Maintenance_schedule
+Values(
+  13,
+  'A'
+);
+INSERT into Maintenance_schedule
+Values(
+  14,
+  'A'
+);
+---- Post Insert TRIGGERS HERE || Write INSERT statements above this
 create sequence Emp_id_seq START WITH 999204784;
 
 create trigger trg_emp_id
@@ -4608,3 +5035,4 @@ begin
   from dual;
 end;
 /
+------------------------
