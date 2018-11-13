@@ -24,6 +24,23 @@ public class utilitiesFunctions {
 		}
 
 	}
+	
+	// does user exist
+	public static boolean doesUserExists(String username) {
+		try {
+			rs = connObject.selectQuery(
+					"SELECT email FROM Users where email='" + username + "'");
+			if (!rs.next()) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong Username");
+			return false;
+		}
+
+	}
 
 	public static String getRole(String email) {
 		try {
@@ -50,13 +67,14 @@ public class utilitiesFunctions {
 
 	public static boolean createUser(String email, String password, String name, String add, String ph) {
 		try {
-			int ans = connObject.insertQuery("Insert into Users Values('"+ email +"','" + password + "')");
-			if(ans!=1) {
+			int ans = connObject.insertQuery("Insert into Users Values('" + email + "','" + password + "')");
+			if (ans != 1) {
 				System.out.println("Email already exists.");
 				return false;
 			} else {
-				ans = connObject.insertQuery("Insert into Customers(id, email, name, tel, addr, sc_id) Values('1231','"+ email +"','" + name + "','"+ph+"','"+add+"','S0001')");
-				if (ans!=1) {
+				ans = connObject.insertQuery("Insert into Customers(id, email, name, tel, addr, sc_id) Values('1231','"
+						+ email + "','" + name + "','" + ph + "','" + add + "','S0001')");
+				if (ans != 1) {
 					System.out.println("Error occured while adding to customer table!");
 					return false;
 				} else {
@@ -69,26 +87,33 @@ public class utilitiesFunctions {
 			return false;
 		}
 	}
-	
-	public static boolean addCar(String licencePlate, String purchaseDate, String make, String model, String year, int currMilage, String lastServiceDate, String email) {
+
+	public static boolean addCar(String licencePlate, String purchaseDate, String make, String model, String year,
+			int currMilage, String lastServiceDate, String email) {
 		try {
-			rs = connObject.selectQuery("SELECT vehicle_id FROM Vehicles v where v.make='"+make +"' " + "and v.model='"+model+"'");
-			int vehicle_id=0;
+			rs = connObject.selectQuery(
+					"SELECT vehicle_id FROM Vehicles v where v.make='" + make + "' " + "and v.model='" + model + "'");
+			int vehicle_id = 0;
 			if (!rs.next()) {
 				System.out.println("Make Model doesn't exists");
 				return false;
 			} else {
 				vehicle_id = rs.getInt("vehicle_id");
 				int ans = 0;
-				if(lastServiceDate.equals("")) {
-					ans = connObject.insertQuery("Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
-							+ "Values('"+ licencePlate +"','" + currMilage +"',NULL, Date '"+purchaseDate+"','"+vehicle_id+"','"+email+"','"+make+"')");
+				if (lastServiceDate.equals("")) {
+					ans = connObject.insertQuery(
+							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
+									+ "Values('" + licencePlate + "','" + currMilage + "',NULL, Date '" + purchaseDate
+									+ "','" + vehicle_id + "','" + email + "','" + make + "')");
 				} else {
-					ans = connObject.insertQuery("Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
-							+ "Values('"+ licencePlate +"','" + currMilage + "', Date '"+ lastServiceDate + "',Date '"+purchaseDate+"','"+vehicle_id+"','"+email+"','"+make+"')");
+					ans = connObject.insertQuery(
+							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
+									+ "Values('" + licencePlate + "','" + currMilage + "', Date '" + lastServiceDate
+									+ "',Date '" + purchaseDate + "','" + vehicle_id + "','" + email + "','" + make
+									+ "')");
 				}
-				
-				if (ans!=1) {
+
+				if (ans != 1) {
 					System.out.println("Error occured while adding to vehicle table!");
 					return false;
 				} else {
@@ -112,10 +137,12 @@ public class utilitiesFunctions {
 			return rs;
 		}
 	}
-	
+
 	public static ResultSet getCustomerCars(String email) {
 		try {
-			rs = connObject.selectQuery("SELECT * FROM Owns O1 JOIN Vehicles V1 ON O1.vehicle_id=V1.vehicle_id WHERE email='" + email + "'");
+			rs = connObject
+					.selectQuery("SELECT * FROM Owns O1 JOIN Vehicles V1 ON O1.vehicle_id=V1.vehicle_id WHERE email='"
+							+ email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -124,37 +151,39 @@ public class utilitiesFunctions {
 	}
 
 //	update customer profile
-	public static ResultSet updateCustomer(String email, String password, String name, String add, String ph) {
-		return rs;
-	}
-	public static ResultSet updateCustomerName(String email,String name) {
+
+	public static ResultSet updateCustomerName(String email, String name) {
 		try {
-			rs = connObject.selectQuery("UPDATE Customers SET name='" + name + "' " + "WHERE email='" + email + "'" );
+			rs = connObject.selectQuery("UPDATE Customers SET name='" + name + "' " + "WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
 			return rs;
 		}
 	}
-	public static ResultSet updateCustomerPassword(String email,String password) {
+
+	public static ResultSet updateCustomerPassword(String email, String password) {
 		try {
-			rs = connObject.selectQuery("UPDATE Users SET password='" + password + "' " + "WHERE email='" + email+ "'");
+			rs = connObject
+					.selectQuery("UPDATE Users SET password='" + password + "' " + "WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
 			return rs;
 		}
 	}
+
 	public static ResultSet updateCustomerAddress(String email, String addr) {
 		try {
-			rs = connObject.selectQuery("UPDATE Customers SET addr='" + addr + "' " + "WHERE email='" + email+ "'");
+			rs = connObject.selectQuery("UPDATE Customers SET addr='" + addr + "' " + "WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
 			return rs;
 		}
 	}
-	public static ResultSet updateCustomerPhoneNumber(String email,String tel) {
+
+	public static ResultSet updateCustomerPhoneNumber(String email, String tel) {
 		try {
 			rs = connObject.selectQuery("UPDATE Customers SET tel='" + tel + "' " + "WHERE email='" + email + "'");
 			return rs;
@@ -187,4 +216,73 @@ public class utilitiesFunctions {
 	public static ResultSet viewInvoiceById(String email, String serviceId) {
 		return rs;
 	}
+
+// get Employee info
+	public static ResultSet getEmployeeInfo(String email) {
+		try {
+			rs = connObject.selectQuery(
+					"SELECT eid,s_date,email,E.addr AS e_addr,E.tel AS e_tel ,wage,freq,E.name AS e_name,SC.name AS sc_name FROM Employees E JOIN Service_center SC ON E.service_centre_id=SC.sc_id WHERE email='"
+							+ email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+	
+//	update employee profile
+
+	public static ResultSet updateEmployeeName(String email, String name) {
+		try {
+			rs = connObject.selectQuery("UPDATE Employees SET name='" + name + "' " + "WHERE email='" + email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+
+	public static ResultSet updateEmployeePassword(String email, String password) {
+		try {
+			rs = connObject
+					.selectQuery("UPDATE Users SET password='" + password + "' " + "WHERE email='" + email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+	
+	public static ResultSet updateEmployeeEmail(String email, String new_email) {
+		try {
+			rs = connObject
+					.selectQuery("UPDATE Users SET email='" + new_email + "' " + "WHERE email='" + email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+
+	public static ResultSet updateEmployeeAddress(String email, String addr) {
+		try {
+			rs = connObject.selectQuery("UPDATE Employees SET addr='" + addr + "' " + "WHERE email='" + email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+
+	public static ResultSet updateEmployeePhoneNumber(String email, String tel) {
+		try {
+			rs = connObject.selectQuery("UPDATE Employees SET tel='" + tel + "' " + "WHERE email='" + email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+
+
 }

@@ -33,6 +33,10 @@ public class MainApp {
 				userInfoObject = new userInfo(functObject.getRole(username), username);
 				if (userInfoObject.role.equals("customer")) {
 					customerLandingPage();
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistLandingPage();
+				} else if (userInfoObject.role.equals("manager")) {
+					managerLandingPage();
 				}
 			}
 		} else if (option == 2) {
@@ -143,7 +147,6 @@ public class MainApp {
 	}
 
 	// Customer Profile
-
 	public static void customerProfilePage() {
 		System.out.println("1. View Profile");
 		System.out.println("2. Update Profile");
@@ -239,7 +242,6 @@ public class MainApp {
 	}
 
 	// Customer Service
-
 	public static void customerServicePage() {
 		System.out.println("1. View Service History");
 		System.out.println("2. Schedule Service");
@@ -323,7 +325,6 @@ public class MainApp {
 	}
 
 	// Customer Maintenance Schedule
-
 	public static void customerScheduleMaintenancePage1() {
 		System.out.println("1. Find Service Date");
 		System.out.println("2. Go Back");
@@ -378,7 +379,6 @@ public class MainApp {
 	}
 
 	// Customer Repair Schedule
-
 	public static void customerScheduleRepairPage1() {
 		System.out.println("1. Engine knock");
 		System.out.println("2. Car drifts in a particular direction");
@@ -461,7 +461,6 @@ public class MainApp {
 	}
 
 	// Customer Reschedule Service
-
 	public static void customerRescheduleServicePage1() {
 		// Display
 		// 1. License Plate, Service ID, Service Date, Service Type, Service Details
@@ -538,7 +537,6 @@ public class MainApp {
 	}
 
 	// Customer Invoice
-
 	public static void customerInvoice() {
 		try {
 			// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
@@ -559,7 +557,7 @@ public class MainApp {
 				String selected_option = s.nextLine();
 
 				if (selected_option.equals("1")) {
-					//add stuff
+					// add stuff
 				} else if (selected_option.equals("2")) {
 					customerLandingPage();
 				} else {
@@ -578,23 +576,23 @@ public class MainApp {
 			while (true) {
 				String service_id = s.nextLine();
 
-				//if (vaild(service_id)) {
-					// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
-					while (rs.next()) {
-						System.out.println("A. " + rs.getString("service_id"));
-						System.out.println("B. " + rs.getString("service_start_date"));
-						System.out.println("C. " + rs.getString("service_end_date"));
-						System.out.println("D. " + rs.getString("plate_no"));
-						System.out.println("E. " + rs.getString("service_type"));
-						System.out.println("E. " + rs.getString("mechanic_name"));
-						System.out.println("E. " + rs.getInt("total_service_cost"));
-						System.out.println("F. ");
-					}
-					break;
-				//} 
-				//else {
-					//System.out.println("Choose a valid option");
-				//}
+				// if (vaild(service_id)) {
+				// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+				while (rs.next()) {
+					System.out.println("A. " + rs.getString("service_id"));
+					System.out.println("B. " + rs.getString("service_start_date"));
+					System.out.println("C. " + rs.getString("service_end_date"));
+					System.out.println("D. " + rs.getString("plate_no"));
+					System.out.println("E. " + rs.getString("service_type"));
+					System.out.println("E. " + rs.getString("mechanic_name"));
+					System.out.println("E. " + rs.getInt("total_service_cost"));
+					System.out.println("F. ");
+				}
+				break;
+				// }
+				// else {
+				// System.out.println("Choose a valid option");
+				// }
 			}
 
 			System.out.println("1. Go Back");
@@ -612,7 +610,361 @@ public class MainApp {
 			e.printStackTrace();
 		}
 	}
+
+	// Manager
+	public static void managerLandingPage() {
+		System.out.println("1. Profile");
+		System.out.println("2. View Customer Profile");
+		System.out.println("3. Add New Employees");
+		System.out.println("4. Payroll");
+		System.out.println("5. Inventory");
+		System.out.println("6. Orders");
+		System.out.println("7. Notifications");
+		System.out.println("8. New Car Model");
+		System.out.println("9. Car Service Details");
+		System.out.println("10. Service History");
+		System.out.println("11. Invoices");
+		System.out.println("12. Logout");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				employeeProfilePage();
+			} else if (selected_option.equals("2")) {
+				employeeViewCustomerProfilePage();
+			} else if (selected_option.equals("3")) {
+				// add Stuff
+			} else if (selected_option.equals("4")) {
+				customerInvoice();
+			} else if (selected_option.equals("5")) {
+				// add Stuff
+			} else if (selected_option.equals("6")) {
+				// add Stuff
+			} else if (selected_option.equals("7")) {
+				// add Stuff
+			} else if (selected_option.equals("8")) {
+				// add Stuff
+			} else if (selected_option.equals("9")) {
+				// add Stuff
+			} else if (selected_option.equals("10")) {
+				// add Stuff
+			} else if (selected_option.equals("11")) {
+				// add Stuff
+			} else if (selected_option.equals("12")) {
+				// add Stuff
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	// Receptionist
+	public static void receptionistLandingPage() {
+		System.out.println("1. Profile");
+		System.out.println("2. View Customer Profile");
+		System.out.println("3. Register Car");
+		System.out.println("4. Service History");
+		System.out.println("5. Schedule Service");
+		System.out.println("6. Reschedule Service");
+		System.out.println("7. Invoices");
+		System.out.println("8. Daily Task-Update Inventory");
+		System.out.println("9. Daily Task-Record Deliveries");
+		System.out.println("10. Logout");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				employeeProfilePage();
+			} else if (selected_option.equals("2")) {
+				employeeViewCustomerProfilePage();
+			} else if (selected_option.equals("3")) {
+				// add Stuff
+			} else if (selected_option.equals("4")) {
+				customerInvoice();
+			} else if (selected_option.equals("5")) {
+				// add Stuff
+			} else if (selected_option.equals("6")) {
+				// add Stuff
+			} else if (selected_option.equals("7")) {
+				// add Stuff
+			} else if (selected_option.equals("8")) {
+				// add Stuff
+			} else if (selected_option.equals("9")) {
+				// add Stuff
+			} else if (selected_option.equals("10")) {
+				// add Stuff
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	public static void receptionistRegisterCar() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("Enter customer email:");
+		String customer_email = s.nextLine();
+		System.out.println("Enter licence plate:");
+		String licencePlate = s.nextLine();
+		System.out.println("Enter purchase date: (Format YYYY-MM-DD eg. 2015-12-09)");
+		String purchaseDate = s.nextLine();
+		System.out.println("Enter make:");
+		String make = s.nextLine();
+		System.out.println("Enter model:");
+		String model = s.nextLine();
+		System.out.println("Enter year:(Format YYYY eg. 2018)");
+		String year = s.nextLine();
+		System.out.println("Enter lastServiceDate: (Format YYYY-MM-DD eg. 2015-12-09)");
+		String lastServiceDate = s.nextLine();
+		System.out.println("Enter current milage:");
+		int currMilage = s.nextInt();
+
+		System.out.println("1.Register");
+		System.out.println("2.Cancel");
+
+		int option = s.nextInt();
+		if (option == 1) {
+			boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage, lastServiceDate,
+					customer_email);
+			if (ans) {
+				receptionistLandingPage();
+			} else {
+				System.out.println("Wrong Input");
+				registerCar();
+			}
+		} else if (option == 2) {
+			receptionistLandingPage();
+		} else {
+			System.out.println("Wrong Input");
+			registerCar();
+		}
+	}
+
+	public static void receptionistServiceHistoryPage() {
+		try {
+			System.out.println("Enter customer email:");
+			Scanner s2 = new Scanner(System.in);
+			while (true) {
+				String customer_email = s2.nextLine();
+				if (functObject.doesUserExists(customer_email)) {
+					// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+					while (rs.next()) {
+						System.out.println("A. " + rs.getString("id"));
+						System.out.println("B. " + rs.getString("plate_no"));
+						System.out.println("C. " + rs.getString("service_type"));
+						System.out.println("D. " + rs.getString("mechanic"));
+						System.out.println("E. " + rs.getString("start_time"));
+						System.out.println("E. " + rs.getString("end_time"));
+						System.out.println("E. " + rs.getString("status"));
+						System.out.println("F. ");
+					}
+					break;
+				} else {
+					System.out.println("Enter a valid customer email");
+				}
+			}
+			System.out.println("1. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					receptionistLandingPage();
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void receptionistScheduleService() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("Enter customer email:");
+		String customer_email = s.nextLine();
+		System.out.println("Enter licence plate:");
+		String licencePlate = s.nextLine();
+		System.out.println("Enter current milage:");
+		int currMilage = s.nextInt();
+		System.out.println("Mechanic name:");
+		String make = s.nextLine();
+
+		System.out.println("1.Schedule Maintenance");
+		System.out.println("2.Schedule Repair");
+		System.out.println("3.Go Back");
+
+		Scanner s2 = new Scanner(System.in);
+		while (true) {
+			String selected_option = s2.nextLine();
+			if (selected_option.equals("1")) {
+				// reuse customerScheduleMaintenancePage1() maybe by passing email
+			} else if (selected_option.equals("2")) {
+				// reuse customerScheduleRepairPage1() maybe by passing email
+			} else if (selected_option.equals("3")) {
+				receptionistLandingPage();
+			} else {
+				System.out.println("Wrong Input");
+				registerCar();
+			}
+		}
+	}
+
 	
+	// Employee Profile
+	public static void employeeProfilePage() {
+		System.out.println("1. View Profile");
+		System.out.println("2. Update Profile");
+		System.out.println("3. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				employeeViewProfilePage();
+			} else if (selected_option.equals("2")) {
+				employeeUpdateProfilePage();
+			} else if (selected_option.equals("3")) {
+				if (userInfoObject.role.equals("manager")) {
+					managerLandingPage();
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistLandingPage();
+				}
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+	}
+
+	public static void employeeViewProfilePage() {
+		try {
+			ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+			while (rs.next()) {
+				System.out.println("A. " + rs.getString("eid"));
+				System.out.println("B. " + rs.getString("e_name"));
+				System.out.println("C. " + rs.getString("e_addr"));
+				System.out.println("D. " + rs.getString("email"));
+				System.out.println("E. " + rs.getString("e_tel"));
+				System.out.println("F. " + rs.getString("sc_name"));
+				System.out.println("G. Manager");
+				System.out.println("H. " + rs.getString("s_date"));
+				System.out.println("I. " + rs.getInt("wage") + "$");
+				System.out.println("J. " + rs.getString("freq"));
+			}
+			System.out.println("1. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					employeeProfilePage();
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void employeeUpdateProfilePage() {
+		try {
+			System.out.println("1. Name");
+			System.out.println("2. Address");
+			System.out.println("3. Email Address");
+			System.out.println("4. Phone Number");
+			System.out.println("5. Password");
+			System.out.println("6. Go Back");
+			Scanner s = new Scanner(System.in);
+
+			while (true) {
+				String selected_option = s.nextLine();
+				Scanner s2 = new Scanner(System.in);
+
+				if (selected_option.equals("1")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeeName(userInfoObject.email, updatedValue);
+
+				} else if (selected_option.equals("2")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeeAddress(userInfoObject.email, updatedValue);
+
+				} else if (selected_option.equals("3")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeeEmail(userInfoObject.email, updatedValue);
+
+				} else if (selected_option.equals("4")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeePhoneNumber(userInfoObject.email, updatedValue);
+
+				} else if (selected_option.equals("5")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeePassword(userInfoObject.email, updatedValue);
+
+				} else if (selected_option.equals("6")) {
+					employeeProfilePage();
+
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			// e.printStackTrace();
+		}
+	}
+
+	public static void employeeViewCustomerProfilePage() {
+		try {
+			System.out.println("Enter customer email:");
+			Scanner s2 = new Scanner(System.in);
+			while (true) {
+				String customer_email = s2.nextLine();
+				if (functObject.doesUserExists(customer_email)) {
+					ResultSet rs = functObject.getCustomerInfo(customer_email);
+					while (rs.next()) {
+						System.out.println("A. " + rs.getString("id"));
+						System.out.println("B. " + rs.getString("name"));
+						System.out.println("C. " + rs.getString("addr"));
+						System.out.println("D. " + rs.getString("email"));
+						System.out.println("E. " + rs.getString("tel"));
+						System.out.println("F. ");
+						ResultSet rs2 = functObject.getCustomerCars(customer_email);
+						while (rs2.next()) {
+							String s = rs2.getString("make") + " " + rs2.getString("model");
+							System.out.println(s);
+						}
+					}
+					break;
+				} else {
+					System.out.println("Enter a valid customer email");
+				}
+			}
+			System.out.println("1. Go Back");
+			Scanner s = new Scanner(System.in);
+			while (true) {
+				String selected_option = s.nextLine();
+
+				if (selected_option.equals("1")) {
+					if (userInfoObject.role.equals("manager")) {
+						managerLandingPage();
+					} else if (userInfoObject.role.equals("receptionist")) {
+						receptionistLandingPage();
+					}
+				} else {
+					System.out.println("Choose a valid option");
+				}
+			}
+
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void mainMenu() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("1.Login");
