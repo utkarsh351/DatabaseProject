@@ -22,14 +22,12 @@ public class utilitiesFunctions {
 			System.out.println("Wrong Username or password");
 			return false;
 		}
-
 	}
-	
+
 	// does user exist
 	public static boolean doesUserExists(String username) {
 		try {
-			rs = connObject.selectQuery(
-					"SELECT email FROM Users where email='" + username + "'");
+			rs = connObject.selectQuery("SELECT email FROM Users where email='" + username + "'");
 			if (!rs.next()) {
 				return false;
 			} else {
@@ -229,7 +227,7 @@ public class utilitiesFunctions {
 			return rs;
 		}
 	}
-	
+
 //	update employee profile
 
 	public static ResultSet updateEmployeeName(String email, String name) {
@@ -252,11 +250,10 @@ public class utilitiesFunctions {
 			return rs;
 		}
 	}
-	
+
 	public static ResultSet updateEmployeeEmail(String email, String new_email) {
 		try {
-			rs = connObject
-					.selectQuery("UPDATE Users SET email='" + new_email + "' " + "WHERE email='" + email + "'");
+			rs = connObject.selectQuery("UPDATE Users SET email='" + new_email + "' " + "WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -284,5 +281,38 @@ public class utilitiesFunctions {
 		}
 	}
 
+// Manager
+	public static void addEmpolyee(String name, String addr, String email, String tel, String role, String s_date,
+			int wage,String sc_id) {
+		try {
+			if (role.equalsIgnoreCase("mechanic")) {
+				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
+				int new_id = generateNewEmployeeId();
+				connObject.insertQuery(
+						"Insert into Employees(name, email, tel, s_date, wage, freq, service_centre_id) "
+								+ "Values('" + new_id + "'," + "'" + name + "'," + "'" + email + "'," + "'" + tel
+								+ "'," + "'" + s_date + "'," + "'" + wage + "', 'hour'," + "'" + sc_id + "'");
+				connObject.insertQuery("Insert into Mechanic(mechanic_id) " + "Values('" + new_id + "'");
+			} else if (role.equalsIgnoreCase("receptionist")) {
+
+			}
+		} catch (Throwable e) {
+			System.out.println("Error occured!");
+		}
+	}
+
+	public static int generateNewEmployeeId() {
+		try {
+			int new_id = 0;
+			rs = connObject.selectQuery("SELECT MAX(eid) FROM Employees");
+			while (rs.next()) {
+				new_id = rs.getInt("max(eid)") + 1;
+			}
+			return new_id;
+		} catch (Throwable e) {
+			System.out.println("Wrong Username or password");
+			return 0;
+		}
+	}
 
 }
