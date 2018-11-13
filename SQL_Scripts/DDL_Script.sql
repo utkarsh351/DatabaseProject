@@ -99,7 +99,6 @@ CREATE TABLE Schedule
    start_time TIMESTAMP,
    customer_plate_no VARCHAR(300) NOT NULL,
    mechanic_id INTEGER NOT NULL,
-   end_time TIMESTAMP,
    status VARCHAR(100),
   PRIMARY KEY (schedule_id),
    FOREIGN KEY (customer_plate_no)
