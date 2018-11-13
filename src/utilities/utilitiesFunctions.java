@@ -338,7 +338,7 @@ public class utilitiesFunctions {
 						"FROM Inventory I " + 
 						"JOIN Parts_to_make PM ON I.parts_to_make_id=PM.parts_to_make_id) Q " + 
 						"JOIN Parts P ON P.part_id=Q.part_id " + 
-						"WHERE service_center_id=';"
+						"WHERE service_center_id='"
 								+ sc_id + "'");
 				return rs;
 			} catch (Throwable e) {
