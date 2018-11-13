@@ -187,4 +187,29 @@ public class utilitiesFunctions {
 	public static ResultSet viewInvoiceById(String email, String serviceId) {
 		return rs;
 	}
+
+	public void updateEmployeeName(String email, String updatedValue) {
+		// TODO
+		
+	}
+
+	public void updateEmployeeAddress(String email, String updatedValue) {
+		// TODO
+		
+	}
+
+	public void updateEmployeeEmail(String email, String updatedValue) {
+		// TODO 
+		
+	}
+
+	public void updateEmployeePhoneNumber(String email, String updatedValue) {
+		// TODO
+		
+	}
+
+	public void updateEmployeePassword(String email, String updatedValue) {
+		// TODO 
+		
+	}
 }

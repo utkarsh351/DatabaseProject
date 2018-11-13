@@ -2,14 +2,12 @@ package main;
 
 import java.sql.*;
 import java.util.Scanner;
-
 import utilities.utilitiesFunctions;
 
 public class MainApp {
 
 	static ResultSet rs = null;
 	static connection connObject = new connection();
-
 	static utilitiesFunctions functObject = new utilitiesFunctions();
 	static userInfo userInfoObject;
 
@@ -34,6 +32,12 @@ public class MainApp {
 				if (userInfoObject.role.equals("customer")) {
 					customerLandingPage();
 				}
+				else if(userInfoObject.role.equals("manager")) {
+					managerLandingPage();
+				}
+				else if(userInfoObject.role.equals("receptionist")) {
+					receptionistLandingPage();
+				}
 			}
 		} else if (option == 2) {
 			mainMenu();
@@ -41,6 +45,167 @@ public class MainApp {
 			System.out.println("Wrong Input");
 			login();
 		}
+	}
+
+	public static void receptionistLandingPage() {
+		System.out.println("----------------------------");
+		System.out.println(" Landing Page: Receptionist ");
+		System.out.println("----------------------------");
+		
+		System.out.println("1. Profile");
+		System.out.println("2. View Customer Profile");
+		System.out.println("3. Register Car");
+		System.out.println("4. Service History");
+		System.out.println("5. Schedule Service");
+		System.out.println("6. Reschedule Service");
+		System.out.println("7. Invoices");
+		System.out.println("8. Daily Task-Update Inventory");
+		System.out.println("9. Daily Task-Record Deliveries");
+		System.out.println("10. Logout");
+		
+		System.out.println("Enter your options: ");
+		
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				System.out.println("Receptionist Profile");
+				employeeProfilePage("receptionist");
+			} else if (selected_option.equals("2")) {
+				
+			} else if (selected_option.equals("3")) {
+
+			} else if (selected_option.equals("4")) {
+
+			} else if (selected_option.equals("5")) {
+			} else if (selected_option.equals("6")) {
+			} else if (selected_option.equals("7")) {
+			} else if (selected_option.equals("8")) {
+			} else if (selected_option.equals("9")) {
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+		
+	}
+
+	public static void employeeProfilePage(String role) {
+		System.out.println("1. View Profile");
+		System.out.println("2. Update Profile");
+		System.out.println("3. Go Back");
+
+		Scanner s = new Scanner(System.in);
+		while (true) {
+			String selected_option = s.nextLine();
+
+			if (selected_option.equals("1")) {
+				employeeViewProfilePage(role);
+			} else if (selected_option.equals("2")) {
+				employeeUpdateProfilePage(role); 
+			} else if (selected_option.equals("3")) {
+				if (role.equals("receptionist")) {
+					receptionistLandingPage();
+				} else if (role.equals("manager")) {
+					managerLandingPage();
+				}	
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+		
+	}
+
+	public static void employeeUpdateProfilePage(String role) {
+		try {
+			System.out.println("---Update Profile---");
+			System.out.println("1. Name");
+			System.out.println("2. Address");
+			System.out.println("3. Email Address");
+			System.out.println("4. Phone Number");
+			System.out.println("5. Password");
+			System.out.println("6. Go Back");
+			Scanner s = new Scanner(System.in);
+
+			while (true) {
+				String selected_option = s.nextLine();
+				Scanner s2 = new Scanner(System.in);
+
+				if (selected_option.equals("1")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeeName(userInfoObject.email, updatedValue);
+				} 
+				else if (selected_option.equals("2")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeeAddress(userInfoObject.email, updatedValue);
+				} 
+				else if (selected_option.equals("3")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeeEmail(userInfoObject.email, updatedValue);
+				} 
+				else if (selected_option.equals("4")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeePhoneNumber(userInfoObject.email, updatedValue);
+
+				} 
+				else if (selected_option.equals("5")) {
+					String updatedValue = s.nextLine();
+					functObject.updateEmployeePassword(userInfoObject.email, updatedValue);
+				} 
+				else if (selected_option.equals("6")) {
+					employeeProfilePage(role);
+				} 
+				else {
+					System.out.println("Choose a valid option");
+				}
+			}
+		} catch (Throwable e) {
+			// e.printStackTrace();
+		}
+		
+	}
+
+	public static void employeeViewProfilePage(String role) {
+		try {
+			ResultSet rs = functObject.getCustomerInfo(userInfoObject.email);
+			while (rs.next()) {
+				System.out.println("A. Employee ID: " + rs.getInt("eid"));
+				System.out.println("B. Name: " + rs.getString("name"));
+				System.out.println("C. Address: " + rs.getString("addr"));
+				System.out.println("D. Email: " + rs.getString("email"));
+				System.out.println("E. Phone Number: " + rs.getString("tel"));
+				System.out.println("F. Service Center: " + rs.getString("service_centre_id"));
+				System.out.println("G. Role: " + role);
+				System.out.println("H. Start Date: " + rs.getDate("s_date"));
+				System.out.println("I. Compensation($) : " + rs.getInt("wage"));
+				System.out.println("J. Frequency : " + rs.getString("freq"));
+				System.out.println("1. Go Back");
+				
+				Scanner s = new Scanner(System.in);
+				while (true) {
+					String selected_option = s.nextLine();
+					if (selected_option.equals("1")) {
+						if (role.equals("receptionist")) {
+							employeeProfilePage("receptionist");
+						} else if (role.equals("manager")){
+							employeeProfilePage("manager");
+						} 	
+					} else {
+						System.out.println("Choose a valid option");
+					}
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	public static void managerLandingPage() {
+		System.out.println("----------------------------");
+		System.out.println(" Landing Page: Manager ");
+		System.out.println("----------------------------");
+		
 	}
 
 	public static void signup() {
@@ -236,11 +401,16 @@ public class MainApp {
 	}
 
 	public static void mainMenu() {
+		System.out.println("----------------------------------------");
+		System.out.println("CAR Repair and Service Management System");
+		System.out.println("----------------------------------------");
+		
 		Scanner s = new Scanner(System.in);
 		System.out.println("1.Login");
 		System.out.println("2.Sign Up");
 		System.out.println("3.Exit");
 
+		System.out.println("Enter [1, 2 or 3]");
 		int option = s.nextInt();
 
 		if (option == 1) {
@@ -286,5 +456,4 @@ public class MainApp {
 			e.printStackTrace();
 		}
 	}
-
 }
