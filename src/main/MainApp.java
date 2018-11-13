@@ -635,7 +635,7 @@ public class MainApp {
 			} else if (selected_option.equals("2")) {
 				employeeViewCustomerProfilePage();
 			} else if (selected_option.equals("3")) {
-				// add Stuff
+				managerAddNewEmployees();
 			} else if (selected_option.equals("4")) {
 				customerInvoice();
 			} else if (selected_option.equals("5")) {
@@ -659,7 +659,39 @@ public class MainApp {
 			}
 		}
 	}
+	
+	public static void managerAddNewEmployees() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("Enter Name:");
+		String emp_name = s.nextLine();
+		System.out.println("Enter Address:");
+		String addr = s.nextLine();
+		System.out.println("Enter Email:");
+		String email = s.nextLine();
+		System.out.println("Enter Phone Number:");
+		String tel = s.nextLine();
+		System.out.println("Enter Role:");
+		String role = s.nextLine();
+		System.out.println("Enter start date: (Format YYYY-MM-DD eg. 2015-12-09)");
+		String s_date = s.nextLine();
+		System.out.println("Enter Compensatiom:");
+		int wage = s.nextInt();
 
+		System.out.println("1.Add");
+		System.out.println("2.Go Back");
+
+		int option = s.nextInt();
+		if (option == 1) {
+			 functObject.addEmpolyee(emp_name, addr, email, tel, role, s_date,
+					wage,userInfoObject.service_centre_id);
+		} else if (option == 2) {
+			managerLandingPage();
+		} else {
+			System.out.println("Wrong Input");
+			managerAddNewEmployees();
+		}
+	}
+	
 	// Receptionist
 	public static void receptionistLandingPage() {
 		System.out.println("1. Profile");
@@ -844,6 +876,7 @@ public class MainApp {
 	public static void employeeViewProfilePage() {
 		try {
 			ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+			userInfoObject.service_centre_id=rs.getString("service_centre_id");
 			while (rs.next()) {
 				System.out.println("A. " + rs.getString("eid"));
 				System.out.println("B. " + rs.getString("e_name"));
@@ -851,7 +884,7 @@ public class MainApp {
 				System.out.println("D. " + rs.getString("email"));
 				System.out.println("E. " + rs.getString("e_tel"));
 				System.out.println("F. " + rs.getString("sc_name"));
-				System.out.println("G. Manager");
+				System.out.println("G. " + rs.getString("role"));
 				System.out.println("H. " + rs.getString("s_date"));
 				System.out.println("I. " + rs.getInt("wage") + "$");
 				System.out.println("J. " + rs.getString("freq"));

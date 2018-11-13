@@ -42,18 +42,12 @@ public class utilitiesFunctions {
 
 	public static String getRole(String email) {
 		try {
-			rs = connObject.selectQuery("SELECT email FROM Employees e, Manager m where e.email='" + email + "' "
-					+ "and m.manager_id=e.eid");
+			rs = connObject.selectQuery("SELECT role FROM Employees e where e.email='" + email + "'");
 			if (!rs.next()) {
-				rs = connObject.selectQuery("SELECT email FROM Employees e, Receptionist r where e.email='" + email
-						+ "' " + "and r.receptionist_id=e.eid");
-				if (!rs.next()) {
-					return "customer";
-				} else {
-					return "receptionist";
-				}
-			} else {
-				return "manager";
+				return "";
+			}
+			else {
+				return rs.getString("role");
 			}
 		} catch (Throwable e) {
 //			e.printStackTrace();
@@ -283,19 +277,22 @@ public class utilitiesFunctions {
 
 // Manager
 	public static void addEmpolyee(String name, String addr, String email, String tel, String role, String s_date,
-			int wage,String sc_id) {
+			int wage, String sc_id) {
 		try {
 			if (role.equalsIgnoreCase("mechanic")) {
 				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
-				int new_id = generateNewEmployeeId();
 				connObject.insertQuery(
-						"Insert into Employees(name, email, tel, s_date, wage, freq, service_centre_id) "
-								+ "Values('" + new_id + "'," + "'" + name + "'," + "'" + email + "'," + "'" + tel
-								+ "'," + "'" + s_date + "'," + "'" + wage + "', 'hour'," + "'" + sc_id + "'");
-				connObject.insertQuery("Insert into Mechanic(mechanic_id) " + "Values('" + new_id + "'");
+						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
+								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "'," + "'" + s_date + "',"
+								+ "'" + wage + "', 'hour'," + "'" + "'" + role + "'," + sc_id + "'");
 			} else if (role.equalsIgnoreCase("receptionist")) {
-
+				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
+				connObject.insertQuery(
+						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
+								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "'," + "'" + s_date + "',"
+								+ "'" + wage + "', 'month'," + "'" + "'" + role + "'," + sc_id + "'");
 			}
+			System.out.println("Employee Added Successfully");
 		} catch (Throwable e) {
 			System.out.println("Error occured!");
 		}
