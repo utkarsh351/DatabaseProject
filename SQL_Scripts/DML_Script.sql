@@ -4583,7 +4583,172 @@ Values (14,
    44000,
    3);
 
+INSERT into Repair
+Values(
+  1,
+  'Engine knock',
+  'Timing issue',
+  75
+);
 
+INSERT into Repair
+Values(
+  2,
+  'Car drifts in a particular direction',
+  'Wheel alignment issue',
+  50
+);
+
+INSERT into Repair
+Values(
+  3,
+  'Battery does not hold charge',
+  '​​Battery needs replacement',
+  25
+);
+
+INSERT into Repair
+Values(
+  4,
+  'Black/unclean exhaust',
+  '​​​​Bad catalytic convertor and filters',
+  75
+);
+
+INSERT into Repair
+Values(
+  5,
+  'A/C-Heater not working',
+  '​​​​Drive belt damaged, coolant not enough, weak battery',
+  50
+);
+
+INSERT into Repair
+Values(
+  6,
+  'Headlamps/Tail lamps not working',
+  '​​​​Light assembly damaged',
+  30
+);
+
+INSERT into Repair
+Values(
+  7,
+  'Check engine light',
+  '​​​​Gearbox and Torque convertor issue',
+  100
+);
+
+INSERT into Repair_uses
+Values(
+  8,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  15,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  5,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  19,
+  1
+);
+
+INSERT into Repair_uses
+Values(
+  20,
+  2
+);
+
+INSERT into Repair_uses
+Values(
+  2,
+  3
+);
+
+INSERT into Repair_uses
+Values(
+  1,
+  4
+);
+
+INSERT into Repair_uses
+Values(
+  12,
+  4
+);
+
+INSERT into Repair_uses
+Values(
+  6,
+  4
+);
+
+INSERT into Repair_uses
+Values(
+  8,
+  5
+);
+INSERT into Repair_uses
+Values(
+  7,
+  5
+);
+INSERT into Repair_uses
+Values(
+  2,
+  5
+);
+
+INSERT into Repair_uses
+Values(
+  11,
+  6
+);
+
+INSERT into Repair_uses
+Values(
+  17,
+  6
+);
+
+INSERT into Repair_uses
+Values(
+  18,
+  6
+);
+
+INSERT into Repair_uses
+Values(
+  13,
+  7
+);
+
+INSERT into Repair_uses
+Values(
+  10,
+  7
+);
+
+INSERT into Repair_uses
+Values(
+  5,
+  7
+);
+INSERT into Repair_uses
+Values(
+  19,
+  7
+);
 ---- TRIGGERS HERE || Write INSERT statements above this
 create sequence Emp_id_seq START WITH 999204784;
 
