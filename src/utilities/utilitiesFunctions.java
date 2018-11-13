@@ -346,4 +346,9 @@ public class utilitiesFunctions {
 				return rs;
 			}
 		}
+
+		public ResultSet getOrderHistory(String email) {
+			// TODO 
+			return null;
+		}
 }

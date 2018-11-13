@@ -14,12 +14,14 @@ public class connection {
 	
 	public connection() {
 		if(stmt == null) {
+			
 			createConnection();
 		}
 	}
 	
 	private static void createConnection() {
 		try {
+			
 			conn = DriverManager.getConnection(jdbcURL, user, passwd);
 
 			stmt = conn.createStatement();

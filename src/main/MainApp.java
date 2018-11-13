@@ -645,7 +645,8 @@ public class MainApp {
 				} else if (selected_option.equals("5")) {
 					managerInventoryPage();
 				} else if (selected_option.equals("6")) {
-					// add Stuff
+					ManagerOrders managerOrders = new ManagerOrders();
+					managerOrders.managerOrdersPage();
 				} else if (selected_option.equals("7")) {
 					// add Stuff
 				} else if (selected_option.equals("8")) {
