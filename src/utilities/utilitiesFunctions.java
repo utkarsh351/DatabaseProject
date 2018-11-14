@@ -362,4 +362,9 @@ public class utilitiesFunctions {
 			// TODO Auto-generated method stub
 			
 		}
+
+		public ResultSet getCarServiceDetails() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 }

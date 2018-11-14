@@ -683,9 +683,10 @@ public class MainApp {
 					ManagerNewCarModel newCarModel = new ManagerNewCarModel();
 					newCarModel.newCarModelPage();
 				} else if (selected_option.equals("9")) {
-					// add Stuff
+					ManagerCarServiceDetail carServiceDetails = new ManagerCarServiceDetail();
+					carServiceDetails.viewCarServiceDetailsPage();
 				} else if (selected_option.equals("10")) {
-					// add Stuff
+					//
 				} else if (selected_option.equals("11")) {
 					// add Stuff
 				} else if (selected_option.equals("12")) {
