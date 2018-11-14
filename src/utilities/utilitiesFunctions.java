@@ -367,4 +367,14 @@ public class utilitiesFunctions {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		public ResultSet getServiceHistory() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public ResultSet getInvoiceDetails() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 }

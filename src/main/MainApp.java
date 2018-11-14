@@ -686,11 +686,13 @@ public class MainApp {
 					ManagerCarServiceDetail carServiceDetails = new ManagerCarServiceDetail();
 					carServiceDetails.viewCarServiceDetailsPage();
 				} else if (selected_option.equals("10")) {
-					//
+					ManagerServiceHistory serviceHistory = new ManagerServiceHistory();
+					serviceHistory.viewServiceHistoryPage();
 				} else if (selected_option.equals("11")) {
-					// add Stuff
+					ManagerInvoice invoice = new ManagerInvoice();
+					invoice.viewInvoice();
 				} else if (selected_option.equals("12")) {
-					// add Stuff
+					mainMenu();
 				} else {
 					System.out.println("Choose a valid option");
 				}
