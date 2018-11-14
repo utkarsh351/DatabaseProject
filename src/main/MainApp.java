@@ -95,7 +95,7 @@ public class MainApp {
 			if (selected_option.equals("1")) {
 				customerProfilePage();
 			} else if (selected_option.equals("2")) {
-				registerCar();
+				registerCar(userInfoObject.email);
 			} else if (selected_option.equals("3")) {
 				customerServicePage();
 			} else if (selected_option.equals("4")) {
@@ -108,7 +108,7 @@ public class MainApp {
 		}
 	}
 
-	public static void registerCar() {
+	public static void registerCar(String email) {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter licence plate:");
 		String licencePlate = s.nextLine();
@@ -126,23 +126,27 @@ public class MainApp {
 		int currMilage = s.nextInt();
 
 		System.out.println("1.Register");
-		System.out.println("2.Go Back");
+		System.out.println("2.Cancel");
 
-		int option = s.nextInt();
-		if (option == 1) {
-			boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage, lastServiceDate,
-					userInfoObject.email);
-			if (ans) {
-				customerLandingPage();
+		while (true) {
+			int option = s.nextInt();
+			if (option == 1) {
+				boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage,
+						lastServiceDate, userInfoObject.email);
+				if (ans) {
+					customerLandingPage();
+				} else {
+					System.out.println("Wrong Input");
+				}
+			} else if (option == 2) {
+				if (userInfoObject.role.equals("customer")) {
+					customerLandingPage();
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistLandingPage();
+				}
 			} else {
 				System.out.println("Wrong Input");
-				registerCar();
 			}
-		} else if (option == 2) {
-			customerLandingPage();
-		} else {
-			System.out.println("Wrong Input");
-			registerCar();
 		}
 	}
 
@@ -157,7 +161,7 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
-				customerViewProfilePage();
+				customerViewProfilePage(userInfoObject.email);
 			} else if (selected_option.equals("2")) {
 				customerUpdateProfilePage();
 			} else if (selected_option.equals("3")) {
@@ -168,9 +172,9 @@ public class MainApp {
 		}
 	}
 
-	public static void customerViewProfilePage() {
+	public static void customerViewProfilePage(String email) {
 		try {
-			ResultSet rs = functObject.getCustomerInfo(userInfoObject.email);
+			ResultSet rs = functObject.getCustomerInfo(email);
 			while (rs.next()) {
 				System.out.println("A. " + rs.getString("id"));
 				System.out.println("B. " + rs.getString("name"));
@@ -178,7 +182,7 @@ public class MainApp {
 				System.out.println("D. " + rs.getString("email"));
 				System.out.println("E. " + rs.getString("tel"));
 				System.out.println("F. ");
-				ResultSet rs2 = functObject.getCustomerCars(userInfoObject.email);
+				ResultSet rs2 = functObject.getCustomerCars(email);
 				while (rs2.next()) {
 					String s = rs2.getString("make") + " " + rs2.getString("model");
 					System.out.println(s);
@@ -190,7 +194,13 @@ public class MainApp {
 				String selected_option = s.nextLine();
 
 				if (selected_option.equals("1")) {
-					customerProfilePage();
+					if (userInfoObject.role.equals("customer")) {
+						customerProfilePage();
+					} else if (userInfoObject.role.equals("receptionist")) {
+						receptionistLandingPage();
+					} else if (userInfoObject.role.equals("manager")) {
+						managerLandingPage();
+					}
 				} else {
 					System.out.println("Choose a valid option");
 				}
@@ -253,11 +263,11 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
-				customerServiceHistoryPage();
+				customerServiceHistoryPage(userInfoObject.email);
 			} else if (selected_option.equals("2")) {
-				customerScheduleService();
+				customerScheduleService(userInfoObject.email);
 			} else if (selected_option.equals("3")) {
-				customerRescheduleServicePage1();
+				customerRescheduleServicePage1(userInfoObject.email);
 			} else if (selected_option.equals("4")) {
 				customerLandingPage();
 			} else {
@@ -266,7 +276,7 @@ public class MainApp {
 		}
 	}
 
-	public static void customerServiceHistoryPage() {
+	public static void customerServiceHistoryPage(String email) {
 		try {
 			// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
 			while (rs.next()) {
@@ -284,7 +294,11 @@ public class MainApp {
 				String selected_option = s.nextLine();
 
 				if (selected_option.equals("1")) {
-					customerServicePage();
+					if (userInfoObject.role.equals("customer")) {
+						customerLandingPage();
+					} else if (userInfoObject.role.equals("receptionist")) {
+						receptionistLandingPage();
+					}
 				} else {
 					System.out.println("Choose a valid option");
 				}
@@ -294,7 +308,7 @@ public class MainApp {
 		}
 	}
 
-	public static void customerScheduleService() {
+	public static void customerScheduleService(String email) {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter licence plate:");
 		String licencePlate = s.nextLine();
@@ -311,20 +325,23 @@ public class MainApp {
 		while (true) {
 			String selected_option = s2.nextLine();
 			if (selected_option.equals("1")) {
-				customerScheduleMaintenancePage1();
+				customerScheduleMaintenancePage1(email);
 			} else if (selected_option.equals("2")) {
-				customerScheduleRepairPage1();
+				customerScheduleRepairPage1(email);
 			} else if (selected_option.equals("3")) {
-				customerServicePage();
+				if (userInfoObject.role.equals("customer")) {
+					customerServicePage();
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistLandingPage();
+				}
 			} else {
 				System.out.println("Wrong Input");
-				registerCar();
 			}
 		}
 	}
 
 	// Customer Maintenance Schedule
-	public static void customerScheduleMaintenancePage1() {
+	public static void customerScheduleMaintenancePage1(String email) {
 		System.out.println("1. Find Service Date");
 		System.out.println("2. Go Back");
 
@@ -333,17 +350,21 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
-				customerScheduleMaintenancePage2();
+				customerScheduleMaintenancePage2(email);
 				// find two earliest dates
 			} else if (selected_option.equals("2")) {
-				customerScheduleService();
+				if (userInfoObject.role.equals("customer")) {
+					customerScheduleService(userInfoObject.email);
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistScheduleService();
+				}
 			} else {
 				System.out.println("Choose a valid option");
 			}
 		}
 	}
 
-	public static void customerScheduleMaintenancePage2() {
+	public static void customerScheduleMaintenancePage2(String email) {
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -370,7 +391,7 @@ public class MainApp {
 					}
 				}
 			} else if (selected_option.equals("2")) {
-				customerScheduleMaintenancePage1();
+				customerScheduleMaintenancePage1(email);
 			} else {
 				System.out.println("Choose a valid option");
 			}
@@ -378,7 +399,7 @@ public class MainApp {
 	}
 
 	// Customer Repair Schedule
-	public static void customerScheduleRepairPage1() {
+	public static void customerScheduleRepairPage1(String email) {
 		System.out.println("1. Engine knock");
 		System.out.println("2. Car drifts in a particular direction");
 		System.out.println("3. Battery does not hold charge");
@@ -416,14 +437,18 @@ public class MainApp {
 			} else if (selected_option.equals("7")) {
 				// refer to first comment
 			} else if (selected_option.equals("8")) {
-				customerScheduleService();
+				if (userInfoObject.role.equals("customer")) {
+					customerScheduleService(userInfoObject.email);
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistScheduleService();
+				}
 			} else {
 				System.out.println("Choose a valid option");
 			}
 		}
 	}
 
-	public static void customerScheduleRepairPage2() {
+	public static void customerScheduleRepairPage2(String email) {
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -452,7 +477,7 @@ public class MainApp {
 					}
 				}
 			} else if (selected_option.equals("2")) {
-				customerScheduleRepairPage1();
+				customerScheduleRepairPage1(email);
 			} else {
 				System.out.println("Choose a valid option");
 			}
@@ -460,7 +485,7 @@ public class MainApp {
 	}
 
 	// Customer Reschedule Service
-	public static void customerRescheduleServicePage1() {
+	public static void customerRescheduleServicePage1(String email) {
 		// Display
 		// 1. License Plate, Service ID, Service Date, Service Type, Service Details
 		// 2. License Plate, Service ID, Service Date, Service Type, Service Details
@@ -488,14 +513,18 @@ public class MainApp {
 //					}
 				}
 			} else if (selected_option.equals("2")) {
-				customerScheduleService();
+				if (userInfoObject.role.equals("customer")) {
+					customerServicePage();
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistLandingPage();
+				}
 			} else {
 				System.out.println("Choose a valid option");
 			}
 		}
 	}
 
-	public static void customerRescheduleServicePage2() {
+	public static void customerRescheduleServicePage2(String email) {
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -528,7 +557,7 @@ public class MainApp {
 					}
 				}
 			} else if (selected_option.equals("2")) {
-				customerRescheduleServicePage1();
+				customerRescheduleServicePage1(email);
 			} else {
 				System.out.println("Choose a valid option");
 			}
@@ -556,7 +585,7 @@ public class MainApp {
 				String selected_option = s.nextLine();
 
 				if (selected_option.equals("1")) {
-					// add stuff
+					customerViewInvoiceDetails();
 				} else if (selected_option.equals("2")) {
 					customerLandingPage();
 				} else {
@@ -645,10 +674,11 @@ public class MainApp {
 				} else if (selected_option.equals("5")) {
 					managerInventoryPage();
 				} else if (selected_option.equals("6")) {
-					ManagerOrders managerOrders = new ManagerOrders();
-					managerOrders.managerOrdersPage();
+					ManagerOrder managerOrder = new ManagerOrder();
+					managerOrder.managerOrdersPage();
 				} else if (selected_option.equals("7")) {
-					// add Stuff
+					Notification notification = new Notification();
+					notification.notificationPage();
 				} else if (selected_option.equals("8")) {
 					// add Stuff
 				} else if (selected_option.equals("9")) {
@@ -790,13 +820,13 @@ public class MainApp {
 			} else if (selected_option.equals("2")) {
 				employeeViewCustomerProfilePage();
 			} else if (selected_option.equals("3")) {
-				// add Stuff
+				receptionistRegisterCar();
 			} else if (selected_option.equals("4")) {
-				customerInvoice();
+				receptionistServiceHistoryPage();
 			} else if (selected_option.equals("5")) {
-				// add Stuff
+				receptionistScheduleService();
 			} else if (selected_option.equals("6")) {
-				// add Stuff
+				receptionistRescheduleService();
 			} else if (selected_option.equals("7")) {
 				// add Stuff
 			} else if (selected_option.equals("8")) {
@@ -812,42 +842,19 @@ public class MainApp {
 	}
 
 	public static void receptionistRegisterCar() {
-		Scanner s = new Scanner(System.in);
-		System.out.println("Enter customer email:");
-		String customer_email = s.nextLine();
-		System.out.println("Enter licence plate:");
-		String licencePlate = s.nextLine();
-		System.out.println("Enter purchase date: (Format YYYY-MM-DD eg. 2015-12-09)");
-		String purchaseDate = s.nextLine();
-		System.out.println("Enter make:");
-		String make = s.nextLine();
-		System.out.println("Enter model:");
-		String model = s.nextLine();
-		System.out.println("Enter year:(Format YYYY eg. 2018)");
-		String year = s.nextLine();
-		System.out.println("Enter lastServiceDate: (Format YYYY-MM-DD eg. 2015-12-09)");
-		String lastServiceDate = s.nextLine();
-		System.out.println("Enter current milage:");
-		int currMilage = s.nextInt();
-
-		System.out.println("1.Register");
-		System.out.println("2.Cancel");
-
-		int option = s.nextInt();
-		if (option == 1) {
-			boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage, lastServiceDate,
-					customer_email);
-			if (ans) {
-				receptionistLandingPage();
-			} else {
-				System.out.println("Wrong Input");
-				registerCar();
+		try {
+			System.out.println("Enter customer email:");
+			Scanner s2 = new Scanner(System.in);
+			while (true) {
+				String customer_email = s2.nextLine();
+				if (functObject.doesUserExists(customer_email)) {
+					registerCar(customer_email);
+				} else {
+					System.out.println("Enter a valid customer email");
+				}
 			}
-		} else if (option == 2) {
-			receptionistLandingPage();
-		} else {
-			System.out.println("Wrong Input");
-			registerCar();
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -858,67 +865,47 @@ public class MainApp {
 			while (true) {
 				String customer_email = s2.nextLine();
 				if (functObject.doesUserExists(customer_email)) {
-					// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
-					while (rs.next()) {
-						System.out.println("A. " + rs.getString("id"));
-						System.out.println("B. " + rs.getString("plate_no"));
-						System.out.println("C. " + rs.getString("service_type"));
-						System.out.println("D. " + rs.getString("mechanic"));
-						System.out.println("E. " + rs.getString("start_time"));
-						System.out.println("E. " + rs.getString("end_time"));
-						System.out.println("E. " + rs.getString("status"));
-						System.out.println("F. ");
-					}
-					break;
+					customerServiceHistoryPage(customer_email);
 				} else {
 					System.out.println("Enter a valid customer email");
 				}
 			}
-			System.out.println("1. Go Back");
-			Scanner s = new Scanner(System.in);
-			while (true) {
-				String selected_option = s.nextLine();
-
-				if (selected_option.equals("1")) {
-					receptionistLandingPage();
-				} else {
-					System.out.println("Choose a valid option");
-				}
-			}
-
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void receptionistScheduleService() {
-		Scanner s = new Scanner(System.in);
-		System.out.println("Enter customer email:");
-		String customer_email = s.nextLine();
-		System.out.println("Enter licence plate:");
-		String licencePlate = s.nextLine();
-		System.out.println("Enter current milage:");
-		int currMilage = s.nextInt();
-		System.out.println("Mechanic name:");
-		String make = s.nextLine();
-
-		System.out.println("1.Schedule Maintenance");
-		System.out.println("2.Schedule Repair");
-		System.out.println("3.Go Back");
-
-		Scanner s2 = new Scanner(System.in);
-		while (true) {
-			String selected_option = s2.nextLine();
-			if (selected_option.equals("1")) {
-				// reuse customerScheduleMaintenancePage1() maybe by passing email
-			} else if (selected_option.equals("2")) {
-				// reuse customerScheduleRepairPage1() maybe by passing email
-			} else if (selected_option.equals("3")) {
-				receptionistLandingPage();
-			} else {
-				System.out.println("Wrong Input");
-				registerCar();
+		try {
+			System.out.println("Enter customer email:");
+			Scanner s2 = new Scanner(System.in);
+			while (true) {
+				String customer_email = s2.nextLine();
+				if (functObject.doesUserExists(customer_email)) {
+					customerScheduleService(customer_email);
+				} else {
+					System.out.println("Enter a valid customer email");
+				}
 			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void receptionistRescheduleService() {
+		try {
+			System.out.println("Enter customer email:");
+			Scanner s2 = new Scanner(System.in);
+			while (true) {
+				String customer_email = s2.nextLine();
+				if (functObject.doesUserExists(customer_email)) {
+					customerRescheduleServicePage1(customer_email);
+				} else {
+					System.out.println("Enter a valid customer email");
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -1032,41 +1019,11 @@ public class MainApp {
 			while (true) {
 				String customer_email = s2.nextLine();
 				if (functObject.doesUserExists(customer_email)) {
-					ResultSet rs = functObject.getCustomerInfo(customer_email);
-					while (rs.next()) {
-						System.out.println("A. " + rs.getString("id"));
-						System.out.println("B. " + rs.getString("name"));
-						System.out.println("C. " + rs.getString("addr"));
-						System.out.println("D. " + rs.getString("email"));
-						System.out.println("E. " + rs.getString("tel"));
-						System.out.println("F. ");
-						ResultSet rs2 = functObject.getCustomerCars(customer_email);
-						while (rs2.next()) {
-							String s = rs2.getString("make") + " " + rs2.getString("model");
-							System.out.println(s);
-						}
-					}
-					break;
+					customerViewProfilePage(customer_email);
 				} else {
 					System.out.println("Enter a valid customer email");
 				}
 			}
-			System.out.println("1. Go Back");
-			Scanner s = new Scanner(System.in);
-			while (true) {
-				String selected_option = s.nextLine();
-
-				if (selected_option.equals("1")) {
-					if (userInfoObject.role.equals("manager")) {
-						managerLandingPage();
-					} else if (userInfoObject.role.equals("receptionist")) {
-						receptionistLandingPage();
-					}
-				} else {
-					System.out.println("Choose a valid option");
-				}
-			}
-
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
