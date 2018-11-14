@@ -356,4 +356,10 @@ public class utilitiesFunctions {
 			// TODO Auto-generated method stub
 			return null;
 		}
+
+		public void addNewCar(String make, String model, String year, int milesA, String monthsA, String partsA,
+				int milesB, String monthsB, String partsB, int milesC, String monthsC, String partsC) {
+			// TODO Auto-generated method stub
+			
+		}
 }

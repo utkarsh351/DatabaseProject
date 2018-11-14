@@ -680,7 +680,8 @@ public class MainApp {
 					Notification notification = new Notification();
 					notification.notificationPage();
 				} else if (selected_option.equals("8")) {
-					// add Stuff
+					ManagerNewCarModel newCarModel = new ManagerNewCarModel();
+					newCarModel.newCarModelPage();
 				} else if (selected_option.equals("9")) {
 					// add Stuff
 				} else if (selected_option.equals("10")) {

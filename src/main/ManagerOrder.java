@@ -33,14 +33,14 @@ public class ManagerOrder {
 			
 			while (rs.next()) {
 				System.out.println("A. " + rs.getInt("order_id"));
-				System.out.println("B. " + rs.getString("")); // Date
-				System.out.println("C. " + rs.getInt("")); // Part name
-				System.out.println("D. " + rs.getInt("")); // Supplier Name
-				System.out.println("E. " + rs.getInt("")); // Purchaser Name
+				System.out.println("B. " + rs.getDate("order_date")); // Date
+				System.out.println("C. " + rs.getString("name")); // Part name
+				System.out.println("D. " + rs.getString("")); // Supplier Name
+				System.out.println("E. " + rs.getString("")); // Purchaser Name
 				System.out.println("F. " + rs.getInt("")); // Quantity 
-				System.out.println("G. " + rs.getInt("")); // Unit Price
+				System.out.println("G. " + rs.getFloat("")); // Unit Price
 				System.out.println("H. " + rs.getInt("")); // Total Cost
-				System.out.println("I. " + rs.getInt("")); // Order Status
+				System.out.println("I. " + rs.getString("")); // Order Status
 			}
 			
 			System.out.println("1. Go Back");
