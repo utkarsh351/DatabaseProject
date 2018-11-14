@@ -126,7 +126,7 @@ public class MainApp {
 		int currMilage = s.nextInt();
 
 		System.out.println("1.Register");
-		System.out.println("2.Go Back");
+		System.out.println("2.Cancel");
 
 		while (true) {
 			int option = s.nextInt();
@@ -139,7 +139,11 @@ public class MainApp {
 					System.out.println("Wrong Input");
 				}
 			} else if (option == 2) {
-				customerLandingPage();
+				if (userInfoObject.role.equals("customer")) {
+					customerLandingPage();
+				} else if (userInfoObject.role.equals("receptionist")) {
+					receptionistLandingPage();
+				}
 			} else {
 				System.out.println("Wrong Input");
 			}
@@ -581,7 +585,7 @@ public class MainApp {
 				String selected_option = s.nextLine();
 
 				if (selected_option.equals("1")) {
-					// add stuff
+					customerViewInvoiceDetails();
 				} else if (selected_option.equals("2")) {
 					customerLandingPage();
 				} else {
