@@ -299,14 +299,14 @@ public class utilitiesFunctions {
 				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
 				connObject.insertQuery(
 						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
-								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "'," + "'" + s_date + "',"
-								+ "'" + wage + "', 'hour'," + "'" + "'" + role + "'," + sc_id + "'");
+								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date + "',"
+								+ "'" + wage + "', 'hour'," + "'" + role + "'," + "'" + sc_id + "')");
 			} else if (role.equalsIgnoreCase("receptionist")) {
 				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
 				connObject.insertQuery(
 						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
-								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "'," + "'" + s_date + "',"
-								+ "'" + wage + "', 'month'," + "'" + "'" + role + "'," + sc_id + "'");
+								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date + "',"
+								+ "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
 			}
 			System.out.println("Employee Added Successfully");
 		} catch (Throwable e) {
