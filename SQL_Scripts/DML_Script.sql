@@ -11,6 +11,7 @@ begin
 end;
 /
 
+/*
 create sequence Maintain_schedule_id_seq;
 
 create trigger trg_maintain_schedule_id
@@ -34,6 +35,7 @@ begin
   from dual;
 end;
 /
+*/
 -------------------------------------------------------
 
 INSERT into Service_center
