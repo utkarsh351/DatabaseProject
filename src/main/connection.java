@@ -5,8 +5,8 @@ import java.sql.*;
 public class connection {
 	
 	private static final String jdbcURL = "jdbc:oracle:thin:@orca.csc.ncsu.edu:1521:orcl01";
-	private static String user = "rbhasin";	// add your unity id if want to test something, don't do in this db
-	private static String passwd = "200259240"; //add you password for oracle here.
+	private static String user = "usharma2";	// add your unity id if want to test something, don't do in this db
+	private static String passwd = "200263312"; //add you password for oracle here.
 
 	private static Connection conn = null;
 	private static Statement stmt = null;

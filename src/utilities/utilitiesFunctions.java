@@ -39,30 +39,34 @@ public class utilitiesFunctions {
 		}
 
 	}
-	
-	// does Employee exist
-		public static boolean doesEmployeeExists(int emp_id) {
-			try {
-				rs = connObject.selectQuery("SELECT email FROM Employees where eid='" + emp_id + "'");
-				if (!rs.next()) {
-					return false;
-				} else {
-					return true;
-				}
-			} catch (Throwable e) {
-				System.out.println("Wrong Username");
-				return false;
-			}
 
+	// does Employee exist
+	public static boolean doesEmployeeExists(int emp_id) {
+		try {
+			rs = connObject.selectQuery("SELECT email FROM Employees where eid='" + emp_id + "'");
+			if (!rs.next()) {
+				return false;
+			} else {
+				return true;
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong Username");
+			return false;
 		}
+
+	}
 
 	public static String getRole(String email) {
 		try {
 			rs = connObject.selectQuery("SELECT role FROM Employees e where e.email='" + email + "'");
 			if (!rs.next()) {
-				return "";
-			}
-			else {
+				rs = connObject.selectQuery("SELECT * FROM Customers e where e.email='" + email + "'");
+				if (!rs.next()) {
+					return "";
+				} else {
+					return "customer";
+				}
+			} else {
 				return rs.getString("role");
 			}
 		} catch (Throwable e) {
@@ -73,7 +77,7 @@ public class utilitiesFunctions {
 
 	}
 
-	public static boolean createUser(String email, String password, String name, String add, String ph) {
+	public static boolean createUser(String email, String password, String name, String add, String ph, String sc_id) {
 		try {
 			int ans = connObject.insertQuery("Insert into Users Values('" + email + "','" + password + "')");
 			if (ans != 1) {
@@ -81,7 +85,7 @@ public class utilitiesFunctions {
 				return false;
 			} else {
 				ans = connObject.insertQuery("Insert into Customers(id, email, name, tel, addr, sc_id) Values('1231','"
-						+ email + "','" + name + "','" + ph + "','" + add + "','S0001')");
+						+ email + "','" + name + "','" + ph + "','" + add + "','" + sc_id + "')");
 				if (ans != 1) {
 					System.out.println("Error occured while adding to customer table!");
 					return false;
@@ -96,7 +100,7 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static boolean addCar(String licencePlate, String purchaseDate, String make, String model, String year,
+	public static boolean addCar(String licensePlate, String purchaseDate, String make, String model, String year,
 			int currMilage, String lastServiceDate, String email) {
 		try {
 			rs = connObject.selectQuery(
@@ -111,12 +115,12 @@ public class utilitiesFunctions {
 				if (lastServiceDate.equals("")) {
 					ans = connObject.insertQuery(
 							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
-									+ "Values('" + licencePlate + "','" + currMilage + "',NULL, Date '" + purchaseDate
+									+ "Values('" + licensePlate + "','" + currMilage + "',NULL, Date '" + purchaseDate
 									+ "','" + vehicle_id + "','" + email + "','" + make + "')");
 				} else {
 					ans = connObject.insertQuery(
 							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
-									+ "Values('" + licencePlate + "','" + currMilage + "', Date '" + lastServiceDate
+									+ "Values('" + licensePlate + "','" + currMilage + "', Date '" + lastServiceDate
 									+ "',Date '" + purchaseDate + "','" + vehicle_id + "','" + email + "','" + make
 									+ "')");
 				}
@@ -203,7 +207,7 @@ public class utilitiesFunctions {
 
 //	register car 
 //	check what needs to be done with lastServD exactly
-	public static boolean registerCar(String email, String licencePlate, String purD, String make, String model,
+	public static boolean registerCar(String email, String licensePlate, String purD, String make, String model,
 			String year, String currMil, String lastServD) {
 		return true;
 	}
@@ -299,14 +303,14 @@ public class utilitiesFunctions {
 				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
 				connObject.insertQuery(
 						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
-								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date + "',"
-								+ "'" + wage + "', 'hour'," + "'" + role + "'," + "'" + sc_id + "')");
+								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
+								+ "'," + "'" + wage + "', 'hour'," + "'" + role + "'," + "'" + sc_id + "')");
 			} else if (role.equalsIgnoreCase("receptionist")) {
 				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
 				connObject.insertQuery(
 						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
-								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date + "',"
-								+ "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
+								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
+								+ "'," + "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
 			}
 			System.out.println("Employee Added Successfully");
 		} catch (Throwable e) {
@@ -328,53 +332,178 @@ public class utilitiesFunctions {
 		}
 	}
 
-	// get Employee info
-		public static ResultSet getInventory(String sc_id) {
-			try {
-				rs = connObject.selectQuery(
-						"Select P.part_id AS part_id, P.name, Q.current_quantity," + 
-						"Q.unit_price,Q.make,Q.min_inventory_thold,Q.min_order_quantity " + 
-						"FROM (SELECT * " + 
-						"FROM Inventory I " + 
-						"JOIN Parts_to_make PM ON I.parts_to_make_id=PM.parts_to_make_id) Q " + 
-						"JOIN Parts P ON P.part_id=Q.part_id " + 
-						"WHERE service_center_id='"
-								+ sc_id + "'");
-				return rs;
-			} catch (Throwable e) {
-				System.out.println("Wrong Service Center Id");
-				return rs;
+// get Employee info
+	public static ResultSet getInventory(String sc_id) {
+		try {
+			rs = connObject.selectQuery("Select P.part_id AS part_id, P.name, Q.current_quantity,"
+					+ "Q.unit_price,Q.make,Q.min_inventory_thold,Q.min_order_quantity " + "FROM (SELECT * "
+					+ "FROM Inventory I " + "JOIN Parts_to_make PM ON I.parts_to_make_id=PM.parts_to_make_id) Q "
+					+ "JOIN Parts P ON P.part_id=Q.part_id " + "WHERE service_center_id='" + sc_id + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Service Center Id");
+			return rs;
+		}
+	}
+
+	public ResultSet getOrderHistory(String service_centre_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ResultSet getNotifications(String service_centre_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void addNewCar(String make, String model, String year, int milesA, String monthsA, String partsA, int milesB,
+			String monthsB, String partsB, int milesC, String monthsC, String partsC) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public ResultSet getCarServiceDetails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ResultSet getServiceHistory(String email) {
+		try {
+			rs = connObject.selectQuery("SELECT * FROM Owns O JOIN(SELECT * FROM Maintenance_schedule MS JOIN (Select * from Schedule S JOIN Employees E ON S.mechanic_id= E.eid) Q ON Q.schedule_id=MS.maintenance_schedule_id) W ON O.plate_no=W.customer_plate_no WHERE O.email ='" + email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
+	}
+
+	public ResultSet getInvoiceDetails() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+// Schedule
+	public static ResultSet getLastMaintenanceType(String licensePlate) {
+		try {
+			rs = connObject.selectQuery(
+					"Select S2.m_type, S2.last_rec_mileage FROM ( Select M.m_type, S.start_time, O.last_rec_mileage from Maintenance_schedule M, Schedule S, Owns O WHERE O.plate_no=S.customer_plate_no AND S.schedule_id=M.maintenance_schedule_id AND S.customer_plate_no ='"
+							+ licensePlate + "') S2 WHERE ROWNUM=1 ORDER BY S2.start_time DESC");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return rs;
+		}
+	}
+
+	public static ResultSet getVehicleMaintenanceTypeDetails(String licensePlate, String serviceType) {
+		try {
+			rs = connObject.selectQuery(
+					"select M2.miles from Owns O, (select DISTINCT m_type, vehicle_id, miles from Maintenance_uses) M2 where O.plate_no = '"
+							+ licensePlate + "' AND M2.vehicle_id = O.vehicle_id AND M2.M_type = '" + serviceType
+							+ "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return rs;
+		}
+	}
+
+	public static ResultSet getMechanicByName(String mechanicName) {
+		try {
+			rs = connObject
+					.selectQuery("SELECT email FROM Employees where name='" + mechanicName + "' AND role ='mechnanic'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Mechanic Name");
+			return rs;
+		}
+	}
+
+	public static ResultSet getMaintenanceMissingParts(String licensePlate, String serviceType) {
+		try {
+			rs = connObject.selectQuery("");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return rs;
+		}
+	}
+
+	public static ResultSet orderParts(String licensePlate, String serviceType) {
+		try {
+			rs = connObject.selectQuery("");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return rs;
+		}
+	}
+
+	public static ResultSet addToSchedule(String licensePlate, int mechanicId) {
+		try {
+			rs = connObject.selectQuery("");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return rs;
+		}
+	}
+
+	public static String getNextMaintenanceType(String email, String licensePlate, int currMileage) {
+		try {
+			int mid1, mid2;
+			int A = 0, B = 0, C = 0;
+			ResultSet a = getVehicleMaintenanceTypeDetails(licensePlate, "A");
+			if (a.next()) {
+				A = a.getInt("miles");
 			}
-		}
+			ResultSet b = getVehicleMaintenanceTypeDetails(licensePlate, "B");
+			if (b.next()) {
+				B = b.getInt("miles");
+			}
+			ResultSet c = getVehicleMaintenanceTypeDetails(licensePlate, "C");
+			if (c.next()) {
+				C = c.getInt("miles");
+			}
+			rs = getLastMaintenanceType(licensePlate);
 
-		public ResultSet getOrderHistory(String service_centre_id) {
-			// TODO Auto-generated method stub
-			return null;
+			if (rs.next()) {
+				if (rs.getString("m_type").equals("A")) {
+					mid1 = (rs.getInt("last_rec_mileage") + B + (rs.getInt("last_rec_mileage") + B + C)) / 2;
+					if (currMileage <= mid1) {
+						return "B";
+					} else if (currMileage > mid1) {
+						return "C";
+					}
+				} else if (rs.getString("m_type").equals("B")) {
+					return "C";
+				} else if (rs.getString("m_type").equals("C")) {
+					mid1 = (rs.getInt("last_rec_mileage") + A + (rs.getInt("last_rec_mileage") + A + B)) / 2;
+					mid2 = (rs.getInt("last_rec_mileage") + A + B + (rs.getInt("last_rec_mileage") + A + B + C)) / 2;
+					if (currMileage <= mid1) {
+						return "A";
+					} else if (currMileage > mid1 && currMileage <= mid2) {
+						return "B";
+					} else if (currMileage > mid2) {
+						return "C";
+					}
+				}
+			} else {
+				mid1 = (A + (A + B)) / 2;
+				mid2 = (A + B + (A + B + C)) / 2;
+				if (currMileage <= mid1) {
+					return "A";
+				} else if (currMileage > mid1 && currMileage <= mid2) {
+					return "B";
+				} else if (currMileage > mid2) {
+					return "C";
+				}
+			}
+			return "";
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return "";
 		}
+	}
 
-		public ResultSet getNotifications(String service_centre_id) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public void addNewCar(String make, String model, String year, int milesA, String monthsA, String partsA,
-				int milesB, String monthsB, String partsB, int milesC, String monthsC, String partsC) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public ResultSet getCarServiceDetails() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public ResultSet getServiceHistory() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public ResultSet getInvoiceDetails() {
-			// TODO Auto-generated method stub
-			return null;
-		}
 }

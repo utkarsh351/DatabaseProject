@@ -59,6 +59,8 @@ public class MainApp {
 		String addr = s.nextLine();
 		System.out.println("Enter phone:");
 		String phone = s.nextLine();
+		System.out.println("Enter Service Centre ID:");
+		String sc_id = s.nextLine();
 
 		System.out.println("1.Sign Up");
 		System.out.println("2.Go Back");
@@ -66,7 +68,7 @@ public class MainApp {
 		int option = s.nextInt();
 
 		if (option == 1) {
-			boolean ans = functObject.createUser(email, password, name, addr, phone);
+			boolean ans = functObject.createUser(email, password, name, addr, phone, sc_id);
 			if (ans == false) {
 				System.out.println("Email already exists");
 				signup();
@@ -110,8 +112,8 @@ public class MainApp {
 
 	public static void registerCar(String email) {
 		Scanner s = new Scanner(System.in);
-		System.out.println("Enter licence plate:");
-		String licencePlate = s.nextLine();
+		System.out.println("Enter license plate:");
+		String licensePlate = s.nextLine();
 		System.out.println("Enter purchase date: (Format YYYY-MM-DD eg. 2015-12-09)");
 		String purchaseDate = s.nextLine();
 		System.out.println("Enter make:");
@@ -131,7 +133,7 @@ public class MainApp {
 		while (true) {
 			int option = s.nextInt();
 			if (option == 1) {
-				boolean ans = functObject.addCar(licencePlate, purchaseDate, make, model, year, currMilage,
+				boolean ans = functObject.addCar(licensePlate, purchaseDate, make, model, year, currMilage,
 						lastServiceDate, userInfoObject.email);
 				if (ans) {
 					customerLandingPage();
@@ -310,12 +312,13 @@ public class MainApp {
 
 	public static void customerScheduleService(String email) {
 		Scanner s = new Scanner(System.in);
-		System.out.println("Enter licence plate:");
-		String licencePlate = s.nextLine();
+		System.out.println("Enter license plate:");
+		String licensePlate = s.nextLine();
 		System.out.println("Enter current milage:");
-		int currMilage = s.nextInt();
+		int currMileage = s.nextInt();
 		System.out.println("Mechanic name:");
-		String make = s.nextLine();
+		s.nextLine();
+		String mechanicName = s.nextLine();
 
 		System.out.println("1.Schedule Maintenance");
 		System.out.println("2.Schedule Repair");
@@ -325,7 +328,7 @@ public class MainApp {
 		while (true) {
 			String selected_option = s2.nextLine();
 			if (selected_option.equals("1")) {
-				customerScheduleMaintenancePage1(email);
+				customerScheduleMaintenancePage1(email, licensePlate, currMileage, mechanicName);
 			} else if (selected_option.equals("2")) {
 				customerScheduleRepairPage1(email);
 			} else if (selected_option.equals("3")) {
@@ -341,7 +344,8 @@ public class MainApp {
 	}
 
 	// Customer Maintenance Schedule
-	public static void customerScheduleMaintenancePage1(String email) {
+	public static void customerScheduleMaintenancePage1(String email, String licensePlate, int currMileage,
+			String mechanicName) {
 		System.out.println("1. Find Service Date");
 		System.out.println("2. Go Back");
 
@@ -350,7 +354,8 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
-				customerScheduleMaintenancePage2(email);
+				String s_type = functObject.getNextMaintenanceType(email, licensePlate, currMileage);
+				customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName);
 				// find two earliest dates
 			} else if (selected_option.equals("2")) {
 				if (userInfoObject.role.equals("customer")) {
@@ -364,7 +369,8 @@ public class MainApp {
 		}
 	}
 
-	public static void customerScheduleMaintenancePage2(String email) {
+	public static void customerScheduleMaintenancePage2(String email, String licensePlate, int currMileage,
+			String mechanicName) {
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -391,7 +397,7 @@ public class MainApp {
 					}
 				}
 			} else if (selected_option.equals("2")) {
-				customerScheduleMaintenancePage1(email);
+				customerScheduleMaintenancePage1(email, licensePlate, currMileage, mechanicName);
 			} else {
 				System.out.println("Choose a valid option");
 			}
