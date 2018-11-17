@@ -674,19 +674,25 @@ public class MainApp {
 				} else if (selected_option.equals("5")) {
 					managerInventoryPage();
 				} else if (selected_option.equals("6")) {
-					// add Stuff
+					ManagerOrder managerOrder = new ManagerOrder();
+					managerOrder.managerOrdersPage();
 				} else if (selected_option.equals("7")) {
-					// add Stuff
+					Notification notification = new Notification();
+					notification.notificationPage();
 				} else if (selected_option.equals("8")) {
-					// add Stuff
+					ManagerNewCarModel newCarModel = new ManagerNewCarModel();
+					newCarModel.newCarModelPage();
 				} else if (selected_option.equals("9")) {
-					// add Stuff
+					ManagerCarServiceDetail carServiceDetails = new ManagerCarServiceDetail();
+					carServiceDetails.viewCarServiceDetailsPage();
 				} else if (selected_option.equals("10")) {
-					// add Stuff
+					ManagerServiceHistory serviceHistory = new ManagerServiceHistory();
+					serviceHistory.viewServiceHistoryPage();
 				} else if (selected_option.equals("11")) {
-					// add Stuff
+					ManagerInvoice invoice = new ManagerInvoice();
+					invoice.viewInvoice();
 				} else if (selected_option.equals("12")) {
-					// add Stuff
+					mainMenu();
 				} else {
 					System.out.println("Choose a valid option");
 				}

@@ -346,4 +346,35 @@ public class utilitiesFunctions {
 				return rs;
 			}
 		}
+
+		public ResultSet getOrderHistory(String service_centre_id) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public ResultSet getNotifications(String service_centre_id) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public void addNewCar(String make, String model, String year, int milesA, String monthsA, String partsA,
+				int milesB, String monthsB, String partsB, int milesC, String monthsC, String partsC) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public ResultSet getCarServiceDetails() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public ResultSet getServiceHistory() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public ResultSet getInvoiceDetails() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 }
