@@ -1,6 +1,7 @@
 package utilities;
 
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 import main.connection;
 
@@ -532,6 +533,124 @@ public class utilitiesFunctions {
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
 			return "";
+		}
+	}
+	
+	public static float getTotalTimeForMaintenance(String plate_no, String m_type) {
+		try {
+			rs = connObject.selectQuery(
+					"Select sum(hours_to_complete) as sum from Service S, "
+					+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type FROM Owns O, Maintenance_uses MU, Vehicles V WHERE O.plate_no = '" + plate_no + 
+					"' AND O.vehicle_id = MU.vehicle_id AND MU.m_type='" + m_type +"' AND V.vehicle_id = O.vehicle_id ) T1  where S.sid = T1.sid");
+			if (!rs.next()) {
+				return 0;
+			} else {
+				return rs.getFloat("sum");
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+	
+	public static String getEndTimeForMaintenance(String plate_no, String m_type, String schedule_id) {
+		try {
+			float totalTime = getTotalTimeForMaintenance(plate_no, m_type);
+			int hours = (int)totalTime;
+			float minutes = totalTime - (int)totalTime;
+			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
+			if(!rs.next()) {
+				System.out.println("Wrong schedule_id");
+				return "";
+			} else {
+				Timestamp time = rs.getTimestamp("start_time");
+				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
+				time.setTime(time.getTime() + duration);
+				return time.toString();
+			}
+		} catch (Throwable e) {
+			System.out.println("Something went wrong");
+			return "";
+		}
+	}
+	
+	public static boolean updateEndTimeForMaintenanceInSchedule(String plate_no, String m_type, String schedule_id) {
+		try {
+			float totalTime = getTotalTimeForMaintenance(plate_no, m_type);
+			int hours = (int)totalTime;
+			float minutes = totalTime - (int)totalTime;
+			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
+			if(!rs.next()) {
+				System.out.println("Wrong schedule_id");
+				return false;
+			} else {
+				Timestamp time = rs.getTimestamp("start_time");
+				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
+				time.setTime(time.getTime() + duration);
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '"+time.toString()+"'");
+				return true;
+			}
+		} catch (Throwable e) {
+			System.out.println("Something went wrong");
+			return false;
+		}
+	}
+	
+	public static float getTotalTimeForRepair(String repair_name) {
+		try {
+			rs = connObject.selectQuery("Select sum(hours_to_complete) as sum from Service S," 
+					+ "(Select R2.sid from Repair R1, Repair_uses R2 where R1.repair_name='"+repair_name+"' and R1.rid = R2.rid) T1 where S.sid = T1.sid");
+			if (!rs.next()) {
+				return 0;
+			} else {
+				return rs.getFloat("sum");
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+	
+	public static String getEndTimeForRepair(String repair_name, String schedule_id) {
+		try {
+			float totalTime = getTotalTimeForRepair(repair_name);
+			int hours = (int)totalTime;
+			float minutes = totalTime - (int)totalTime;
+			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
+			if(!rs.next()) {
+				System.out.println("Wrong schedule_id");
+				return "";
+			} else {
+				Timestamp time = rs.getTimestamp("start_time");
+				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
+				time.setTime(time.getTime() + duration);
+				return time.toString();
+			}
+		} catch (Throwable e) {
+			System.out.println("Something went wrong");
+			return "";
+		}
+	}
+	
+	public static boolean updateEndTimeForRepairInSchedule(String repair_name, String schedule_id) {
+		try {
+			float totalTime = getTotalTimeForRepair(repair_name);
+			int hours = (int)totalTime;
+			float minutes = totalTime - (int)totalTime;
+			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
+			if(!rs.next()) {
+				System.out.println("Wrong schedule_id");
+				return false;
+			} else {
+				Timestamp time = rs.getTimestamp("start_time");
+				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
+				time.setTime(time.getTime() + duration);
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '"+time.toString()+"'");
+				return true;
+			}
+		} catch (Throwable e) {
+			System.out.println("Something went wrong");
+			return false;
 		}
 	}
 

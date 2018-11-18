@@ -100,6 +100,7 @@ CREATE TABLE Schedule
    customer_plate_no VARCHAR(300) NOT NULL,
    mechanic_id INTEGER NOT NULL,
    status VARCHAR(100),
+   end_time TIMESTAMP DEFAULT NULL,
   PRIMARY KEY (schedule_id),
    FOREIGN KEY (customer_plate_no)
    REFERENCES Owns,

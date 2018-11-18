@@ -33,7 +33,7 @@ public class connection {
 	}
 	
 //	call this function to create table. pass create statement as a string in query
-	public int  createTable(String query) {
+	public int createTable(String query) {
 		try {
 			return stmt.executeUpdate(query);
 		} catch (Throwable e) {
