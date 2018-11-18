@@ -591,15 +591,15 @@ public class utilitiesFunctions {
 	public static String getEndTimeForMaintenance(String plate_no, String m_type, String schedule_id) {
 		try {
 			float totalTime = getTotalTimeForMaintenance(plate_no, m_type);
-			int hours = (int) totalTime;
-			float minutes = totalTime - (int) totalTime;
+
 			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
 			if (!rs.next()) {
 				System.out.println("Wrong schedule_id");
 				return "";
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long) ((hours * 60 * 60) + (minutes * 60)) * 1000;
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				return time.toString();
 			}
@@ -612,15 +612,15 @@ public class utilitiesFunctions {
 	public static boolean updateEndTimeForMaintenanceInSchedule(String plate_no, String m_type, String schedule_id) {
 		try {
 			float totalTime = getTotalTimeForMaintenance(plate_no, m_type);
-			int hours = (int) totalTime;
-			float minutes = totalTime - (int) totalTime;
+
 			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
 			if (!rs.next()) {
 				System.out.println("Wrong schedule_id");
 				return false;
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long) ((hours * 60 * 60) + (minutes * 60)) * 1000;
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
 				return true;
@@ -650,15 +650,15 @@ public class utilitiesFunctions {
 	public static String getEndTimeForRepair(String repair_name, String schedule_id) {
 		try {
 			float totalTime = getTotalTimeForRepair(repair_name);
-			int hours = (int) totalTime;
-			float minutes = totalTime - (int) totalTime;
+
 			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
 			if (!rs.next()) {
 				System.out.println("Wrong schedule_id");
 				return "";
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long) ((hours * 60 * 60) + (minutes * 60)) * 1000;
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				return time.toString();
 			}
@@ -671,15 +671,15 @@ public class utilitiesFunctions {
 	public static boolean updateEndTimeForRepairInSchedule(String repair_name, String schedule_id) {
 		try {
 			float totalTime = getTotalTimeForRepair(repair_name);
-			int hours = (int) totalTime;
-			float minutes = totalTime - (int) totalTime;
+
 			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
 			if (!rs.next()) {
 				System.out.println("Wrong schedule_id");
 				return false;
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long) ((hours * 60 * 60) + (minutes * 60)) * 1000;
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
 				return true;
