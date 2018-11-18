@@ -11,8 +11,6 @@ begin
 end;
 /
 
-ALTER TABLE Inventory MODIFY uncommited_current_quantity INTEGER DEFAULT 0;
-
 
 /*
 create sequence Maintain_schedule_id_seq;
