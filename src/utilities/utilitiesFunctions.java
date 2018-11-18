@@ -422,7 +422,7 @@ public class utilitiesFunctions {
 	public static ResultSet getMechanicByName(String mechanicName) {
 		try {
 			rs = connObject
-					.selectQuery("SELECT email FROM Employees where name='" + mechanicName + "' AND role ='mechnanic'");
+					.selectQuery("SELECT * FROM Employees where name='" + mechanicName + "' AND role ='mechanic'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Mechanic Name");
@@ -456,9 +456,13 @@ public class utilitiesFunctions {
 		try {
 			int day_increment = 1;
 			int mechanic_id = 0;
-			rs = getMechanicByName(mechanic_name);
-			if (rs.next()) {
-				mechanic_id = rs.getInt("eid");
+			String s3="";
+			if (!mechanic_name.equals("")) {
+				rs = getMechanicByName(mechanic_name);
+				if (rs.next()) {
+					mechanic_id = rs.getInt("eid");
+					s3="AND mechanic_id='" + mechanic_id +"'";
+				}
 			}
 
 			int totalTime = 0;
@@ -475,6 +479,9 @@ public class utilitiesFunctions {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(utilDate);
 			cal.add(Calendar.DATE, day_increment);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
 			cal.set(Calendar.HOUR_OF_DAY, 4);
 			while (day_increment <= 10) {
 				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
@@ -482,14 +489,26 @@ public class utilitiesFunctions {
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
 						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s1 + "' AND mechanic_id='" + mechanic_id
-								+ "' ORDER BY start_time DESC");
+								+ "' AND S.start_time < TIMESTAMP '" + s1 + "'" + s3
+								+ " ORDER BY start_time DESC");
 				if (rs.next()) {
+					long diff = compareTwoTimeStamps(rs.getTimestamp("end_time"),
+							new java.sql.Timestamp(cal.getTimeInMillis()));
 					if (compareTwoTimeStamps(rs.getTimestamp("end_time"),
 							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
-						addToSchedule(rs.getTimestamp("end_time"),plate_no,mechanic_id,new Timestamp(rs.getTimestamp("end_time").getTime() + (totalTime)));
+						addToSchedule(rs.getTimestamp("end_time"), plate_no, mechanic_id,
+								new Timestamp(rs.getTimestamp("end_time").getTime() + (totalTime)));
 						break;
+					} else {
+						day_increment = day_increment + 1;
 					}
+				} else {
+					cal.set(Calendar.HOUR_OF_DAY, 8);
+					Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
+					Timestamp t2 = new java.sql.Timestamp(cal.getTimeInMillis());
+					t2.setTime(t1.getTime() + totalTime);
+					addToSchedule(t1, plate_no, mechanic_id, t2);
+					break;
 				}
 				// apply scheduling instead of the current greedy approach
 
@@ -501,16 +520,15 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ResultSet addToSchedule(Timestamp start_time, String licensePlate, int mechanicId,
-			Timestamp end_time) {
+	public static int addToSchedule(Timestamp start_time, String licensePlate, int mechanicId, Timestamp end_time) {
 		try {
-			rs = connObject.selectQuery("INSERT into Schedule " + "Values(" + "'1', " + "TIMESTAMP '" + start_time
-					+ "', " + "'" + licensePlate + "', " + mechanicId + ", " + "'pending' " + "TIMESTAMP '" + end_time
-					+ "', " + ");");
-			return rs;
+			int ans = connObject.insertQuery("INSERT into Schedule " + "Values(" + "'1', " + "TIMESTAMP '" + start_time
+					+ "', " + "'" + licensePlate + "', " + mechanicId + ", " + "'pending', " + "TIMESTAMP '" + end_time
+					+ "')");
+			return ans;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
-			return rs;
+			return -1;
 		}
 	}
 
@@ -580,7 +598,7 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return (int)rs.getFloat("sum") *60 *60*1000;
+				return (int) (rs.getFloat("sum") * 60 * 60 * 1000);
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -599,7 +617,7 @@ public class utilitiesFunctions {
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
 
-				Long duration = (long)(totalTime * 60 * 60 * 1000);
+				Long duration = (long) (totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				return time.toString();
 			}
@@ -620,7 +638,7 @@ public class utilitiesFunctions {
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
 
-				Long duration = (long)(totalTime * 60 * 60 * 1000);
+				Long duration = (long) (totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
 				return true;
@@ -639,7 +657,7 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return (int)rs.getFloat("sum") *60 *60*1000;
+				return (int) (rs.getFloat("sum") * 60 * 60 * 1000);
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -658,7 +676,7 @@ public class utilitiesFunctions {
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
 
-				Long duration = (long)(totalTime * 60 * 60 * 1000);
+				Long duration = (long) (totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				return time.toString();
 			}
@@ -679,7 +697,7 @@ public class utilitiesFunctions {
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
 
-				Long duration = (long)(totalTime * 60 * 60 * 1000);
+				Long duration = (long) (totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
 				return true;
@@ -695,8 +713,7 @@ public class utilitiesFunctions {
 		long milliseconds2 = currentTime.getTime();
 
 		long diff = milliseconds2 - milliseconds1;
-		long diffHours = diff / (60 * 60 * 1000);
 
-		return diffHours;
+		return diff;
 	}
 }
