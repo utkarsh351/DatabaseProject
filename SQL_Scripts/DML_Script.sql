@@ -4799,7 +4799,8 @@ Values(
   TIMESTAMP '2018-09-10 10:00:00',
   'XYZ-5643',
   557279280,
-  'complete'
+  'complete',
+  TIMESTAMP '2018-09-10 13:00:00'
 );
 
 INSERT into Schedule
@@ -4808,7 +4809,8 @@ Values(
   TIMESTAMP '2018-02-25 09:00:00',
   'XYZ-5643',
   557279281,
-  'complete'
+  'complete',
+  TIMESTAMP '2018-02-25 11:30:00'
 );
 
 INSERT into Schedule
@@ -4817,7 +4819,8 @@ Values(
   TIMESTAMP '2017-10-15 08:00:00',
   'XYZ-5643',
   183683346,
-  'complete'
+  'complete',
+  TIMESTAMP '2017-10-15 08:45:00'
 );
 
 INSERT into Schedule
@@ -4826,7 +4829,8 @@ Values(
   TIMESTAMP '2018-08-06 08:00:00',
   'AHS-3132',
   557279282,
-  'complete'
+  'complete',
+  TIMESTAMP '2018-08-06 08:15:00'
 );
 
 INSERT into Schedule
@@ -4835,7 +4839,8 @@ Values(
   TIMESTAMP '2018-05-15 10:30:00',
   'AHS-3132',
   557279283,
-  'complete'
+  'complete',
+  TIMESTAMP '2018-05-15 12:45:00'
 );
 
 INSERT into Schedule
@@ -4844,7 +4849,8 @@ Values(
   TIMESTAMP '2018-01-28 12:00:00',
   'AHS-3132',
   557279283,
-  'complete'
+  'complete',
+  TIMESTAMP '2018-01-28 12:45:00'
 );
 
 INSERT into Schedule
@@ -4853,7 +4859,8 @@ Values(
   TIMESTAMP '2018-02-11 08:30:00',
   'IRM-1212',
   557279281,
-  'complete'
+  'complete',
+  TIMESTAMP '2018-02-11 09:15:00'
 );
 
 INSERT into Schedule
@@ -4862,7 +4869,8 @@ Values(
   TIMESTAMP '2017-12-10 09:30:00',
   'IRM-1212',
   557279281,
-  'complete'
+  'complete',
+  TIMESTAMP '2017-12-10 12:00:00'
 );
 
 INSERT into Schedule
@@ -4871,7 +4879,8 @@ Values(
   TIMESTAMP '2017-01-20 10:00:00',
   'IRM-1212',
   557279281,
-  'complete'
+  'complete',
+  TIMESTAMP '2017-01-20 11:15:00'
 );
 INSERT into Schedule
 Values(
@@ -4879,7 +4888,8 @@ Values(
   TIMESTAMP '2018-02-11 08:30:00',
   'DEL-8888',
   187658163,
-  'complete'
+  'complete',
+  TIMESTAMP '2018-02-11 09:30:00'
 );
 INSERT into Schedule
 Values(
@@ -4887,7 +4897,8 @@ Values(
   TIMESTAMP '2016-11-05 09:00:00',
   'DEL-8888',
   401671897,
-  'complete'
+  'complete',
+  TIMESTAMP '2016-11-05 10:15:00'
 );
 
 INSERT into Schedule
@@ -4896,7 +4907,8 @@ Values(
   TIMESTAMP '2017-09-01 09:00:00',
   'P11-212A',
   590424694,
-  'complete'
+  'complete',
+  TIMESTAMP '2017-09-01 10:45:00'
 );
 
 INSERT into Schedule
@@ -4905,7 +4917,8 @@ Values(
   TIMESTAMP '2014-06-15 08:30:00',
   'P11-212A',
   310773348,
-  'complete'
+  'complete',
+  TIMESTAMP '2014-06-15 09:30:00'
 );
 
 INSERT into Schedule
@@ -4914,7 +4927,8 @@ Values(
   TIMESTAMP '2016-11-11 08:30:00',
   'WIM-BLE5',
   310773348,
-  'complete'
+  'complete',
+  TIMESTAMP '2016-11-11 08:45:00'
 );
 
 INSERT into Schedule
@@ -4923,7 +4937,8 @@ Values(
   TIMESTAMP '2016-01-02 14:00:00',
   'WIM-BLE5',
   401671897,
-  'complete'
+  'complete',
+  TIMESTAMP '2016-01-02 15:30:00'
 );
 INSERT into Schedule
 Values(
@@ -4931,7 +4946,8 @@ Values(
   TIMESTAMP '2015-09-30 11:00:00',
   'WIM-BLE5',
   401671897,
-  'complete'
+  'complete',
+  TIMESTAMP '2015-09-30 14:15:00'
 );
 
 INSERT into Repair_schedule
