@@ -361,6 +361,7 @@ public class MainApp {
 
 			if (selected_option.equals("1")) {
 				String s_type = functObject.getNextMaintenanceType(email, licensePlate, currMileage);
+				functObject.findMaintenanceScheduleDates(mechanicName,licensePlate,s_type);
 				functObject.getMaintenanceMissingParts(licensePlate, s_type);
 				customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName);
 				// find two earliest dates

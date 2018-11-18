@@ -5,6 +5,10 @@ import java.sql.Timestamp;
 
 import main.connection;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
+
 public class utilitiesFunctions {
 	static ResultSet rs = null;
 	static connection connObject = new connection();
@@ -370,20 +374,13 @@ public class utilitiesFunctions {
 
 	public ResultSet getServiceHistory(String email) {
 		try {
-			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email, " + 
-					"schedule_id, start_time,mechanic_id,status,name,service_centre_id, " + 
-					"m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S " + 
-					"JOIN Employees E " + 
-					"ON S.mechanic_id= E.eid " + 
-					"WHERE S.status='complete') W " + 
-					"FULL OUTER JOIN Maintenance_schedule MS " + 
-					"ON W.schedule_id=MS.maintenance_schedule_id " + 
-					"\r\n" + 
-					"FULL OUTER JOIN Repair_schedule RS " + 
-					"ON W.schedule_id=RS.repair_schedule_id) X " + 
-					"ON O.plate_no=X.customer_plate_no " + 
-					" " + 
-					"WHERE O.email='" + email + "'");
+			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email, "
+					+ "schedule_id, start_time,mechanic_id,status,name,service_centre_id, "
+					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
+					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
+					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
+					+ "\r\n" + "FULL OUTER JOIN Repair_schedule RS " + "ON W.schedule_id=RS.repair_schedule_id) X "
+					+ "ON O.plate_no=X.customer_plate_no " + " " + "WHERE O.email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Error");
@@ -435,23 +432,19 @@ public class utilitiesFunctions {
 
 	public static ResultSet getMaintenanceMissingParts(String licensePlate, String serviceType) {
 		try {
-			rs = connObject.selectQuery("SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, " + 
-					"(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, " + 
-					"(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, " + 
-					"(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V " + 
-					"WHERE O.plate_no = 'IRM-1212' AND " + 
-					"O.vehicle_id = MU.vehicle_id AND " + 
-					"MU.m_type='" + serviceType + "' AND " + 
-					"V.vehicle_id = O.vehicle_id) T1 " + 
-					"WHERE I.service_id = T1.sid AND " + 
-					"T1.vehicle_id = I.vehicle_id) T2 " + 
-					"WHERE T2.part_id=Pm.part_id AND " + 
-					"T2.make = PM.make) T3, " + 
-					"(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + licensePlate + "' AND O1.email = C1.email) T11 " + 
-					"WHERE " + 
-					"T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + 
-					"T11.sc_id=Inv.service_center_id AND " + 
-					"T3.quantity > Inv.current_quantity;");
+			rs = connObject.selectQuery(
+					"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
+							+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
+							+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
+							+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
+							+ "WHERE O.plate_no = 'IRM-1212' AND " + "O.vehicle_id = MU.vehicle_id AND " + "MU.m_type='"
+							+ serviceType + "' AND " + "V.vehicle_id = O.vehicle_id) T1 "
+							+ "WHERE I.service_id = T1.sid AND " + "T1.vehicle_id = I.vehicle_id) T2 "
+							+ "WHERE T2.part_id=Pm.part_id AND " + "T2.make = PM.make) T3, "
+							+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + licensePlate
+							+ "' AND O1.email = C1.email) T11 " + "WHERE "
+							+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + "T11.sc_id=Inv.service_center_id AND "
+							+ "T3.quantity > Inv.current_quantity;");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
@@ -459,9 +452,48 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ResultSet orderParts(String licensePlate, String serviceType) {
+	public static ResultSet findMaintenanceScheduleDates(String mechanic_name, String plate_no, String m_type) {
 		try {
-			rs = connObject.selectQuery("");
+			int day_increment = 1;
+			int mechanic_id = 0;
+			rs = getMechanicByName(mechanic_name);
+			if (rs.next()) {
+				mechanic_id = rs.getInt("eid");
+			}
+
+			int totalTime = 0;
+			if (m_type.equals("A")) {
+				totalTime = getTotalTimeForMaintenance(plate_no, "A");
+			} else if (m_type.equals("B")) {
+				totalTime = getTotalTimeForMaintenance(plate_no, "A") + getTotalTimeForMaintenance(plate_no, "B");
+			} else if (m_type.equals("C")) {
+				totalTime = getTotalTimeForMaintenance(plate_no, "A") + getTotalTimeForMaintenance(plate_no, "B")
+						+ getTotalTimeForMaintenance(plate_no, "C");
+			}
+
+			java.util.Date utilDate = new java.util.Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(utilDate);
+			cal.add(Calendar.DATE, day_increment);
+			cal.set(Calendar.HOUR_OF_DAY, 4);
+			while (day_increment <= 10) {
+				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				cal.set(Calendar.HOUR_OF_DAY, 11);
+				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				rs = connObject.selectQuery(
+						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
+								+ "' AND S.start_time < TIMESTAMP '" + s1 + "' AND mechanic_id='" + mechanic_id
+								+ "' ORDER BY start_time DESC");
+				if (rs.next()) {
+					if (compareTwoTimeStamps(rs.getTimestamp("end_time"),
+							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
+						addToSchedule(rs.getTimestamp("end_time"),plate_no,mechanic_id,new Timestamp(rs.getTimestamp("end_time").getTime() + (totalTime)));
+						break;
+					}
+				}
+				// apply scheduling instead of the current greedy approach
+
+			}
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
@@ -469,9 +501,12 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ResultSet addToSchedule(String licensePlate, int mechanicId) {
+	public static ResultSet addToSchedule(Timestamp start_time, String licensePlate, int mechanicId,
+			Timestamp end_time) {
 		try {
-			rs = connObject.selectQuery("");
+			rs = connObject.selectQuery("INSERT into Schedule " + "Values(" + "'1', " + "TIMESTAMP '" + start_time
+					+ "', " + "'" + licensePlate + "', " + mechanicId + ", " + "'pending' " + "TIMESTAMP '" + end_time
+					+ "', " + ");");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
@@ -535,36 +570,36 @@ public class utilitiesFunctions {
 			return "";
 		}
 	}
-	
-	public static float getTotalTimeForMaintenance(String plate_no, String m_type) {
+
+	public static int getTotalTimeForMaintenance(String plate_no, String m_type) {
 		try {
-			rs = connObject.selectQuery(
-					"Select sum(hours_to_complete) as sum from Service S, "
-					+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type FROM Owns O, Maintenance_uses MU, Vehicles V WHERE O.plate_no = '" + plate_no + 
-					"' AND O.vehicle_id = MU.vehicle_id AND MU.m_type='" + m_type +"' AND V.vehicle_id = O.vehicle_id ) T1  where S.sid = T1.sid");
+			rs = connObject.selectQuery("Select sum(hours_to_complete) as sum from Service S, "
+					+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type FROM Owns O, Maintenance_uses MU, Vehicles V WHERE O.plate_no = '"
+					+ plate_no + "' AND O.vehicle_id = MU.vehicle_id AND MU.m_type='" + m_type
+					+ "' AND V.vehicle_id = O.vehicle_id ) T1  where S.sid = T1.sid");
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return rs.getFloat("sum");
+				return (int)rs.getFloat("sum") *60 *60*1000;
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
 			return 0;
 		}
 	}
-	
+
 	public static String getEndTimeForMaintenance(String plate_no, String m_type, String schedule_id) {
 		try {
 			float totalTime = getTotalTimeForMaintenance(plate_no, m_type);
-			int hours = (int)totalTime;
-			float minutes = totalTime - (int)totalTime;
+
 			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
-			if(!rs.next()) {
+			if (!rs.next()) {
 				System.out.println("Wrong schedule_id");
 				return "";
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
 				return time.toString();
 			}
@@ -573,79 +608,21 @@ public class utilitiesFunctions {
 			return "";
 		}
 	}
-	
+
 	public static boolean updateEndTimeForMaintenanceInSchedule(String plate_no, String m_type, String schedule_id) {
 		try {
 			float totalTime = getTotalTimeForMaintenance(plate_no, m_type);
-			int hours = (int)totalTime;
-			float minutes = totalTime - (int)totalTime;
+
 			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
-			if(!rs.next()) {
-				System.out.println("Wrong schedule_id");
-				return false;
-			} else {
-				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
-				time.setTime(time.getTime() + duration);
-				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '"+time.toString()+"'");
-				return true;
-			}
-		} catch (Throwable e) {
-			System.out.println("Something went wrong");
-			return false;
-		}
-	}
-	
-	public static float getTotalTimeForRepair(String repair_name) {
-		try {
-			rs = connObject.selectQuery("Select sum(hours_to_complete) as sum from Service S," 
-					+ "(Select R2.sid from Repair R1, Repair_uses R2 where R1.repair_name='"+repair_name+"' and R1.rid = R2.rid) T1 where S.sid = T1.sid");
 			if (!rs.next()) {
-				return 0;
-			} else {
-				return rs.getFloat("sum");
-			}
-		} catch (Throwable e) {
-			System.out.println("Wrong values");
-			return 0;
-		}
-	}
-	
-	public static String getEndTimeForRepair(String repair_name, String schedule_id) {
-		try {
-			float totalTime = getTotalTimeForRepair(repair_name);
-			int hours = (int)totalTime;
-			float minutes = totalTime - (int)totalTime;
-			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
-			if(!rs.next()) {
-				System.out.println("Wrong schedule_id");
-				return "";
-			} else {
-				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
-				time.setTime(time.getTime() + duration);
-				return time.toString();
-			}
-		} catch (Throwable e) {
-			System.out.println("Something went wrong");
-			return "";
-		}
-	}
-	
-	public static boolean updateEndTimeForRepairInSchedule(String repair_name, String schedule_id) {
-		try {
-			float totalTime = getTotalTimeForRepair(repair_name);
-			int hours = (int)totalTime;
-			float minutes = totalTime - (int)totalTime;
-			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
-			if(!rs.next()) {
 				System.out.println("Wrong schedule_id");
 				return false;
 			} else {
 				Timestamp time = rs.getTimestamp("start_time");
-				Long duration = (long)((hours * 60 * 60) + (minutes * 60)) * 1000;
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
 				time.setTime(time.getTime() + duration);
-				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '"+time.toString()+"'");
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
 				return true;
 			}
 		} catch (Throwable e) {
@@ -654,4 +631,72 @@ public class utilitiesFunctions {
 		}
 	}
 
+	public static int getTotalTimeForRepair(String repair_name) {
+		try {
+			rs = connObject.selectQuery("Select sum(hours_to_complete) as sum from Service S,"
+					+ "(Select R2.sid from Repair R1, Repair_uses R2 where R1.repair_name='" + repair_name
+					+ "' and R1.rid = R2.rid) T1 where S.sid = T1.sid");
+			if (!rs.next()) {
+				return 0;
+			} else {
+				return (int)rs.getFloat("sum") *60 *60*1000;
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+
+	public static String getEndTimeForRepair(String repair_name, String schedule_id) {
+		try {
+			float totalTime = getTotalTimeForRepair(repair_name);
+
+			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
+			if (!rs.next()) {
+				System.out.println("Wrong schedule_id");
+				return "";
+			} else {
+				Timestamp time = rs.getTimestamp("start_time");
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
+				time.setTime(time.getTime() + duration);
+				return time.toString();
+			}
+		} catch (Throwable e) {
+			System.out.println("Something went wrong");
+			return "";
+		}
+	}
+
+	public static boolean updateEndTimeForRepairInSchedule(String repair_name, String schedule_id) {
+		try {
+			float totalTime = getTotalTimeForRepair(repair_name);
+
+			rs = connObject.selectQuery("Select * from Schedule where schedule_id='" + schedule_id + "'");
+			if (!rs.next()) {
+				System.out.println("Wrong schedule_id");
+				return false;
+			} else {
+				Timestamp time = rs.getTimestamp("start_time");
+
+				Long duration = (long)(totalTime * 60 * 60 * 1000);
+				time.setTime(time.getTime() + duration);
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
+				return true;
+			}
+		} catch (Throwable e) {
+			System.out.println("Something went wrong");
+			return false;
+		}
+	}
+
+	public static long compareTwoTimeStamps(java.sql.Timestamp currentTime, java.sql.Timestamp oldTime) {
+		long milliseconds1 = oldTime.getTime();
+		long milliseconds2 = currentTime.getTime();
+
+		long diff = milliseconds2 - milliseconds1;
+		long diffHours = diff / (60 * 60 * 1000);
+
+		return diffHours;
+	}
 }
