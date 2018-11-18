@@ -5269,7 +5269,7 @@ Values(
 ALTER TABLE Inventory
   ADD uncommited_current_quantity INTEGER;
   
-Update table Inventory
+Update Inventory
 set
 uncommited_current_quantity = current_quantity;
 -------------
