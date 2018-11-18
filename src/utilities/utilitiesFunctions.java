@@ -373,20 +373,13 @@ public class utilitiesFunctions {
 
 	public ResultSet getServiceHistory(String email) {
 		try {
-			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email, " + 
-					"schedule_id, start_time,mechanic_id,status,name,service_centre_id, " + 
-					"m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S " + 
-					"JOIN Employees E " + 
-					"ON S.mechanic_id= E.eid " + 
-					"WHERE S.status='complete') W " + 
-					"FULL OUTER JOIN Maintenance_schedule MS " + 
-					"ON W.schedule_id=MS.maintenance_schedule_id " + 
-					"\r\n" + 
-					"FULL OUTER JOIN Repair_schedule RS " + 
-					"ON W.schedule_id=RS.repair_schedule_id) X " + 
-					"ON O.plate_no=X.customer_plate_no " + 
-					" " + 
-					"WHERE O.email='" + email + "'");
+			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email, "
+					+ "schedule_id, start_time,mechanic_id,status,name,service_centre_id, "
+					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
+					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
+					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
+					+ "\r\n" + "FULL OUTER JOIN Repair_schedule RS " + "ON W.schedule_id=RS.repair_schedule_id) X "
+					+ "ON O.plate_no=X.customer_plate_no " + " " + "WHERE O.email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Error");
@@ -438,23 +431,19 @@ public class utilitiesFunctions {
 
 	public static ResultSet getMaintenanceMissingParts(String licensePlate, String serviceType) {
 		try {
-			rs = connObject.selectQuery("SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, " + 
-					"(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, " + 
-					"(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, " + 
-					"(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V " + 
-					"WHERE O.plate_no = 'IRM-1212' AND " + 
-					"O.vehicle_id = MU.vehicle_id AND " + 
-					"MU.m_type='" + serviceType + "' AND " + 
-					"V.vehicle_id = O.vehicle_id) T1 " + 
-					"WHERE I.service_id = T1.sid AND " + 
-					"T1.vehicle_id = I.vehicle_id) T2 " + 
-					"WHERE T2.part_id=Pm.part_id AND " + 
-					"T2.make = PM.make) T3, " + 
-					"(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + licensePlate + "' AND O1.email = C1.email) T11 " + 
-					"WHERE " + 
-					"T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + 
-					"T11.sc_id=Inv.service_center_id AND " + 
-					"T3.quantity > Inv.current_quantity;");
+			rs = connObject.selectQuery(
+					"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
+							+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
+							+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
+							+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
+							+ "WHERE O.plate_no = 'IRM-1212' AND " + "O.vehicle_id = MU.vehicle_id AND " + "MU.m_type='"
+							+ serviceType + "' AND " + "V.vehicle_id = O.vehicle_id) T1 "
+							+ "WHERE I.service_id = T1.sid AND " + "T1.vehicle_id = I.vehicle_id) T2 "
+							+ "WHERE T2.part_id=Pm.part_id AND " + "T2.make = PM.make) T3, "
+							+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + licensePlate
+							+ "' AND O1.email = C1.email) T11 " + "WHERE "
+							+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + "T11.sc_id=Inv.service_center_id AND "
+							+ "T3.quantity > Inv.current_quantity;");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
@@ -462,16 +451,32 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ResultSet findMaintenanceScheduleDates(String  mechanic_name) {
+	public static ResultSet findMaintenanceScheduleDates(String mechanic_name) {
 		try {
+			int day_increment = 1;
+			int mechanic_id=0;
+			rs=getMechanicByName(mechanic_name);
+			if(rs.next()) {
+				mechanic_id=rs.getInt("eid");
+			}
+			
 			java.util.Date utilDate = new java.util.Date();
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(utilDate);
-			cal.set(Calendar.MILLISECOND, 0);
-			rs = connObject.selectQuery("select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time < TIMESTAMP '" + new java.sql.Timestamp(utilDate.getTime()) + "' + numtodsinterval(1, 'day')");
-			while (rs.next()) {
-				//apply scheduling instead of the current greedy approach
-				
+			cal.add(Calendar.DATE, day_increment);
+			cal.set(Calendar.HOUR_OF_DAY, 4);
+			while (day_increment <= 10) { 
+				String s1=new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				cal.set(Calendar.HOUR_OF_DAY, 11);
+				String s2=new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				rs = connObject.selectQuery(
+						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" 
+								+ s1 + "' AND S.start_time < TIMESTAMP '"+ s1 + "' AND mechanic_id='" + mechanic_id + "' ORDER BY start_time DESC");
+				while(rs.next()) {
+					
+				}
+				// apply scheduling instead of the current greedy approach
+
 			}
 			return rs;
 		} catch (Throwable e) {
