@@ -4,6 +4,10 @@ import java.sql.ResultSet;
 
 import main.connection;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Calendar;
+
 public class utilitiesFunctions {
 	static ResultSet rs = null;
 	static connection connObject = new connection();
@@ -458,9 +462,17 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ResultSet orderParts(String licensePlate, String serviceType) {
+	public static ResultSet findMaintenanceScheduleDates(String  mechanic_name) {
 		try {
-			rs = connObject.selectQuery("");
+			java.util.Date utilDate = new java.util.Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(utilDate);
+			cal.set(Calendar.MILLISECOND, 0);
+			rs = connObject.selectQuery("select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time < TIMESTAMP '" + new java.sql.Timestamp(utilDate.getTime()) + "' + numtodsinterval(1, 'day')");
+			while (rs.next()) {
+				//apply scheduling instead of the current greedy approach
+				
+			}
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
