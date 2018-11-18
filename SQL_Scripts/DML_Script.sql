@@ -11,6 +11,10 @@ begin
 end;
 /
 
+ALTER TABLE Inventory MODIFY uncommited_current_quantity INTEGER DEFAULT 0;
+
+
+/*
 create sequence Maintain_schedule_id_seq;
 
 create trigger trg_maintain_schedule_id
@@ -34,6 +38,7 @@ begin
   from dual;
 end;
 /
+*/
 -------------------------------------------------------
 
 INSERT into Service_center
@@ -5011,6 +5016,14 @@ Values(
   14,
   'A'
 );
+
+
+------------
+Update table Inventory
+set
+uncommited_current_quantity = current_quantity;
+-------------
+
 ---- Post Insert TRIGGERS HERE || Write INSERT statements above this
 create sequence Emp_id_seq START WITH 999204784;
 
@@ -5035,4 +5048,5 @@ begin
   from dual;
 end;
 /
+
 ------------------------

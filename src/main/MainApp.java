@@ -280,15 +280,21 @@ public class MainApp {
 
 	public static void customerServiceHistoryPage(String email) {
 		try {
-			// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+			ResultSet rs = functObject.getServiceHistory(userInfoObject.email);
 			while (rs.next()) {
-				System.out.println("A. " + rs.getString("id"));
+				System.out.println("A. " + rs.getString("schedule_id"));
 				System.out.println("B. " + rs.getString("plate_no"));
-				System.out.println("C. " + rs.getString("service_type"));
-				System.out.println("D. " + rs.getString("mechanic"));
+				if(rs.getString("maintenance_schedule_id")== null) {
+					System.out.println("C. Repair-" + rs.getInt("rid"));
+				}
+				else {
+					System.out.println("C. Maintenance-" + rs.getString("m_type"));
+				}
+				System.out.println("D. " + rs.getString("name"));
 				System.out.println("E. " + rs.getString("start_time"));
-				System.out.println("F. " + rs.getString("end_time"));
+				System.out.println("F. To be calculated");
 				System.out.println("G. " + rs.getString("status"));
+				System.out.println(" " );
 			}
 			System.out.println("1. Go Back");
 			Scanner s = new Scanner(System.in);
@@ -355,6 +361,7 @@ public class MainApp {
 
 			if (selected_option.equals("1")) {
 				String s_type = functObject.getNextMaintenanceType(email, licensePlate, currMileage);
+				functObject.getMaintenanceMissingParts(licensePlate, s_type);
 				customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName);
 				// find two earliest dates
 			} else if (selected_option.equals("2")) {

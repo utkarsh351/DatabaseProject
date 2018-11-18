@@ -235,6 +235,7 @@ CREATE TABLE Inventory
    current_quantity INTEGER,
    min_inventory_thold INTEGER,
    min_order_quantity INTEGER,
+   uncommited_current_quantity INTEGER
    PRIMARY KEY (inventory_id),
    FOREIGN KEY (service_center_id)
    REFERENCES Service_center,
