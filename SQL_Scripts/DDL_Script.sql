@@ -226,8 +226,7 @@ CREATE TABLE Orders
     order_delivery_date DATE,
    parts_to_make_id INTEGER NOT NULL,
    quantity INTEGER,
-   status VARCHAR(40),
-   
+   status VARCHAR(40),   
   PRIMARY KEY (order_id),
   FOREIGN KEY (parts_to_make_id)
    REFERENCES Parts_to_make,
