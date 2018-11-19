@@ -226,7 +226,7 @@ public class utilitiesFunctions {
 	public static ResultSet viewInvoices(String email) {
 		try {
 			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email,O.vehicle_id, "
-					+ "schedule_id, start_time,end_time,mechanic_id,status,name,service_centre_id, "
+					+ "schedule_id, start_time,end_time,mechanic_id,status,name,service_centre_id,wage, "
 					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
 					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
 					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
@@ -389,8 +389,8 @@ public class utilitiesFunctions {
 					+ "JOIN Parts P ON P.part_id=PM.part_id "
 					+ "FULL OUTER JOIN Distributor D ON D.distributor_id=W.distributor_id "
 					+ "FULL OUTER JOIN Service_center SC ON SC.sc_id =W.service_center_provider_id "
-					+ "JOIN Service_center SC2 ON SC2.sc_id =W.requester_center_inventory_id "
-					+ "WHERE SC2.sc_id='" + service_centre_id + "'");
+					+ "JOIN Service_center SC2 ON SC2.sc_id =W.requester_center_inventory_id " + "WHERE SC2.sc_id='"
+					+ service_centre_id + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Service Center Id");
@@ -522,7 +522,7 @@ public class utilitiesFunctions {
 	public static ResultSet getMaintenanceMissingParts(String licensePlate, String serviceType) {
 		try {
 			rs = connObject.selectQuery(
-					"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
+					"SELECT T3.quantity- Inv.current_quantity as shortage, T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
 							+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
 							+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
 							+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
@@ -541,11 +541,11 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ResultSet checkForParts(String licensePlate, String serviceType) {
+	public static ResultSet checkForParts(String licensePlate, String serviceType, String scId) {
 		try {
 			rs = getMaintenanceMissingParts(licensePlate, serviceType);
 			while (rs.next()) {
-				rs.getString("parts_to_make_id");
+				checkExistingOrders(rs.getString("parts_to_make_id"), scId);
 			}
 			return rs;
 		} catch (Throwable e) {
@@ -554,7 +554,7 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static Timestamp checkExistingOrders(String parts_to_make_id) {
+	public static Timestamp checkExistingOrders(String parts_to_make_id, String scId) {
 		try {
 			java.util.Date utilDate = new java.util.Date();
 			java.sql.Timestamp t = new java.sql.Timestamp(utilDate.getTime());
@@ -563,9 +563,13 @@ public class utilitiesFunctions {
 							+ parts_to_make_id + " AND rownum = 1 ORDER BY O.order_expected_delivery_date DESC;");
 			if (rs.next()) {
 				return rs.getTimestamp("order_expected_delivery_date");
-			} else {
-
 			}
+			rs = connObject.selectQuery("SELECT service_center_id FROM Inventory I WHERE I.parts_to_make_id='"
+					+ parts_to_make_id + "' AND I.service_center_id <> '" + scId + "' AND I.current_quantity>1;");
+			if (rs.next()) {
+				// place order
+			}
+				//order from dist
 			return t;
 		} catch (Throwable e) {
 			java.util.Date utilDate = new java.util.Date();
@@ -1102,7 +1106,7 @@ public class utilitiesFunctions {
 			return rs;
 		}
 	}
-	
+
 	public static boolean dailyTaskUpdateInventory(String users_service_centre_id) {
 		try {
 			java.util.Date utilDate = new java.util.Date();
@@ -1116,34 +1120,37 @@ public class utilitiesFunctions {
 			String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-			rs = connObject.selectQuery(
-						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'");
-			while(rs.next()) {
+			rs = connObject
+					.selectQuery("select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '"
+							+ s1 + "' AND S.start_time < TIMESTAMP '" + s2 + "'");
+			while (rs.next()) {
 				int sid = rs.getInt("schedule_id");
 				String plate_no = rs.getString("customer_plate_no");
 				String type_name = null;
-				ResultSet rs2 = connObject2.selectQuery("Select * from Maintenance_schedule where maintenance_schedule_id='"+sid+"'");
-				if(rs2.next()) {
+				ResultSet rs2 = connObject2
+						.selectQuery("Select * from Maintenance_schedule where maintenance_schedule_id='" + sid + "'");
+				if (rs2.next()) {
 					type_name = rs2.getString("m_type");
 					rs2 = connObject2.selectQuery(
 							"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
 									+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
 									+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
 									+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
-									+ "WHERE O.plate_no = 'IRM-1212' AND " + "O.vehicle_id = MU.vehicle_id AND " + "MU.m_type='"
-									+ type_name + "' AND " + "V.vehicle_id = O.vehicle_id) T1 "
+									+ "WHERE O.plate_no = 'IRM-1212' AND " + "O.vehicle_id = MU.vehicle_id AND "
+									+ "MU.m_type='" + type_name + "' AND " + "V.vehicle_id = O.vehicle_id) T1 "
 									+ "WHERE I.service_id = T1.sid AND " + "T1.vehicle_id = I.vehicle_id) T2 "
 									+ "WHERE T2.part_id=Pm.part_id AND " + "T2.make = PM.make) T3, "
 									+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + plate_no
 									+ "' AND O1.email = C1.email) T11 " + "WHERE "
-									+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + "T11.sc_id=Inv.service_center_id");
-					while(rs2.next()) {
-						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - " 
-								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id")+" and "
-										+ "Inventory.service_center_id='"+users_service_centre_id+"'");
+									+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND "
+									+ "T11.sc_id=Inv.service_center_id");
+					while (rs2.next()) {
+						int ans = connObject3.insertQuery(
+								"Update Inventory SET current_quantity=current_quantity - " + rs2.getInt("quantity")
+										+ " where Inventory.parts_to_make_id=" + rs2.getInt("Parts_to_make_id")
+										+ " and " + "Inventory.service_center_id='" + users_service_centre_id + "'");
 					}
-					
+
 				} else {
 					rs2 = connObject2.selectQuery("Select * from Repair_schedule where repair_schedule_id='"+sid+"'");
 					if(rs2.next()) {
@@ -1172,7 +1179,7 @@ public class utilitiesFunctions {
 					}
 				}
 			}
-			
+
 			return true;
 		} catch (Throwable e) {
 			System.out.println("Something Went Wrong");
