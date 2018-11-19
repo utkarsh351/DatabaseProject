@@ -1146,29 +1146,63 @@ public class utilitiesFunctions {
 					
 				} else {
 					rs2 = connObject2.selectQuery("Select * from Repair_schedule where repair_schedule_id='"+sid+"'");
-					int rid = rs2.getInt("repair_schedule_id");
-					rs2 = connObject2.selectQuery("SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv,"
-							+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM,"
-							+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.make FROM Involves I, "
-							+ "(SELECT RU.sid, V.make, O.vehicle_id from Repair_uses RU, Vehicles V, Owns O "
-							+ "Where"
-							+ "RU.rid="+rid+ " AND "
-							+ "V.vehicle_id = O.vehicle_id AND "
-							+ "O.plate_no = 'IRM-1212') T1 "
-							+ "WHERE I.service_id = T1.sid AND "
-							+ "T1.vehicle_id = I.vehicle_id) T2 "
-							+ "WHERE T2.part_id=Pm.part_id AND "
-							+ "T2.make = PM.make) T3, "
-							+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '"+plate_no+"' AND O1.email = C1.email) T11 "
-							+ "WHERE "
-							+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND "
-							+ "T11.sc_id=Inv.service_center_id");
-					while(rs2.next()) {
-						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - " 
-								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id")+" and "
-								+ "Inventory.service_center_id='"+users_service_centre_id+"'");
+					if(rs2.next()) {
+						int rid = rs2.getInt("repair_schedule_id");
+						rs2 = connObject2.selectQuery("SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv,"
+								+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM,"
+								+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.make FROM Involves I, "
+								+ "(SELECT RU.sid, V.make, O.vehicle_id from Repair_uses RU, Vehicles V, Owns O "
+								+ "Where"
+								+ "RU.rid="+rid+ " AND "
+								+ "V.vehicle_id = O.vehicle_id AND "
+								+ "O.plate_no = 'IRM-1212') T1 "
+								+ "WHERE I.service_id = T1.sid AND "
+								+ "T1.vehicle_id = I.vehicle_id) T2 "
+								+ "WHERE T2.part_id=Pm.part_id AND "
+								+ "T2.make = PM.make) T3, "
+								+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '"+plate_no+"' AND O1.email = C1.email) T11 "
+								+ "WHERE "
+								+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND "
+								+ "T11.sc_id=Inv.service_center_id");
+						while(rs2.next()) {
+							int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - " 
+									+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id")+" and "
+									+ "Inventory.service_center_id='"+users_service_centre_id+"'");
+						}
 					}
 				}
+			}
+			
+			return true;
+		} catch (Throwable e) {
+			System.out.println("Something Went Wrong");
+			return false;
+		}
+	}
+	
+	public static boolean dailyTaskRecordDeliveries(String[] arr, String users_service_center_id) {
+		try {
+			java.util.Date utilDate = new java.util.Date();
+		    java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+		    
+			for(int i=0; i < arr.length; i++) {
+				String orderId = arr[i];
+				rs = connObject.selectQuery("Select quantity, parts_to_make_id from Orders where order_id='"+orderId+"'");
+				if(rs.next()) {
+					int quant = rs.getInt("quantity");
+					int parts_to_make_id = rs.getInt("parts_to_make_id");
+					connObject.insertQuery("Update Orders Set status='complete', order_delivery_date= Date '"+sqlDate+"' where status <> 'complete' and order_id='"+orderId+"'");
+					connObject.insertQuery("Update Inventory Set current_quantity = current_quantity + "+quant+" where service_center_id='"+users_service_center_id+"' and parts_to_make_id="+parts_to_make_id);
+				}
+			}
+			
+			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<=Date '"+sqlDate+"' and "
+					+ "requester_center_inventory_id='"+users_service_center_id+"'");
+			while(rs.next()) {
+				int orderId = rs.getInt("order_id");
+				connObject.insertQuery("Update Orders Set status='delayed' where order_id="+orderId);
+				connObject.insertQuery("INSERT into Notification(notification_id,order_id,message,notification_date,service_center_id) "
+						+ "Values(1,"+orderId+",'Order with id "+orderId+" delayed,Date '"+sqlDate+"','"+users_service_center_id+"')");
 			}
 			
 			return true;

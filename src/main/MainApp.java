@@ -35,9 +35,9 @@ public class MainApp {
 					userInfoObject = new userInfo(functObject.getRole(username), username);
 					if (userInfoObject.role.equals("customer")) {
 						try {
-							ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+							ResultSet rs = functObject.getCustomerInfo(userInfoObject.email);
 							while (rs.next()) {
-								userInfoObject.service_centre_id = rs.getString("service_centre_id");
+								userInfoObject.service_centre_id = rs.getString("sc_id");
 							}
 							customerLandingPage();
 						} catch (Throwable e) {
@@ -956,7 +956,7 @@ public class MainApp {
 			} else if (selected_option.equals("8")) {
 				dailyTaskUpdateInventoryReceptionist();
 			} else if (selected_option.equals("9")) {
-				// add Stuff
+				dailyTaskRecordDeliveries();
 			} else if (selected_option.equals("10")) {
 				mainMenu();
 			} else {
@@ -980,6 +980,37 @@ public class MainApp {
 		while(true) {
 			String option = s.nextLine();
 			if(option.equals("1")) {
+				receptionistLandingPage();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+		
+	}
+	
+	public static void dailyTaskRecordDeliveries() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("1. Enter Comma Separated Order Ids");
+		System.out.println("2. Go Back");
+		while(true) {
+			String option = s.nextLine();
+			if(option.equals("1")) {
+				String orderIds = s.nextLine();
+				String[] arr = orderIds.split(",");
+				for(int i=0;i<arr.length;i++) {
+					arr[i] = arr[i].trim();
+				}
+				
+				boolean ans = functObject.dailyTaskRecordDeliveries(arr, userInfoObject.service_centre_id);
+				
+				if(ans == true) {
+					System.out.println("Daily Task-Record Deliveries Successful");
+				} else {
+					System.out.println("Daily Task-Record Deliveries Was Not Successful");
+				}
+				
+				receptionistLandingPage();
+			} else if(option.equals("2")) {
 				receptionistLandingPage();
 			} else {
 				System.out.println("Choose a valid option");
@@ -1221,7 +1252,7 @@ public class MainApp {
 //			******************************************
 
 //			now do stuff
-
+		    
 			mainMenu();
 
 		} catch (Throwable e) {

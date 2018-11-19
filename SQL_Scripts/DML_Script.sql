@@ -1,4 +1,16 @@
 ---- Pre Insert TRIGGERS HERE || Write INSERT statements below this section ------
+create sequence Notification_id_seq;
+
+create trigger trg_notification_id
+before insert on Notification
+for each row
+begin
+  select Notification_id_seq.nextval
+  into :new.notification_id 
+  from dual;
+end;
+/
+
 create sequence Schedule_id_seq;
 
 create trigger trg_schedule_id
@@ -5153,7 +5165,7 @@ Values(
   Null,
   38,
   7,
-  'pending',
+  'delayed',
 'S0002'
 );
 
@@ -5166,7 +5178,7 @@ Values(
   Null,
   21,
   12,
-  'pending',
+  'delayed',
 'S0002'
 );
 
@@ -5179,7 +5191,7 @@ Values(
   Null,
   25,
   6,
-  'pending',
+  'delayed',
 'S0002'
 );
 
@@ -5192,7 +5204,7 @@ Values(
   Null,
   32,
   5,
-  'pending',
+  'delayed',
 'S0002'
 );
 
@@ -5205,7 +5217,7 @@ Values(
   Null,
   23,
   5,
-  'pending',
+  'delayed',
 'S0002'
 );
 
@@ -5280,6 +5292,35 @@ Values(
 1,
 'D0002',
 11
+);
+--1
+INSERT into Notification
+Values(
+1,
+6,
+'5 Camshaft from D0001 delayed by 2 business days',
+Date '2018-11-05',
+'S0001'
+);
+
+--2
+INSERT into Notification
+Values(
+1,
+4,
+'4 Coolant from D0002 delayed by 1 business day',
+Date '2017-08-17',
+'S0002'
+);
+
+--3
+INSERT into Notification
+Values(
+1,
+1,
+'5 Battery from D0001 delayed by 3 business days',
+Date '2014-06-18',
+'S0001'
 );
 
 ------------
