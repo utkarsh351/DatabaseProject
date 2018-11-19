@@ -312,9 +312,3 @@ CREATE TABLE Distributor_order
    FOREIGN KEY (customer_email)
    REFERENCES Customers
    );
-
-
-
-
-
-

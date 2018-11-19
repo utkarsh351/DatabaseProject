@@ -7,6 +7,7 @@ import main.connection;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class utilitiesFunctions {
@@ -587,11 +588,12 @@ public class utilitiesFunctions {
 			cal.set(Calendar.HOUR_OF_DAY, 4);
 			while (day_increment <= 10) {
 				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-				cal.set(Calendar.HOUR_OF_DAY, 11);
+				cal.set(Calendar.HOUR_OF_DAY, 23);
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
 						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s1 + "'" + s3 + " ORDER BY start_time DESC");
+								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3
+								+ " ORDER BY start_time DESC");
 				if (rs.next()) {
 					long diff = compareTwoTimeStamps(rs.getTimestamp("end_time"),
 							new java.sql.Timestamp(cal.getTimeInMillis()));
@@ -618,6 +620,88 @@ public class utilitiesFunctions {
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
 			return rs;
+		}
+	}
+	
+	public static ArrayList<Timestamp> findRepairScheduleDates(String mechanic_name, String plate_no, String repair_name) {
+		try {
+			ArrayList<Timestamp> arr = new ArrayList<>();
+			int day_increment = 1;
+			int mechanic_id = 0;
+			String s3="";
+			if (!mechanic_name.equals("")) {
+				rs = getMechanicByName(mechanic_name);
+				if (rs.next()) {
+					mechanic_id = rs.getInt("eid");
+					s3="AND mechanic_id='" + mechanic_id +"'";
+				}
+			}
+
+			int totalTime = 0;
+			totalTime = getTotalTimeForRepair(repair_name);
+
+			java.util.Date utilDate = new java.util.Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(utilDate);
+			cal.add(Calendar.DATE, day_increment);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 4);
+			Timestamp date1 = null;
+			Timestamp date2 = null;
+			while (day_increment <= 10) {
+				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				cal.set(Calendar.HOUR_OF_DAY, 23);
+				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				rs = connObject.selectQuery(
+						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
+								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3
+								+ " ORDER BY start_time DESC");
+				if (rs.next()) {
+//					long diff = compareTwoTimeStamps(rs.getTimestamp("end_time"),
+//							new java.sql.Timestamp(cal.getTimeInMillis()));
+					if (compareTwoTimeStamps(rs.getTimestamp("end_time"),
+							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
+//						addToSchedule(rs.getTimestamp("end_time"), plate_no, mechanic_id,
+//								new Timestamp(rs.getTimestamp("end_time").getTime() + (totalTime)));
+						if(date1==null) {
+							date1 = rs.getTimestamp("end_time");
+							day_increment = day_increment + 1;
+							continue;
+						} else {
+							date2 = rs.getTimestamp("end_time");
+							break;
+						}
+					} else {
+						day_increment = day_increment + 1;
+					}
+				} else {
+					cal.set(Calendar.HOUR_OF_DAY, 8);
+					Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
+//					Timestamp t2 = new java.sql.Timestamp(cal.getTimeInMillis());
+//					t2.setTime(t1.getTime() + totalTime);
+//					addToSchedule(t1, plate_no, mechanic_id, t2);
+					if(date1==null) {
+						date1 = t1;
+						day_increment = day_increment + 1;
+						continue;
+					} else {
+						date2 = t1;
+						break;
+					}
+				}
+				// apply scheduling instead of the current greedy approach
+
+			}
+			
+			arr.add(date1);
+			arr.add(date2);
+			
+			return arr;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return new ArrayList<>();
 		}
 	}
 

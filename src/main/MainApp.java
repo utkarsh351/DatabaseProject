@@ -1,6 +1,7 @@
 package main;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import utilities.utilitiesFunctions;
@@ -460,6 +461,8 @@ public class MainApp {
 			if (selected_option.equals("1")) {
 				rs = functObject.getDiagnosticReport(licensePlate, "Engine knock");
 				showDiagnosticReport(rs);
+				ArrayList<Timestamp> arr = functObject.findRepairScheduleDates(mechanicName, licensePlate, "Engine knock");
+				
 				// create and display diagnostic report showing list of causes and parts needed
 				// find two earliest dates
 				// send to repair page 2
@@ -500,7 +503,8 @@ public class MainApp {
 		}
 	}
 
-	public static void customerScheduleRepairPage2(String email) {
+	public static void customerScheduleRepairPage2(String email, String licensePlate, int currMileage,
+			String mechanicName) {
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -529,7 +533,7 @@ public class MainApp {
 					}
 				}
 			} else if (selected_option.equals("2")) {
-				customerScheduleRepairPage1(email);
+				customerScheduleRepairPage1(email, licensePlate, currMileage, mechanicName);
 			} else {
 				System.out.println("Choose a valid option");
 			}
