@@ -64,6 +64,7 @@ public class MainApp {
 		}
 	}
 
+	
 	public static void signup() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter email:");
@@ -120,7 +121,7 @@ public class MainApp {
 			} else if (selected_option.equals("4")) {
 				customerInvoice();
 			} else if (selected_option.equals("5")) {
-
+				mainMenu();
 			} else {
 				System.out.println("Choose a valid option");
 			}
@@ -955,7 +956,7 @@ public class MainApp {
 			} else if (selected_option.equals("9")) {
 				// add Stuff
 			} else if (selected_option.equals("10")) {
-				// add Stuff
+				mainMenu();
 			} else {
 				System.out.println("Choose a valid option");
 			}
