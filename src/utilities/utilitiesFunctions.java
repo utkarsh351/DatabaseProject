@@ -7,11 +7,13 @@ import main.connection;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class utilitiesFunctions {
 	static ResultSet rs = null;
 	static connection connObject = new connection();
+	static connection connObject2 = new connection();
 
 	public static boolean validUser(String username, String password) {
 		try {
@@ -217,21 +219,41 @@ public class utilitiesFunctions {
 		return true;
 	}
 
-//	view customer history
-	public static ResultSet viewCustomerHistory(String email) {
-		return rs;
-	}
-
 //	schedule customer service based on maintenance and repair and schedule or reschedule, do completely.
 
 //	show all invoices
 	public static ResultSet viewInvoices(String email) {
-		return rs;
+		try {
+			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email,O.vehicle_id, "
+					+ "schedule_id, start_time,end_time,mechanic_id,status,name,service_centre_id, "
+					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
+					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
+					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
+					+ "\r\n" + "FULL OUTER JOIN Repair_schedule RS " + "ON W.schedule_id=RS.repair_schedule_id) X "
+					+ "ON O.plate_no=X.customer_plate_no " + " " + "WHERE O.email='" + email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
 	}
 
 //	show invoices based on service id
 	public static ResultSet viewInvoiceById(String email, String serviceId) {
-		return rs;
+		try {
+			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email,O.vehicle_id, "
+					+ "schedule_id, start_time,end_time,mechanic_id,status,name,service_centre_id,wage, "
+					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
+					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
+					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
+					+ "\r\n" + "FULL OUTER JOIN Repair_schedule RS " + "ON W.schedule_id=RS.repair_schedule_id) X "
+					+ "ON O.plate_no=X.customer_plate_no " + " " + "WHERE O.email='" + email + "' AND schedule_id='"
+					+ serviceId + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
 	}
 
 // get Employee info
@@ -368,16 +390,34 @@ public class utilitiesFunctions {
 	}
 
 	public ResultSet getCarServiceDetails() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			rs = connObject.selectQuery("SELECT * FROM " + "(SELECT V.model,O.car_make_year,make, V.vehicle_id "
+					+ "FROM Vehicles V FULL OUTER JOIN Owns O ON V.vehicle_id=O.vehicle_id) W "
+					+ "GROUP BY model,car_make_year,make,vehicle_id");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
+	}
+
+	public ResultSet getMaintenanceServicesForCars(int vehicleId, String mType) {
+		try {
+			ResultSet rs = connObject2.selectQuery(
+					"SELECT * FROM Maintenance_uses WHERE vehicle_id=" + vehicleId + " AND m_type='" + mType + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
 	}
 
 	public ResultSet getServiceHistory(String email) {
 		try {
 			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email, "
-					+ "schedule_id, start_time,mechanic_id,status,name,service_centre_id, "
+					+ "schedule_id, start_time,mechanic_id,status,name,service_centre_id,end_time, "
 					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
-					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
+					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + ") W "
 					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
 					+ "\r\n" + "FULL OUTER JOIN Repair_schedule RS " + "ON W.schedule_id=RS.repair_schedule_id) X "
 					+ "ON O.plate_no=X.customer_plate_no " + " " + "WHERE O.email='" + email + "'");
@@ -388,9 +428,38 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public ResultSet getInvoiceDetails() {
-		// TODO Auto-generated method stub
-		return null;
+	public ResultSet getServiceHistoryForManager(String sc_id) {
+		try {
+			rs = connObject.selectQuery(
+					"SELECT plate_no,last_rec_mileage, last_repair_date,O.email, schedule_id, start_time,mechanic_id,status,name,service_centre_id,"
+							+ "m_type,maintenance_schedule_id,repair_schedule_id,rid,end_time, "
+							+ "FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
+							+ "JOIN Employees E ON S.mechanic_id= E.eid) W "
+							+ "FULL OUTER JOIN Maintenance_schedule MS "
+							+ "ON W.schedule_id=MS.maintenance_schedule_id " + "FULL OUTER JOIN Repair_schedule RS "
+							+ "ON W.schedule_id=RS.repair_schedule_id) X " + "ON O.plate_no=X.customer_plate_no "
+							+ "WHERE X.service_centre_id='" + sc_id + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
+	}
+
+	public ResultSet getInvoiceDetails(String scId) {
+		try {
+			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email,O.vehicle_id, "
+					+ "schedule_id, start_time,end_time,mechanic_id,status,name,service_centre_id,wage, "
+					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
+					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
+					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
+					+ "\r\n" + "FULL OUTER JOIN Repair_schedule RS " + "ON W.schedule_id=RS.repair_schedule_id) X "
+					+ "ON O.plate_no=X.customer_plate_no " + " " + "WHERE service_centre_id='" + scId + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
 	}
 
 // Schedule
@@ -444,7 +513,7 @@ public class utilitiesFunctions {
 							+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + licensePlate
 							+ "' AND O1.email = C1.email) T11 " + "WHERE "
 							+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + "T11.sc_id=Inv.service_center_id AND "
-							+ "T3.quantity > Inv.current_quantity;");
+							+ "T3.quantity > Inv.uncommited_current_quantity");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
@@ -452,16 +521,50 @@ public class utilitiesFunctions {
 		}
 	}
 
+	public static ResultSet checkForParts(String licensePlate, String serviceType) {
+		try {
+			rs = getMaintenanceMissingParts(licensePlate, serviceType);
+			while (rs.next()) {
+				rs.getString("parts_to_make_id");
+			}
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return rs;
+		}
+	}
+
+	public static Timestamp checkExistingOrders(String parts_to_make_id) {
+		try {
+			java.util.Date utilDate = new java.util.Date();
+			java.sql.Timestamp t = new java.sql.Timestamp(utilDate.getTime());
+			rs = connObject.selectQuery(
+					"SELECT O.quantity, O.parts_to_make_id, O.order_expected_delivery_date FROM Orders O WHERE O.status = 'pending' AND O.parts_to_make_id ='"
+							+ parts_to_make_id + " AND rownum = 1 ORDER BY O.order_expected_delivery_date DESC;");
+			if (rs.next()) {
+				return rs.getTimestamp("order_expected_delivery_date");
+			} else {
+
+			}
+			return t;
+		} catch (Throwable e) {
+			java.util.Date utilDate = new java.util.Date();
+			java.sql.Timestamp t = new java.sql.Timestamp(utilDate.getTime());
+			System.out.println("Wrong values");
+			return t;
+		}
+	}
+
 	public static ResultSet findMaintenanceScheduleDates(String mechanic_name, String plate_no, String m_type) {
 		try {
 			int day_increment = 1;
 			int mechanic_id = 0;
-			String s3="";
+			String s3 = "";
 			if (!mechanic_name.equals("")) {
 				rs = getMechanicByName(mechanic_name);
 				if (rs.next()) {
 					mechanic_id = rs.getInt("eid");
-					s3="AND mechanic_id='" + mechanic_id +"'";
+					s3 = "AND mechanic_id='" + mechanic_id + "'";
 				}
 			}
 
@@ -485,11 +588,11 @@ public class utilitiesFunctions {
 			cal.set(Calendar.HOUR_OF_DAY, 4);
 			while (day_increment <= 10) {
 				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-				cal.set(Calendar.HOUR_OF_DAY, 11);
+				cal.set(Calendar.HOUR_OF_DAY, 23);
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
 						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s1 + "'" + s3
+								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3
 								+ " ORDER BY start_time DESC");
 				if (rs.next()) {
 					long diff = compareTwoTimeStamps(rs.getTimestamp("end_time"),
@@ -517,6 +620,88 @@ public class utilitiesFunctions {
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
 			return rs;
+		}
+	}
+	
+	public static ArrayList<Timestamp> findRepairScheduleDates(String mechanic_name, String plate_no, String repair_name) {
+		try {
+			ArrayList<Timestamp> arr = new ArrayList<>();
+			int day_increment = 1;
+			int mechanic_id = 0;
+			String s3="";
+			if (!mechanic_name.equals("")) {
+				rs = getMechanicByName(mechanic_name);
+				if (rs.next()) {
+					mechanic_id = rs.getInt("eid");
+					s3="AND mechanic_id='" + mechanic_id +"'";
+				}
+			}
+
+			int totalTime = 0;
+			totalTime = getTotalTimeForRepair(repair_name);
+
+			java.util.Date utilDate = new java.util.Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(utilDate);
+			cal.add(Calendar.DATE, day_increment);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 4);
+			Timestamp date1 = null;
+			Timestamp date2 = null;
+			while (day_increment <= 10) {
+				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				cal.set(Calendar.HOUR_OF_DAY, 23);
+				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				rs = connObject.selectQuery(
+						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
+								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3
+								+ " ORDER BY start_time DESC");
+				if (rs.next()) {
+//					long diff = compareTwoTimeStamps(rs.getTimestamp("end_time"),
+//							new java.sql.Timestamp(cal.getTimeInMillis()));
+					if (compareTwoTimeStamps(rs.getTimestamp("end_time"),
+							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
+//						addToSchedule(rs.getTimestamp("end_time"), plate_no, mechanic_id,
+//								new Timestamp(rs.getTimestamp("end_time").getTime() + (totalTime)));
+						if(date1==null) {
+							date1 = rs.getTimestamp("end_time");
+							day_increment = day_increment + 1;
+							continue;
+						} else {
+							date2 = rs.getTimestamp("end_time");
+							break;
+						}
+					} else {
+						day_increment = day_increment + 1;
+					}
+				} else {
+					cal.set(Calendar.HOUR_OF_DAY, 8);
+					Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
+//					Timestamp t2 = new java.sql.Timestamp(cal.getTimeInMillis());
+//					t2.setTime(t1.getTime() + totalTime);
+//					addToSchedule(t1, plate_no, mechanic_id, t2);
+					if(date1==null) {
+						date1 = t1;
+						day_increment = day_increment + 1;
+						continue;
+					} else {
+						date2 = t1;
+						break;
+					}
+				}
+				// apply scheduling instead of the current greedy approach
+
+			}
+			
+			arr.add(date1);
+			arr.add(date2);
+			
+			return arr;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return new ArrayList<>();
 		}
 	}
 
@@ -589,6 +774,20 @@ public class utilitiesFunctions {
 		}
 	}
 
+	public static int getTimeInMilliSecondsInSlots(float totalTime) {
+		int hours = (int)totalTime;	
+		float minutes = totalTime - (int)totalTime;
+		
+		if(minutes == 0.25) {
+			minutes = (float)0.50;
+		} else if(minutes == 0.75) {
+			minutes = 0;
+			hours += hours;
+		}
+		
+		return (int)(((hours * 60 * 60) + (minutes * 60)) * 1000);
+	}
+	
 	public static int getTotalTimeForMaintenance(String plate_no, String m_type) {
 		try {
 			rs = connObject.selectQuery("Select sum(hours_to_complete) as sum from Service S, "
@@ -598,11 +797,152 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return (int) (rs.getFloat("sum") * 60 * 60 * 1000);
+				return getTimeInMilliSecondsInSlots(rs.getFloat("sum"));
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
 			return 0;
+		}
+	}
+
+	public static int getTotalCostForMaintenance(int vehicle_id, String m_type) {
+		try {
+			String s1 = "";
+			String s2 = "";
+			if (m_type == "B") {
+				s1 = " OR m_type='B'";
+			} else if (m_type == "C") {
+				s1 = " OR m_type='B'";
+				s2 = " OR m_type='A'";
+			}
+			ResultSet rs = connObject2.selectQuery(
+					"SELECT SUM(CT.rate* hours_to_complete) AS total_cost FROM (SELECT * FROM Maintenance_uses MU "
+							+ "JOIN Service S ON S.sid = MU.sid " + "WHERE vehicle_id=" + vehicle_id + " AND (m_type='"
+							+ m_type + "'" + s1 + s2 + ")) W " + "JOIN Charge_type CT ON CT.charge_type=W.charge_type");
+			if (!rs.next()) {
+				return 0;
+			} else {
+				return rs.getInt("total_cost");
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+
+	public static int getTotalCostForRepair(int repair_id) {
+		try {
+			int repairCost = 0;
+			int diagnosticCost = 0;
+			ResultSet rs = connObject2.selectQuery(
+					"SELECT SUM(CT.rate* hours_to_complete) AS total_cost FROM (SELECT * FROM Repair_uses RU "
+							+ "JOIN Service S ON S.sid = RU.sid " + "WHERE rid='" + repair_id + "') W "
+							+ "JOIN Charge_type CT ON CT.charge_type=W.charge_type");
+			if (rs.next()) {
+				repairCost = rs.getInt("total_cost");
+			} else {
+				repairCost = 0;
+			}
+			rs = connObject2.selectQuery("SELECT diagnostic_cost FROM Repair " + "WHERE rid=" + repair_id + "");
+			if (rs.next()) {
+				diagnosticCost = rs.getInt("diagnostic_cost");
+			} else {
+				diagnosticCost = 0;
+			}
+
+			return (repairCost + diagnosticCost);
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+
+	public static float getTotalHoursForMaintenance(int vehicle_id, String m_type) {
+		try {
+			String s1 = "";
+			String s2 = "";
+			if (m_type == "B") {
+				s1 = " OR m_type='B'";
+			} else if (m_type == "C") {
+				s1 = " OR m_type='B'";
+				s2 = " OR m_type='A'";
+			}
+			ResultSet rs = connObject2
+					.selectQuery("SELECT SUM(hours_to_complete) AS total_time FROM (SELECT * FROM Maintenance_uses MU "
+							+ "JOIN Service S ON S.sid = MU.sid " + "WHERE vehicle_id=" + vehicle_id + " AND (m_type='"
+							+ m_type + "'" + s1 + s2 + ")) W " + "JOIN Charge_type CT ON CT.charge_type=W.charge_type");
+			if (!rs.next()) {
+				return 0;
+			} else {
+				return rs.getFloat("total_time");
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+
+	public static float getTotalHoursForRepair(int repair_id) {
+		try {
+			ResultSet rs = connObject2
+					.selectQuery("SELECT SUM(hours_to_complete) AS total_time FROM (SELECT * FROM Repair_uses RU "
+							+ "JOIN Service S ON S.sid = RU.sid " + "WHERE rid='" + repair_id + "') W "
+							+ "JOIN Charge_type CT ON CT.charge_type=W.charge_type");
+			if (!rs.next()) {
+				return 0;
+			} else {
+				return rs.getFloat("total_time");
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+
+	public static ResultSet getTotalPartsForMaintenance(String m_type, int vehicle_id) {
+		try {
+			String make = "";
+			ResultSet rs = connObject2.selectQuery("SELECT * FROM Vehicles WHERE vehicle_id='" + vehicle_id + "'");
+			if (rs.next()) {
+				make = rs.getString("make");
+			}
+			String s1 = "";
+			String s2 = "";
+			if (m_type == "B") {
+				s1 = " OR m_type='B'";
+			} else if (m_type == "C") {
+				s1 = " OR m_type='B'";
+				s2 = " OR m_type='A'";
+			}
+			rs = connObject2.selectQuery("SELECT * FROM ("
+					+ "SELECT sid, X.part_id as part_id,vehicle_id,quantity,name FROM (SELECT miles,W.vehicle_id,sid,m_type,quantity,part_id  FROM (SELECT * FROM Maintenance_uses MU  WHERE (m_type='"
+					+ m_type + "'" + s1 + s2 + ") AND vehicle_id=" + vehicle_id + ") W "
+					+ "JOIN Involves I ON I.service_id=W.sid " + "WHERE W.vehicle_id=I.vehicle_id) X "
+					+ "JOIN Parts P ON P.part_id=X.part_id) Z " + "JOIN Parts_to_make PM ON PM.part_id=Z.part_id "
+					+ "WHERE make='" + make + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return rs;
+		}
+	}
+
+	public static ResultSet getTotalPartsForRepair(int repair_id, int vehicle_id) {
+		try {
+			String make = "";
+			ResultSet rs = connObject2.selectQuery("SELECT * FROM Vehicles WHERE vehicle_id='" + vehicle_id + "'");
+			if (rs.next()) {
+				make = rs.getString("make");
+			}
+			rs = connObject2.selectQuery("SELECT * FROM ("
+					+ "SELECT sid, X.part_id as part_id,vehicle_id,quantity,name FROM (SELECT * FROM (SELECT * FROM Repair_uses RU  WHERE rid='"
+					+ repair_id + "') W " + "JOIN Involves I ON I.service_id=W.sid " + "WHERE vehicle_id=" + vehicle_id
+					+ ") X " + "JOIN Parts P ON P.part_id=X.part_id) Z "
+					+ "JOIN Parts_to_make PM ON PM.part_id=Z.part_id " + "WHERE make='" + make + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return rs;
 		}
 	}
 
@@ -657,7 +997,7 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return (int) (rs.getFloat("sum") * 60 * 60 * 1000);
+				return getTimeInMilliSecondsInSlots(rs.getFloat("sum"));
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -715,5 +1055,21 @@ public class utilitiesFunctions {
 		long diff = milliseconds2 - milliseconds1;
 
 		return diff;
+	}
+	
+	public static ResultSet getDiagnosticReport(String plate_no, String repair_name) {
+		try {
+			rs = connObject.selectQuery("Select S.name as service_name, Z.name as part_Name, Z.quantity, Z.repair_name, Z.diagnostic_name from Service S,"
+					+ "(Select P.name, Y.quantity, Y.repair_name, Y.diagnostic_name, Y.sid from Parts P,"
+					+ "(Select I.part_id, I.quantity, T.sid, T.repair_name, T.rid, T.diagnostic_name from Involves I,"
+					+ "(Select RU.sid, R.repair_name, R.rid, R.diagnostic_name from Repair_uses RU, "
+					+ "(Select repair_name, rid, diagnostic_name from Repair where repair_name = '"+repair_name+"') R where R.rid= RU.rid) T,"
+					+ "(Select T1.vehicle_id, V.make from Vehicles V, (Select vehicle_id from Owns O where O.plate_no='"+plate_no+"') T1 where V.vehicle_id=T1.vehicle_id) X "
+					+ "where I.service_id=T.sid and I.vehicle_id = X.vehicle_id) Y where P.part_id=Y.part_id) Z where S.sid = Z.sid");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Something Went Wrong");
+			return rs;
+		}
 	}
 }

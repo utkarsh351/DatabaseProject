@@ -46,11 +46,12 @@ begin
   from dual;
 end;
 /
+
 /*
 create sequence Maintain_schedule_id_seq;
 
 create trigger trg_maintain_schedule_id
-before insert on Maintenance_schedule
+before insert on ance_schedule
 for each row
 begin
   select Maintain_schedule_id_seq.nextval
@@ -4852,7 +4853,7 @@ Values(
   'XYZ-5643',
   183683346,
   'complete',
-  TIMESTAMP '2017-10-15 08:45:00'
+  TIMESTAMP '2017-10-15 09:00:00'
 );
 
 INSERT into Schedule
@@ -4862,7 +4863,7 @@ Values(
   'AHS-3132',
   557279282,
   'complete',
-  TIMESTAMP '2018-08-06 08:15:00'
+  TIMESTAMP '2018-08-06 08:30:00'
 );
 
 INSERT into Schedule
@@ -4872,7 +4873,7 @@ Values(
   'AHS-3132',
   557279283,
   'complete',
-  TIMESTAMP '2018-05-15 12:45:00'
+  TIMESTAMP '2018-05-15 13:00:00'
 );
 
 INSERT into Schedule
@@ -4882,7 +4883,7 @@ Values(
   'AHS-3132',
   557279283,
   'complete',
-  TIMESTAMP '2018-01-28 12:45:00'
+  TIMESTAMP '2018-01-28 13:00:00'
 );
 
 INSERT into Schedule
@@ -4892,7 +4893,7 @@ Values(
   'IRM-1212',
   557279281,
   'complete',
-  TIMESTAMP '2018-02-11 09:15:00'
+  TIMESTAMP '2018-02-11 09:30:00'
 );
 
 INSERT into Schedule
@@ -4902,7 +4903,7 @@ Values(
   'IRM-1212',
   557279281,
   'complete',
-  TIMESTAMP '2017-12-10 12:00:00'
+  TIMESTAMP '2017-12-10 12:30:00'
 );
 
 INSERT into Schedule
@@ -4912,7 +4913,7 @@ Values(
   'IRM-1212',
   557279281,
   'complete',
-  TIMESTAMP '2017-01-20 11:15:00'
+  TIMESTAMP '2017-01-20 11:30:00'
 );
 INSERT into Schedule
 Values(
@@ -4921,7 +4922,7 @@ Values(
   'DEL-8888',
   187658163,
   'complete',
-  TIMESTAMP '2018-02-11 09:30:00'
+  TIMESTAMP '2018-02-11 10:00:00'
 );
 INSERT into Schedule
 Values(
@@ -4930,7 +4931,7 @@ Values(
   'DEL-8888',
   401671897,
   'complete',
-  TIMESTAMP '2016-11-05 10:15:00'
+  TIMESTAMP '2016-11-05 10:30:00'
 );
 
 INSERT into Schedule
@@ -4940,7 +4941,7 @@ Values(
   'P11-212A',
   590424694,
   'complete',
-  TIMESTAMP '2017-09-01 10:45:00'
+  TIMESTAMP '2017-09-01 11:00:00'
 );
 
 INSERT into Schedule
@@ -4960,7 +4961,7 @@ Values(
   'WIM-BLE5',
   310773348,
   'complete',
-  TIMESTAMP '2016-11-11 08:45:00'
+  TIMESTAMP '2016-11-11 09:30:00'
 );
 
 INSERT into Schedule
@@ -4979,7 +4980,7 @@ Values(
   'WIM-BLE5',
   401671897,
   'complete',
-  TIMESTAMP '2015-09-30 14:15:00'
+  TIMESTAMP '2015-09-30 14:30:00'
 );
 
 INSERT into Repair_schedule
@@ -5065,6 +5066,7 @@ Values(
   'A'
 );
 ---1
+
 INSERT into Orders
 Values(
   1,

@@ -105,7 +105,8 @@ CREATE TABLE Schedule
    FOREIGN KEY (customer_plate_no)
    REFERENCES Owns,
    FOREIGN KEY (mechanic_id)
-   REFERENCES Employees
+   REFERENCES Employees,
+    CHECK (status IN ('pending','complete','ongoing'))
    );
    
 CREATE TABLE Maintenance
@@ -306,4 +307,3 @@ CREATE TABLE Distributor_order
    FOREIGN KEY (customer_email)
    REFERENCES Customers
    );
-

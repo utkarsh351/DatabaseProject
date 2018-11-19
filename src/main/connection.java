@@ -8,18 +8,19 @@ public class connection {
 	private static String user = "rbhasin";	// add your unity id if want to test something, don't do in this db
 	private static String passwd = "200259240"; //add you password for oracle here.
 
-	private static Connection conn = null;
-	private static Statement stmt = null;
-	private static ResultSet rs = null;
+	private Connection conn = null;
+	private  Statement stmt = null;
+	private  ResultSet rs = null;
 	
 	public connection() {
-		if(stmt == null) {
-			
-			createConnection();
-		}
+//		if(stmt == null) {
+//			
+//			createConnection();
+//		}
+		createConnection();
 	}
 	
-	private static void createConnection() {
+	private  void createConnection() {
 		try {
 			
 			conn = DriverManager.getConnection(jdbcURL, user, passwd);
@@ -68,10 +69,11 @@ public class connection {
 
 //	call this statement to get statement, if required ever,
 //	otherwise always use only connection object to manipulate everything.
-	public static Statement getStatement() {
-		if(stmt == null) {
-			createConnection();
-		}
+	public  Statement getStatement() {
+//		if(stmt == null) {
+//			createConnection();
+//		}
+		createConnection();
 		
 		return stmt;
 	}
