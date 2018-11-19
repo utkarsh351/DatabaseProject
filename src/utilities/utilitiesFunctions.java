@@ -1201,7 +1201,7 @@ public class utilitiesFunctions {
 				}
 			}
 			
-			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<=Date '"+sqlDate+"' and "
+			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<Date '"+sqlDate+"' and "
 					+ "requester_center_inventory_id='"+users_service_center_id+"' and status <> 'complete'");
 			while(rs.next()) {
 				int orderId = rs.getInt("order_id");

@@ -790,7 +790,7 @@ public class MainApp {
 				} else if (selected_option.equals("3")) {
 					managerAddNewEmployees();
 				} else if (selected_option.equals("4")) {
-					customerInvoice();
+					managerPayrollPage();
 				} else if (selected_option.equals("5")) {
 					managerInventoryPage();
 				} else if (selected_option.equals("6")) {
