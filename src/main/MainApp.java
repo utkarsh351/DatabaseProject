@@ -35,9 +35,9 @@ public class MainApp {
 					userInfoObject = new userInfo(functObject.getRole(username), username);
 					if (userInfoObject.role.equals("customer")) {
 						try {
-							ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+							ResultSet rs = functObject.getCustomerInfo(userInfoObject.email);
 							while (rs.next()) {
-								userInfoObject.service_centre_id = rs.getString("service_centre_id");
+								userInfoObject.service_centre_id = rs.getString("sc_id");
 							}
 							customerLandingPage();
 						} catch (Throwable e) {
@@ -871,15 +871,15 @@ public class MainApp {
 				if (functObject.doesEmployeeExists(employee_id)) {
 					// ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
 					while (rs.next()) {
-						System.out.println("A. " + rs.getString("paycheck_date"));
-						System.out.println("B. " + rs.getString("pay_period"));
-						System.out.println("C. " + rs.getInt("eid"));
-						System.out.println("D. " + rs.getString("name"));
-						System.out.println("E. " + rs.getInt("wage"));
-						System.out.println("F. " + rs.getString("freq"));
-						System.out.println("G. " + rs.getInt("units"));
-						System.out.println("H. " + rs.getString("current_earnings"));
-						System.out.println("I. " + rs.getString("year_earnings"));
+						System.out.println("A. Paycheck Date: " + rs.getString("paycheck_date"));
+						System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+						System.out.println("C. Employee ID: " + rs.getInt("eid"));
+						System.out.println("D. Employee Name: " + rs.getString("e_name"));
+						System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
+						System.out.println("F. Frequency (monthly/hourly): " + rs.getString("freq"));
+						System.out.println("G. Units (# of hours/days): " + rs.getInt("units"));
+						System.out.println("H. Earnings (Current): " + rs.getInt("current_earnings"));
+						System.out.println("I. Earnings (Year-to-date): " + rs.getInt("year_earnings"));
 					}
 					break;
 				} else {
@@ -965,7 +965,7 @@ public class MainApp {
 			} else if (selected_option.equals("8")) {
 				dailyTaskUpdateInventoryReceptionist();
 			} else if (selected_option.equals("9")) {
-				// add Stuff
+				dailyTaskRecordDeliveries();
 			} else if (selected_option.equals("10")) {
 				mainMenu();
 			} else {
@@ -995,6 +995,37 @@ public class MainApp {
 			}
 		}
 
+	}
+	
+	public static void dailyTaskRecordDeliveries() {
+		Scanner s = new Scanner(System.in);
+		System.out.println("1. Enter Comma Separated Order Ids");
+		System.out.println("2. Go Back");
+		while(true) {
+			String option = s.nextLine();
+			if(option.equals("1")) {
+				String orderIds = s.nextLine();
+				String[] arr = orderIds.split(",");
+				for(int i=0;i<arr.length;i++) {
+					arr[i] = arr[i].trim();
+				}
+				
+				boolean ans = functObject.dailyTaskRecordDeliveries(arr, userInfoObject.service_centre_id);
+				
+				if(ans == true) {
+					System.out.println("Daily Task-Record Deliveries Successful");
+				} else {
+					System.out.println("Daily Task-Record Deliveries Was Not Successful");
+				}
+				
+				receptionistLandingPage();
+			} else if(option.equals("2")) {
+				receptionistLandingPage();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+		
 	}
 
 	public static void receptionistRegisterCar() {
@@ -1303,7 +1334,7 @@ public class MainApp {
 //			******************************************
 
 //			now do stuff
-
+		    
 			mainMenu();
 
 		} catch (Throwable e) {

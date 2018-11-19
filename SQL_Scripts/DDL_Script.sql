@@ -232,6 +232,8 @@ CREATE TABLE Orders
   PRIMARY KEY (order_id),
   FOREIGN KEY (parts_to_make_id)
    REFERENCES Parts_to_make,
+   FOREIGN KEY (requester_center_inventory_id)
+   REFERENCES Service_center,
   CHECK (status IN ('pending','complete','delayed'))
    );
 
@@ -268,7 +270,11 @@ CREATE TABLE Notification
   (notification_id INTEGER,
    order_id INTEGER NOT NULL,
    message VARCHAR(100),
+   notification_date Date,
+   service_center_id VARCHAR(300) NOT NULL,
   PRIMARY KEY (notification_id),
+  FOREIGN KEY (service_center_id)
+   REFERENCES Service_center,
    FOREIGN KEY (order_id)
    REFERENCES Orders
    );
