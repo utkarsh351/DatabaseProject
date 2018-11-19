@@ -399,8 +399,21 @@ public class utilitiesFunctions {
 	}
 
 	public ResultSet getNotifications(String service_centre_id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			rs = connObject.selectQuery(
+					"SELECT N.notification_id, N.notification_date, N.order_id, "
+					+ "D.dname AS supplier, O.order_expected_delivery_date AS expected_delivery,"
+					+ "DO.distributor_id "
+					+ "FROM Notification N "
+					+ "JOIN Orders O ON N.order_id=O.order_id "
+					+ "JOIN Distributor_order DO ON DO.order_id=O.order_id "
+					+ "JOIN Distributor D ON D.distributor_id=DO.distributor_id"
+					+ "WHERE N.service_center_id='" + service_centre_id + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Service Center ID");
+			return rs;
+		}
 	}
 
 	public void addNewCar(String make, String model, String year, int milesA, String monthsA, String partsA, int milesB,
@@ -1222,9 +1235,10 @@ public class utilitiesFunctions {
 			rs = connObject.selectQuery(
 					"SELECT E.eid, E.name AS e_name, E.wage AS compensation, "
 					+ "E.freq, PR.units, PC.start_date, PC.end_date "
-					+ "FROM Employees E JOIN Payment_record PR ON E.eid=PR.eid "
-					+ "JOIN Payment_cycle PC ON PR.pcid=PC.pcid WHERE email='"
-							+ email + "'");
+					+ "FROM Employees E "
+					+ "JOIN Payment_record PR ON E.eid=PR.eid "
+					+ "JOIN Payment_cycle PC ON PR.pcid=PC.pcid "
+					+ "WHERE email='" + email + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");

@@ -860,7 +860,7 @@ public class MainApp {
 			while (true) {
 				int employee_id = s2.nextInt();
 				if (functObject.doesEmployeeExists(employee_id)) {
-					// ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
+					ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
 					while (rs.next()) {
 						System.out.println("A. Paycheck Date: " + rs.getString("paycheck_date"));
 						System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
