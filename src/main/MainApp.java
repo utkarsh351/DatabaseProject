@@ -680,10 +680,6 @@ public class MainApp {
 					System.out.println(" ");
 				}
 				break;
-				// }
-				// else {
-				// System.out.println("Choose a valid option");
-				// }
 			}
 
 			System.out.println("1. Go Back");

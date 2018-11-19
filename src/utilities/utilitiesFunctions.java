@@ -445,8 +445,20 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public ResultSet getInvoiceDetails() {
-		return null;
+	public ResultSet getInvoiceDetails(String scId) {
+		try {
+			rs = connObject.selectQuery("SELECT plate_no,last_rec_mileage, last_repair_date,O.email,O.vehicle_id, "
+					+ "schedule_id, start_time,end_time,mechanic_id,status,name,service_centre_id,wage, "
+					+ "m_type,maintenance_schedule_id,repair_schedule_id,rid FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
+					+ "JOIN Employees E " + "ON S.mechanic_id= E.eid " + "WHERE S.status='complete') W "
+					+ "FULL OUTER JOIN Maintenance_schedule MS " + "ON W.schedule_id=MS.maintenance_schedule_id "
+					+ "\r\n" + "FULL OUTER JOIN Repair_schedule RS " + "ON W.schedule_id=RS.repair_schedule_id) X "
+					+ "ON O.plate_no=X.customer_plate_no " + " " + "WHERE service_centre_id='" + scId + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return rs;
+		}
 	}
 
 // Schedule
