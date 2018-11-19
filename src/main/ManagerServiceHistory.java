@@ -7,29 +7,22 @@ public class ManagerServiceHistory {
 
 	public void viewServiceHistoryPage() {
 		try {
-			ResultSet rs = MainApp.functObject.getServiceHistory("");
-			/**
-			Display the following details for all cars that were
-			serviced at this service center followed by the menu.
-			A. Service ID
-			B. Customer Name
-			C. License Plate
-			D. Service Type
-			E. Mechanic Name
-			F. Service Start Date/Time
-			G. Service End Date/Time(expected or actual)
-			H. Service Status (Pending, Ongoing, or Complete)
-			*/
+			ResultSet rs = MainApp.functObject.getServiceHistoryForManager(MainApp.userInfoObject.service_centre_id);
+
 			while (rs.next()) {
-				//TODO
-				System.out.println("A. " + rs.getInt("service_id"));
-				System.out.println("B. " + rs.getString(""));
-				System.out.println("C. " + rs.getString(""));
-				System.out.println("D. " + rs.getString(""));
-				System.out.println("E. " + rs.getString(""));
-				System.out.println("F. " + rs.getDate(""));
-				System.out.println("G. " + rs.getDate(""));
-				System.out.println("H. " + rs.getString(""));  
+				System.out.println("A. " + rs.getString("schedule_id"));
+				System.out.println("B. " + rs.getString("plate_no"));
+				if(rs.getString("maintenance_schedule_id")== null) {
+					System.out.println("C. Repair-" + rs.getInt("rid"));
+				}
+				else {
+					System.out.println("C. Maintenance-" + rs.getString("m_type"));
+				}
+				System.out.println("D. " + rs.getString("name"));
+				System.out.println("E. " + rs.getString("start_time"));
+				System.out.println("F. "+ rs.getString("end_time"));
+				System.out.println("G. " + rs.getString("status"));
+				System.out.println(" " );
 			}
 			
 			System.out.println("1. Go Back");
