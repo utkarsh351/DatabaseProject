@@ -11,41 +11,9 @@ begin
 end;
 /
 
-create sequence Order_id_seq START WITH 1;
+ALTER TABLE Inventory MODIFY uncommited_current_quantity INTEGER DEFAULT 0;
 
-create trigger trg_order_id 
-before insert on Orders
-for each row
-begin
-  select Order_id_seq.nextval
-  into :new.order_id 
-  from dual;
-end;
-/
 
-create sequence Service_Center_Order_id_seq START WITH 1;
-
-create trigger trg_serive_center_order_id
-before insert on Service_center_order
-for each row
-begin
-  select Service_Center_Order_id_seq.nextval
-  into :new.service_center_order_id 
-  from dual;
-end;
-/
-
-create sequence Distributor_Order_id_seq START WITH 1;
-
-create trigger trg_distributor_order_id
-before insert on Distributor_order
-for each row
-begin
-  select Distributor_Order_id_seq.nextval
-  into :new.distributor_order_id 
-  from dual;
-end;
-/
 /*
 create sequence Maintain_schedule_id_seq;
 
@@ -4852,7 +4820,7 @@ Values(
   'XYZ-5643',
   183683346,
   'complete',
-  TIMESTAMP '2017-10-15 08:45:00'
+  TIMESTAMP '2017-10-15 09:00:00'
 );
 
 INSERT into Schedule
@@ -4862,7 +4830,7 @@ Values(
   'AHS-3132',
   557279282,
   'complete',
-  TIMESTAMP '2018-08-06 08:15:00'
+  TIMESTAMP '2018-08-06 08:30:00'
 );
 
 INSERT into Schedule
@@ -4872,7 +4840,7 @@ Values(
   'AHS-3132',
   557279283,
   'complete',
-  TIMESTAMP '2018-05-15 12:45:00'
+  TIMESTAMP '2018-05-15 13:00:00'
 );
 
 INSERT into Schedule
@@ -4882,7 +4850,7 @@ Values(
   'AHS-3132',
   557279283,
   'complete',
-  TIMESTAMP '2018-01-28 12:45:00'
+  TIMESTAMP '2018-01-28 13:00:00'
 );
 
 INSERT into Schedule
@@ -4892,7 +4860,7 @@ Values(
   'IRM-1212',
   557279281,
   'complete',
-  TIMESTAMP '2018-02-11 09:15:00'
+  TIMESTAMP '2018-02-11 09:30:00'
 );
 
 INSERT into Schedule
@@ -4902,7 +4870,7 @@ Values(
   'IRM-1212',
   557279281,
   'complete',
-  TIMESTAMP '2017-12-10 12:00:00'
+  TIMESTAMP '2017-12-10 12:30:00'
 );
 
 INSERT into Schedule
@@ -4912,7 +4880,7 @@ Values(
   'IRM-1212',
   557279281,
   'complete',
-  TIMESTAMP '2017-01-20 11:15:00'
+  TIMESTAMP '2017-01-20 11:30:00'
 );
 INSERT into Schedule
 Values(
@@ -4921,7 +4889,7 @@ Values(
   'DEL-8888',
   187658163,
   'complete',
-  TIMESTAMP '2018-02-11 09:30:00'
+  TIMESTAMP '2018-02-11 10:00:00'
 );
 INSERT into Schedule
 Values(
@@ -4930,7 +4898,7 @@ Values(
   'DEL-8888',
   401671897,
   'complete',
-  TIMESTAMP '2016-11-05 10:15:00'
+  TIMESTAMP '2016-11-05 10:30:00'
 );
 
 INSERT into Schedule
@@ -4940,7 +4908,7 @@ Values(
   'P11-212A',
   590424694,
   'complete',
-  TIMESTAMP '2017-09-01 10:45:00'
+  TIMESTAMP '2017-09-01 11:00:00'
 );
 
 INSERT into Schedule
@@ -4960,7 +4928,7 @@ Values(
   'WIM-BLE5',
   310773348,
   'complete',
-  TIMESTAMP '2016-11-11 08:45:00'
+  TIMESTAMP '2016-11-11 09:30:00'
 );
 
 INSERT into Schedule
@@ -4979,7 +4947,7 @@ Values(
   'WIM-BLE5',
   401671897,
   'complete',
-  TIMESTAMP '2015-09-30 14:15:00'
+  TIMESTAMP '2015-09-30 14:30:00'
 );
 
 INSERT into Repair_schedule
@@ -5064,212 +5032,10 @@ Values(
   14,
   'A'
 );
-INSERT into Orders
-Values(
-  1,
-  DATE '2014-06-09',
-  DATE '2014-06-13',
-  DATE '2014-06-18',
-  3,
-  5,
-  'complete'
-);
 
-INSERT into Orders
-Values(
-  1,
-  DATE '2015-09-16',
-  DATE '2015-09-21',
-  DATE '2015-09-21',
-  38,
-  5,
-  'complete'
-);
-
-INSERT into Orders
-Values(
-  1,
-  DATE '2016-02-10',
-  DATE '2016-02-11',
-  DATE '2016-02-11',
-  30,
-  5,
-  'complete'
-);
-
-INSERT into Orders
-Values(
-  1,
-  DATE '2017-08-09',
-  DATE '2017-08-10',
-  DATE '2017-08-11',
-  46,
-  4,
-  'complete'
-);
-
-INSERT into Orders
-Values(
-  1,
-  DATE '2018-10-04',
-  DATE '2018-10-05',
-  DATE '2018-10-05',
-  1,
-  6,
-  'complete'
-);
-
-INSERT into Orders
-Values(
-  1,
-  DATE '2018-10-26',
-  DATE '2018-11-01',
-  DATE '2018-11-05',
-  44,
-  5,
-  'complete'
-);
-
-INSERT into Orders
-Values(
-  1,
-  DATE '2018-11-09',
-  DATE '2018-11-14',
-  Null,
-  38,
-  7,
-  'delayed'
-);
-INSERT into Orders
-Values(
-  1,
-  DATE '2018-11-07',
-  DATE '2018-11-14',
-  Null,
-  21,
-  12,
-  'delayed'
-);
-INSERT into Orders
-Values(
-  1,
-  DATE '2018-11-08',
-  DATE '2018-11-14',
-  Null,
-  25,
-  6,
-  'delayed'
-);
-INSERT into Orders
-Values(
-  1,
-  DATE '2018-11-08',
-  DATE '2018-11-14',
-  Null,
-  32,
-  5,
-  'delayed'
-);
-INSERT into Orders
-Values(
-  1,
-  DATE '2018-11-08',
-  DATE '2018-11-14',
-  Null,
-  23,
-  5,
-  'delayed'
-);
-
-INSERT into Service_center_order
-Values(
-1,
-'S0002',
-'S0001',
-3
-);
-
-INSERT into Service_center_order
-Values(
-1,
-'S0001',
-'S0002',
-4
-);
-
-INSERT into Service_center_order
-Values(
-1,
-'S0002',
-'S0001',
-5
-);
-
-INSERT into Distributor_order
-Values(
-1,
-'S0001',
-'D0001',
-1
-);
-
-INSERT into Distributor_order
-Values(
-1,
-'S0001',
-'D0002',
-2
-);
-
-INSERT into Distributor_order
-Values(
-1,
-'S0001',
-'D0001',
-6
-);
-
-INSERT into Distributor_order
-Values(
-1,
-'S0002',
-'D0002',
-7
-);
-INSERT into Distributor_order
-Values(
-1,
-'S0002',
-'D0001',
-8
-);
-INSERT into Distributor_order
-Values(
-1,
-'S0002',
-'D0001',
-9
-);
-INSERT into Distributor_order
-Values(
-1,
-'S0002',
-'D0001',
-10
-);
-INSERT into Distributor_order
-Values(
-1,
-'S0002',
-'D0002',
-11
-);
 
 ------------
-ALTER TABLE Inventory
-  ADD uncommited_current_quantity INTEGER;
-  
-Update Inventory
+Update table Inventory
 set
 uncommited_current_quantity = current_quantity;
 -------------
