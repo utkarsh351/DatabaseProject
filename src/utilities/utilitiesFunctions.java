@@ -14,6 +14,7 @@ public class utilitiesFunctions {
 	static ResultSet rs = null;
 	static connection connObject = new connection();
 	static connection connObject2 = new connection();
+	static connection connObject3 = new connection();
 
 	public static boolean validUser(String username, String password) {
 		try {
@@ -1070,6 +1071,79 @@ public class utilitiesFunctions {
 		} catch (Throwable e) {
 			System.out.println("Something Went Wrong");
 			return rs;
+		}
+	}
+	
+	public static boolean dailyTaskUpdateInventory() {
+		try {
+			java.util.Date utilDate = new java.util.Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(utilDate);
+			cal.add(Calendar.DATE, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 4);
+			String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+			cal.set(Calendar.HOUR_OF_DAY, 23);
+			String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+			rs = connObject.selectQuery(
+						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
+								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'");
+			while(rs.next()) {
+				int sid = rs.getInt("schedule_id");
+				String plate_no = rs.getString("customer_plate_no");
+				String type_name = null;
+				ResultSet rs2 = connObject2.selectQuery("Select * from Maintenance_schedule where maintenance_schedule_id='"+sid+"'");
+				if(rs2.next()) {
+					type_name = rs2.getString("m_type");
+					rs2 = connObject2.selectQuery(
+							"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
+									+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
+									+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
+									+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
+									+ "WHERE O.plate_no = 'IRM-1212' AND " + "O.vehicle_id = MU.vehicle_id AND " + "MU.m_type='"
+									+ type_name + "' AND " + "V.vehicle_id = O.vehicle_id) T1 "
+									+ "WHERE I.service_id = T1.sid AND " + "T1.vehicle_id = I.vehicle_id) T2 "
+									+ "WHERE T2.part_id=Pm.part_id AND " + "T2.make = PM.make) T3, "
+									+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + plate_no
+									+ "' AND O1.email = C1.email) T11 " + "WHERE "
+									+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + "T11.sc_id=Inv.service_center_id");
+					while(rs2.next()) {
+						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - " 
+								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
+					}
+					
+				} else {
+					rs2 = connObject2.selectQuery("Select * from Repair_schedule where repair_schedule_id='"+sid+"'");
+					int rid = rs2.getInt("repair_schedule_id");
+					rs2 = connObject2.selectQuery("SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv,"
+							+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM,"
+							+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.make FROM Involves I, "
+							+ "(SELECT RU.sid, V.make, O.vehicle_id from Repair_uses RU, Vehicles V, Owns O "
+							+ "Where"
+							+ "RU.rid="+rid+ " AND "
+							+ "V.vehicle_id = O.vehicle_id AND "
+							+ "O.plate_no = 'IRM-1212') T1 "
+							+ "WHERE I.service_id = T1.sid AND "
+							+ "T1.vehicle_id = I.vehicle_id) T2 "
+							+ "WHERE T2.part_id=Pm.part_id AND "
+							+ "T2.make = PM.make) T3, "
+							+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '"+plate_no+"' AND O1.email = C1.email) T11 "
+							+ "WHERE "
+							+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND "
+							+ "T11.sc_id=Inv.service_center_id");
+					while(rs2.next()) {
+						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - " 
+								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
+					}
+				}
+			}
+			
+			return true;
+		} catch (Throwable e) {
+			System.out.println("Something Went Wrong");
+			return false;
 		}
 	}
 }
