@@ -377,4 +377,19 @@ public class utilitiesFunctions {
 			// TODO Auto-generated method stub
 			return null;
 		}
+		
+		public ResultSet getEmployeePayrollDetails(String email) {
+			try {
+				rs = connObject.selectQuery(
+						"SELECT E.eid, E.name AS e_name, E.wage AS compensation, "
+						+ "E.freq, PR.units, PC.start_date, PC.end_date "
+						+ "FROM Employees E JOIN Payment_record PR ON E.eid=PR.eid "
+						+ "JOIN Payment_cycle PC ON PR.pcid=PC.pcid WHERE email='"
+								+ email + "'");
+				return rs;
+			} catch (Throwable e) {
+				System.out.println("Wrong Email");
+				return rs;
+			}
+		}
 }

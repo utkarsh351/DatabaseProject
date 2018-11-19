@@ -740,17 +740,17 @@ public class MainApp {
 			while (true) {
 				int employee_id = s2.nextInt();
 				if (functObject.doesEmployeeExists(employee_id)) {
-					// ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
+					ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
 					while (rs.next()) {
-						System.out.println("A. " + rs.getString("paycheck_date"));
-						System.out.println("B. " + rs.getString("pay_period"));
-						System.out.println("C. " + rs.getInt("eid"));
-						System.out.println("D. " + rs.getString("name"));
-						System.out.println("E. " + rs.getInt("wage"));
-						System.out.println("F. " + rs.getString("freq"));
-						System.out.println("G. " + rs.getInt("units"));
-						System.out.println("H. " + rs.getString("current_earnings"));
-						System.out.println("I. " + rs.getString("year_earnings"));
+						System.out.println("A. Paycheck Date: " + rs.getString("paycheck_date"));
+						System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+						System.out.println("C. Employee ID: " + rs.getInt("eid"));
+						System.out.println("D. Employee Name: " + rs.getString("e_name"));
+						System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
+						System.out.println("F. Frequency (monthly/hourly): " + rs.getString("freq"));
+						System.out.println("G. Units (# of hours/days): " + rs.getInt("units"));
+						System.out.println("H. Earnings (Current): " + rs.getInt("current_earnings")); 
+						System.out.println("I. Earnings (Year-to-date): " + rs.getInt("year_earnings"));
 					}
 					break;
 				} else {
