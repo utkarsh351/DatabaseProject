@@ -227,7 +227,8 @@ CREATE TABLE Orders
     order_delivery_date DATE,
    parts_to_make_id INTEGER NOT NULL,
    quantity INTEGER,
-   status VARCHAR(40),   
+   status VARCHAR(40),
+   requester_center_inventory_id VARCHAR(300) NOT NULL,
   PRIMARY KEY (order_id),
   FOREIGN KEY (parts_to_make_id)
    REFERENCES Parts_to_make,
@@ -274,12 +275,9 @@ CREATE TABLE Notification
 
    CREATE TABLE Service_center_order
   (service_center_order_id INTEGER,
-   requester_center_inventory_id VARCHAR(300) NOT NULL,
    service_center_provider_id VARCHAR(300) NOT NULL,
    order_id INTEGER NOT NULL,
   PRIMARY KEY (service_center_order_id),
-   FOREIGN KEY (requester_center_inventory_id)
-   REFERENCES Service_center,
    FOREIGN KEY (service_center_provider_id)
    REFERENCES Service_center,
    FOREIGN KEY (order_id)
@@ -288,12 +286,9 @@ CREATE TABLE Notification
    
 CREATE TABLE Distributor_order
   (distributor_order_id INTEGER,
-   requester_center_inventory_id VARCHAR(300) NOT NULL,
    distributor_id VARCHAR(300) NOT NULL,
    order_id INTEGER NOT NULL,
   PRIMARY KEY (distributor_order_id),
-   FOREIGN KEY (requester_center_inventory_id)
-   REFERENCES Service_center,
    FOREIGN KEY (distributor_id)
    REFERENCES Distributor,
    FOREIGN KEY (order_id)
