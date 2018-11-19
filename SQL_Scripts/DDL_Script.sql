@@ -273,7 +273,7 @@ CREATE TABLE Notification
    notification_date Date,
    service_center_id VARCHAR(300) NOT NULL,
   PRIMARY KEY (notification_id),
-   FOREIGN KEY (service_center_id)
+  FOREIGN KEY (service_center_id)
    REFERENCES Service_center,
    FOREIGN KEY (order_id)
    REFERENCES Orders

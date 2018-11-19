@@ -1120,15 +1120,13 @@ public class utilitiesFunctions {
 			String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-			rs = connObject
-					.selectQuery("select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '"
+			rs = connObject.selectQuery("select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '"
 							+ s1 + "' AND S.start_time < TIMESTAMP '" + s2 + "'");
 			while (rs.next()) {
 				int sid = rs.getInt("schedule_id");
 				String plate_no = rs.getString("customer_plate_no");
 				String type_name = null;
-				ResultSet rs2 = connObject2
-						.selectQuery("Select * from Maintenance_schedule where maintenance_schedule_id='" + sid + "'");
+				ResultSet rs2 = connObject2.selectQuery("Select * from Maintenance_schedule where maintenance_schedule_id='" + sid + "'");
 				if (rs2.next()) {
 					type_name = rs2.getString("m_type");
 					rs2 = connObject2.selectQuery(
@@ -1198,24 +1196,39 @@ public class utilitiesFunctions {
 				if(rs.next()) {
 					int quant = rs.getInt("quantity");
 					int parts_to_make_id = rs.getInt("parts_to_make_id");
-					connObject.insertQuery("Update Orders Set status='complete', order_delivery_date= Date '"+sqlDate+"' where status <> 'complete' and order_id='"+orderId+"'");
-					connObject.insertQuery("Update Inventory Set current_quantity = current_quantity + "+quant+" where service_center_id='"+users_service_center_id+"' and parts_to_make_id="+parts_to_make_id);
+					connObject2.insertQuery("Update Orders Set status='complete', order_delivery_date= Date '"+sqlDate+"' where order_id='"+orderId+"'");
+					connObject2.insertQuery("Update Inventory Set current_quantity = current_quantity + "+quant+" where service_center_id='"+users_service_center_id+"' and parts_to_make_id="+parts_to_make_id);
 				}
 			}
 			
 			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<=Date '"+sqlDate+"' and "
-					+ "requester_center_inventory_id='"+users_service_center_id+"'");
+					+ "requester_center_inventory_id='"+users_service_center_id+"' and status <> 'complete'");
 			while(rs.next()) {
 				int orderId = rs.getInt("order_id");
-				connObject.insertQuery("Update Orders Set status='delayed' where order_id="+orderId);
-				connObject.insertQuery("INSERT into Notification(notification_id,order_id,message,notification_date,service_center_id) "
-						+ "Values(1,"+orderId+",'Order with id "+orderId+" delayed,Date '"+sqlDate+"','"+users_service_center_id+"')");
+				connObject2.insertQuery("Update Orders Set status='delayed' where order_id="+orderId);
+				connObject2.insertQuery("INSERT into Notification(notification_id,order_id,message,notification_date,service_center_id) "
+						+ "Values(1,"+orderId+",'Order with id "+orderId+" delayed',Date '"+sqlDate+"','"+users_service_center_id+"')");
 			}
 			
 			return true;
 		} catch (Throwable e) {
 			System.out.println("Something Went Wrong");
 			return false;
+		}
+	}
+	
+	public ResultSet getEmployeePayrollDetails(String email) {
+		try {
+			rs = connObject.selectQuery(
+					"SELECT E.eid, E.name AS e_name, E.wage AS compensation, "
+					+ "E.freq, PR.units, PC.start_date, PC.end_date "
+					+ "FROM Employees E JOIN Payment_record PR ON E.eid=PR.eid "
+					+ "JOIN Payment_cycle PC ON PR.pcid=PC.pcid WHERE email='"
+							+ email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
 		}
 	}
 }
