@@ -40,7 +40,7 @@ public class ManagerOrder {
 				} else {
 					System.out.println("D. Supplier- " + rs.getString("dname"));
 				}
-				System.out.println("G. Purchaser name to come here");
+				System.out.println("G. Purchaser" + rs.getString("purchaser_name"));
 				int quantity=rs.getInt("quantity");
 				int unitPrice=rs.getInt("unit_price");
 				System.out.println("H. " + quantity);

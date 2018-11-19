@@ -377,19 +377,20 @@ public class utilitiesFunctions {
 	public ResultSet getOrderHistory(String service_centre_id) {
 		try {
 			rs = connObject.selectQuery("SELECT  order_id,order_date,order_expected_delivery_date,order_delivery_date, "
-					+ "PM.parts_to_make_id,quantity,sc_purchaser,sc_purchaser2,D.distributor_id, "
+					+ "PM.parts_to_make_id,quantity,requester_center_inventory_id,D.distributor_id, "
 					+ "service_center_provider_id,make,P.part_id,unit_price,warranty,P.name AS part_name, "
-					+ "dname,SC.name AS sc_name,status "
+					+ "dname,SC.name AS sc_name,status,SC2.name AS purchaser_name,SC2.sc_id AS purchaser_id "
 					+ "FROM (SELECT O.order_id, order_date,order_expected_delivery_date,order_delivery_date, "
-					+ "parts_to_make_id,quantity,status, SCO.requester_center_inventory_id AS sc_purchaser, "
-					+ "DO.requester_center_inventory_id AS sc_purchaser2,distributor_id, "
+					+ "parts_to_make_id,quantity,status, requester_center_inventory_id,distributor_id, "
 					+ "service_center_provider_id FROM Orders O "
 					+ "FULL OUTER JOIN Service_center_order SCO ON O.order_id=SCO.order_id "
 					+ "FULL OUTER JOIN Distributor_order DO ON O.order_id=DO.order_id) W "
 					+ "JOIN Parts_to_make PM ON PM.parts_to_make_id=W.parts_to_make_id "
 					+ "JOIN Parts P ON P.part_id=PM.part_id "
 					+ "FULL OUTER JOIN Distributor D ON D.distributor_id=W.distributor_id "
-					+ "FULL OUTER JOIN Service_center SC ON SC.sc_id =W.service_center_provider_id");
+					+ "FULL OUTER JOIN Service_center SC ON SC.sc_id =W.service_center_provider_id "
+					+ "JOIN Service_center SC2 ON SC2.sc_id =W.requester_center_inventory_id "
+					+ "WHERE SC2.sc_id='" + service_centre_id + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Service Center Id");
