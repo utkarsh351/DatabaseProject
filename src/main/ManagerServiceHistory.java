@@ -7,7 +7,7 @@ public class ManagerServiceHistory {
 
 	public void viewServiceHistoryPage() {
 		try {
-			ResultSet rs = MainApp.functObject.getServiceHistory();
+			ResultSet rs = MainApp.functObject.getServiceHistory("");
 			/**
 			Display the following details for all cars that were
 			serviced at this service center followed by the menu.
