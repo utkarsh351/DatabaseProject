@@ -5064,6 +5064,7 @@ Values(
   14,
   'A'
 );
+---1
 INSERT into Orders
 Values(
   1,
@@ -5072,9 +5073,11 @@ Values(
   DATE '2014-06-18',
   3,
   5,
-  'complete'
+  'complete',
+'S0001'
 );
 
+---2
 INSERT into Orders
 Values(
   1,
@@ -5083,9 +5086,11 @@ Values(
   DATE '2015-09-21',
   38,
   5,
-  'complete'
+  'complete',
+'S0001'
 );
 
+---3
 INSERT into Orders
 Values(
   1,
@@ -5094,9 +5099,11 @@ Values(
   DATE '2016-02-11',
   30,
   5,
-  'complete'
+  'complete',
+  'S0002'
 );
 
+---4
 INSERT into Orders
 Values(
   1,
@@ -5105,9 +5112,11 @@ Values(
   DATE '2017-08-11',
   46,
   4,
-  'complete'
+  'complete',
+'S0001'
 );
 
+---5
 INSERT into Orders
 Values(
   1,
@@ -5116,9 +5125,11 @@ Values(
   DATE '2018-10-05',
   1,
   6,
-  'complete'
+  'complete',
+'S0002'
 );
 
+---6
 INSERT into Orders
 Values(
   1,
@@ -5127,9 +5138,11 @@ Values(
   DATE '2018-11-05',
   44,
   5,
-  'complete'
+  'complete',
+'S0001'
 );
 
+---7
 INSERT into Orders
 Values(
   1,
@@ -5138,8 +5151,11 @@ Values(
   Null,
   38,
   7,
-  'delayed'
+  'pending',
+'S0002'
 );
+
+---8
 INSERT into Orders
 Values(
   1,
@@ -5148,8 +5164,11 @@ Values(
   Null,
   21,
   12,
-  'delayed'
+  'pending',
+'S0002'
 );
+
+---9
 INSERT into Orders
 Values(
   1,
@@ -5158,8 +5177,11 @@ Values(
   Null,
   25,
   6,
-  'delayed'
+  'pending',
+'S0002'
 );
+
+---10
 INSERT into Orders
 Values(
   1,
@@ -5168,8 +5190,11 @@ Values(
   Null,
   32,
   5,
-  'delayed'
+  'pending',
+'S0002'
 );
+
+---11
 INSERT into Orders
 Values(
   1,
@@ -5178,13 +5203,13 @@ Values(
   Null,
   23,
   5,
-  'delayed'
+  'pending',
+'S0002'
 );
 
 INSERT into Service_center_order
 Values(
 1,
-'S0002',
 'S0001',
 3
 );
@@ -5192,7 +5217,6 @@ Values(
 INSERT into Service_center_order
 Values(
 1,
-'S0001',
 'S0002',
 4
 );
@@ -5200,7 +5224,6 @@ Values(
 INSERT into Service_center_order
 Values(
 1,
-'S0002',
 'S0001',
 5
 );
@@ -5208,7 +5231,6 @@ Values(
 INSERT into Distributor_order
 Values(
 1,
-'S0001',
 'D0001',
 1
 );
@@ -5216,7 +5238,6 @@ Values(
 INSERT into Distributor_order
 Values(
 1,
-'S0001',
 'D0002',
 2
 );
@@ -5224,7 +5245,6 @@ Values(
 INSERT into Distributor_order
 Values(
 1,
-'S0001',
 'D0001',
 6
 );
@@ -5232,35 +5252,30 @@ Values(
 INSERT into Distributor_order
 Values(
 1,
-'S0002',
 'D0002',
 7
 );
 INSERT into Distributor_order
 Values(
 1,
-'S0002',
 'D0001',
 8
 );
 INSERT into Distributor_order
 Values(
 1,
-'S0002',
 'D0001',
 9
 );
 INSERT into Distributor_order
 Values(
 1,
-'S0002',
 'D0001',
 10
 );
 INSERT into Distributor_order
 Values(
 1,
-'S0002',
 'D0002',
 11
 );
