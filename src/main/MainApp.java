@@ -387,9 +387,13 @@ public class MainApp {
 
 			if (selected_option.equals("1")) {
 				String sType = functObject.getNextMaintenanceType(email, licensePlate, currMileage);
-				functObject.checkForParts(licensePlate, sType, "S0001");
-				customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName, sType);
-				// find two earliest dates
+				Timestamp t = functObject.checkForPartsForMaintenanceService(licensePlate, sType,
+						userInfoObject.service_centre_id);
+				if (t == null) {
+					customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName, sType);
+				} else {
+					System.out.println("Please try again after " + t);
+				}
 			} else if (selected_option.equals("2")) {
 				if (userInfoObject.role.equals("customer")) {
 					customerScheduleService(userInfoObject.email);
@@ -486,10 +490,13 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "Engine knock");
-				showDiagnosticReport(rs);
-				ArrayList<Timestamp> arr = functObject.findRepairScheduleDates(mechanicName, licensePlate,
-						"Engine knock");
+				Timestamp t = functObject.checkForPartsForRepairService(licensePlate, selected_option,
+						userInfoObject.service_centre_id);
+				if (t == null) {
+					customerScheduleRepairPage2(email, licensePlate, currMileage, mechanicName, selected_option);
+				} else {
+					System.out.println("Please try again after " + t);
+				}
 
 				// create and display diagnostic report showing list of causes and parts needed
 				// find two earliest dates
@@ -532,7 +539,13 @@ public class MainApp {
 	}
 
 	public static void customerScheduleRepairPage2(String email, String licensePlate, int currMileage,
-			String mechanicName) {
+			String mechanicName, String repairId) {
+		rs = functObject.getDiagnosticReport(licensePlate, repairId);
+		showDiagnosticReport(rs);
+		ArrayList<Timestamp> arr = functObject.findRepairScheduleDates(mechanicName, licensePlate, "Engine knock");
+		
+		System.out.println("1. " + arr.toArray()[0]);
+		System.out.println("2. " + arr.toArray()[1]);
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -872,7 +885,8 @@ public class MainApp {
 					// ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
 					while (rs.next()) {
 						System.out.println("A. Paycheck Date: " + rs.getString("paycheck_date"));
-						System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+						System.out.println(
+								"B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
 						System.out.println("C. Employee ID: " + rs.getInt("eid"));
 						System.out.println("D. Employee Name: " + rs.getString("e_name"));
 						System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
@@ -996,36 +1010,36 @@ public class MainApp {
 		}
 
 	}
-	
+
 	public static void dailyTaskRecordDeliveries() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("1. Enter Comma Separated Order Ids");
 		System.out.println("2. Go Back");
-		while(true) {
+		while (true) {
 			String option = s.nextLine();
-			if(option.equals("1")) {
+			if (option.equals("1")) {
 				String orderIds = s.nextLine();
 				String[] arr = orderIds.split(",");
-				for(int i=0;i<arr.length;i++) {
+				for (int i = 0; i < arr.length; i++) {
 					arr[i] = arr[i].trim();
 				}
-				
+
 				boolean ans = functObject.dailyTaskRecordDeliveries(arr, userInfoObject.service_centre_id);
-				
-				if(ans == true) {
+
+				if (ans == true) {
 					System.out.println("Daily Task-Record Deliveries Successful");
 				} else {
 					System.out.println("Daily Task-Record Deliveries Was Not Successful");
 				}
-				
+
 				receptionistLandingPage();
-			} else if(option.equals("2")) {
+			} else if (option.equals("2")) {
 				receptionistLandingPage();
 			} else {
 				System.out.println("Choose a valid option");
 			}
 		}
-		
+
 	}
 
 	public static void receptionistRegisterCar() {
@@ -1334,7 +1348,7 @@ public class MainApp {
 //			******************************************
 
 //			now do stuff
-		    
+
 			mainMenu();
 
 		} catch (Throwable e) {
