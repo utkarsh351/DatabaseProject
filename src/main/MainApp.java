@@ -1189,7 +1189,7 @@ public class MainApp {
 			} else if (option == 2) {
 				signup();
 			} else if (option == 3) {
-				return;
+				System.exit(0);
 			} else {
 				System.out.println("Wrong Input");
 			}
