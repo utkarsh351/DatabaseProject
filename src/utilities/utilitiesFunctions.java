@@ -690,6 +690,20 @@ public class utilitiesFunctions {
 		}
 	}
 
+	public static int getTimeInMilliSecondsInSlots(float totalTime) {
+		int hours = (int)totalTime;	
+		float minutes = totalTime - (int)totalTime;
+		
+		if(minutes == 0.25) {
+			minutes = (float)0.50;
+		} else if(minutes == 0.75) {
+			minutes = 0;
+			hours += hours;
+		}
+		
+		return (int)(((hours * 60 * 60) + (minutes * 60)) * 1000);
+	}
+	
 	public static int getTotalTimeForMaintenance(String plate_no, String m_type) {
 		try {
 			rs = connObject.selectQuery("Select sum(hours_to_complete) as sum from Service S, "
@@ -699,7 +713,7 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return (int) (rs.getFloat("sum") * 60 * 60 * 1000);
+				return getTimeInMilliSecondsInSlots(rs.getFloat("sum"));
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -899,7 +913,7 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return (int) (rs.getFloat("sum") * 60 * 60 * 1000);
+				return getTimeInMilliSecondsInSlots(rs.getFloat("sum"));
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -957,5 +971,21 @@ public class utilitiesFunctions {
 		long diff = milliseconds2 - milliseconds1;
 
 		return diff;
+	}
+	
+	public static ResultSet getDiagnosticReport(String plate_no, String repair_name) {
+		try {
+			rs = connObject.selectQuery("Select S.name as service_name, Z.name as part_Name, Z.quantity, Z.repair_name, Z.diagnostic_name from Service S,"
+					+ "(Select P.name, Y.quantity, Y.repair_name, Y.diagnostic_name, Y.sid from Parts P,"
+					+ "(Select I.part_id, I.quantity, T.sid, T.repair_name, T.rid, T.diagnostic_name from Involves I,"
+					+ "(Select RU.sid, R.repair_name, R.rid, R.diagnostic_name from Repair_uses RU, "
+					+ "(Select repair_name, rid, diagnostic_name from Repair where repair_name = '"+repair_name+"') R where R.rid= RU.rid) T,"
+					+ "(Select T1.vehicle_id, V.make from Vehicles V, (Select vehicle_id from Owns O where O.plate_no='"+plate_no+"') T1 where V.vehicle_id=T1.vehicle_id) X "
+					+ "where I.service_id=T.sid and I.vehicle_id = X.vehicle_id) Y where P.part_id=Y.part_id) Z where S.sid = Z.sid");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Something Went Wrong");
+			return rs;
+		}
 	}
 }

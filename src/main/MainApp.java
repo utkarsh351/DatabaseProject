@@ -335,7 +335,7 @@ public class MainApp {
 			if (selected_option.equals("1")) {
 				customerScheduleMaintenancePage1(email, licensePlate, currMileage, mechanicName);
 			} else if (selected_option.equals("2")) {
-				customerScheduleRepairPage1(email);
+				customerScheduleRepairPage1(email, licensePlate, currMileage, mechanicName);
 			} else if (selected_option.equals("3")) {
 				if (userInfoObject.role.equals("customer")) {
 					customerServicePage();
@@ -412,8 +412,38 @@ public class MainApp {
 		}
 	}
 
+	public static void showDiagnosticReport(ResultSet x) {
+		try {
+			System.out.print("Service Name");
+			System.out.print(" , ");
+			System.out.print("Part Name");
+			System.out.print(" , ");
+			System.out.print("Quantity");
+			System.out.print(" , ");
+			System.out.print("Repair Name");
+			System.out.print(" , ");
+			System.out.print("Diagnostic Name");
+			System.out.println();
+			while (x.next()) {
+				System.out.print(x.getString("service_name"));
+				System.out.print(" , ");
+				System.out.print(x.getString("part_name"));
+				System.out.print(" , ");
+				System.out.print(x.getInt("quantity"));
+				System.out.print(" , ");
+				System.out.print(x.getString("repair_name"));
+				System.out.print(" , ");
+				System.out.print(x.getString("diagnostic_name"));
+				System.out.println();
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+	}
+	
 	// Customer Repair Schedule
-	public static void customerScheduleRepairPage1(String email) {
+	public static void customerScheduleRepairPage1(String email, String licensePlate, int currMileage,
+			String mechanicName) {
 		System.out.println("1. Engine knock");
 		System.out.println("2. Car drifts in a particular direction");
 		System.out.println("3. Battery does not hold charge");
@@ -428,6 +458,8 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
+				rs = functObject.getDiagnosticReport(licensePlate, "Engine knock");
+				showDiagnosticReport(rs);
 				// create and display diagnostic report showing list of causes and parts needed
 				// find two earliest dates
 				// send to repair page 2
@@ -439,17 +471,23 @@ public class MainApp {
 				// specific date. After showing the message, go back to Customer: Schedule
 				// Service page
 			} else if (selected_option.equals("2")) {
-				// refer to first comment
+				rs = functObject.getDiagnosticReport(licensePlate, "Car drifts in a particular direction");
+				showDiagnosticReport(rs);
 			} else if (selected_option.equals("3")) {
-				// refer to first comment
+				rs = functObject.getDiagnosticReport(licensePlate, "Battery does not hold charge");
+				showDiagnosticReport(rs);
 			} else if (selected_option.equals("4")) {
-				// refer to first comment
+				rs = functObject.getDiagnosticReport(licensePlate, "Black/unclean exhaust");
+				showDiagnosticReport(rs);
 			} else if (selected_option.equals("5")) {
-				// refer to first comment
+				rs = functObject.getDiagnosticReport(licensePlate, "A/C-Heater not working");
+				showDiagnosticReport(rs);
 			} else if (selected_option.equals("6")) {
-				// refer to first comment
+				rs = functObject.getDiagnosticReport(licensePlate, "Headlamps/Tail lamps not working");
+				showDiagnosticReport(rs);
 			} else if (selected_option.equals("7")) {
-				// refer to first comment
+				rs = functObject.getDiagnosticReport(licensePlate, "Check engine light");
+				showDiagnosticReport(rs);
 			} else if (selected_option.equals("8")) {
 				if (userInfoObject.role.equals("customer")) {
 					customerScheduleService(userInfoObject.email);
