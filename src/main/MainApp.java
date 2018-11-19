@@ -24,43 +24,44 @@ public class MainApp {
 		System.out.println("1.Sign In");
 		System.out.println("2.Go Back");
 
-		int option = s.nextInt();
-		if (option == 1) {
-			boolean ans = functObject.validUser(username, password);
-			if (ans == false) {
-				System.out.println("Wrong Input");
-				login();
-			} else {
-				userInfoObject = new userInfo(functObject.getRole(username), username);
-				if (userInfoObject.role.equals("customer")) {
-					try {
-						ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
-						while (rs.next()) {
-							userInfoObject.service_centre_id = rs.getString("service_centre_id");
+		while(true) {
+			int option = s.nextInt();
+			if (option == 1) {
+				boolean ans = functObject.validUser(username, password);
+				if (ans == false) {
+					System.out.println("Wrong Input");
+					login();
+				} else {
+					userInfoObject = new userInfo(functObject.getRole(username), username);
+					if (userInfoObject.role.equals("customer")) {
+						try {
+							ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+							while (rs.next()) {
+								userInfoObject.service_centre_id = rs.getString("service_centre_id");
+							}
+							customerLandingPage();
+						} catch (Throwable e) {
+							e.printStackTrace();
 						}
-						customerLandingPage();
-					} catch (Throwable e) {
-						e.printStackTrace();
-					}
-				} else if (userInfoObject.role.equals("receptionist")) {
-					try {
-						ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
-						while (rs.next()) {
-							userInfoObject.service_centre_id = rs.getString("service_centre_id");
+					} else if (userInfoObject.role.equals("receptionist")) {
+						try {
+							ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+							while (rs.next()) {
+								userInfoObject.service_centre_id = rs.getString("service_centre_id");
+							}
+							receptionistLandingPage();
+						} catch (Throwable e) {
+							e.printStackTrace();
 						}
-						receptionistLandingPage();
-					} catch (Throwable e) {
-						e.printStackTrace();
+					} else if (userInfoObject.role.equals("manager")) {
+						managerLandingPage();
 					}
-				} else if (userInfoObject.role.equals("manager")) {
-					managerLandingPage();
 				}
+			} else if (option == 2) {
+				mainMenu();
+			} else {
+				System.out.println("Wrong Input");
 			}
-		} else if (option == 2) {
-			mainMenu();
-		} else {
-			System.out.println("Wrong Input");
-			login();
 		}
 	}
 
@@ -82,21 +83,22 @@ public class MainApp {
 		System.out.println("1.Sign Up");
 		System.out.println("2.Go Back");
 
-		int option = s.nextInt();
+		while(true) {
+			int option = s.nextInt();
 
-		if (option == 1) {
-			boolean ans = functObject.createUser(email, password, name, addr, phone, sc_id);
-			if (ans == false) {
-				System.out.println("Email already exists");
-				signup();
+			if (option == 1) {
+				boolean ans = functObject.createUser(email, password, name, addr, phone, sc_id);
+				if (ans == false) {
+					System.out.println("Email already exists");
+					signup();
+				} else {
+					login();
+				}
+			} else if (option == 2) {
+				mainMenu();
 			} else {
-				login();
+				System.out.println("Wrong Input");
 			}
-		} else if (option == 2) {
-			mainMenu();
-		} else {
-			System.out.println("Wrong Input");
-			signup();
 		}
 	}
 
@@ -1179,18 +1181,19 @@ public class MainApp {
 		System.out.println("2.Sign Up");
 		System.out.println("3.Exit");
 
-		int option = s.nextInt();
-
-		if (option == 1) {
-			login();
-		} else if (option == 2) {
-			signup();
-		} else if (option == 3) {
-			return;
-		} else {
-			System.out.println("Wrong Input");
-			mainMenu();
+		while(true) {
+			int option = s.nextInt();
+			if (option == 1) {
+				login();
+			} else if (option == 2) {
+				signup();
+			} else if (option == 3) {
+				return;
+			} else {
+				System.out.println("Wrong Input");
+			}
 		}
+		
 	}
 
 	public static void main(String[] args) {
