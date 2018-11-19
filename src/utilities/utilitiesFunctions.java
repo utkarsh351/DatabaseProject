@@ -357,8 +357,14 @@ public class utilitiesFunctions {
 	}
 
 	public ResultSet getNotifications(String service_centre_id) {
-		// TODO Auto-generated method stub
 		return null;
+//		try {
+//			rs = connObject.selectQuery("SELECT  + "WHERE E.service_centre_id='" + service_centre_id + "'");
+//			return rs;
+//		} catch (Throwable e) {
+//			System.out.println("Error");
+//			return rs;
+//		}
 	}
 
 	public void addNewCar(String make, String model, String year, int milesA, String monthsA, String partsA, int milesB,
@@ -715,5 +721,20 @@ public class utilitiesFunctions {
 		long diff = milliseconds2 - milliseconds1;
 
 		return diff;
+	}
+
+	public ResultSet getEmployeePayrollDetails(String email) {
+		try {
+			rs = connObject.selectQuery(
+					"SELECT E.eid, E.name AS e_name, E.wage AS compensation, "
+					+ "E.freq, PR.units, PC.start_date, PC.end_date "
+					+ "FROM Employees E JOIN Payment_record PR ON E.eid=PR.eid "
+					+ "JOIN Payment_cycle PC ON PR.pcid=PC.pcid WHERE email='"
+							+ email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
 	}
 }
