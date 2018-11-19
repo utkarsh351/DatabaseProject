@@ -285,17 +285,16 @@ public class MainApp {
 			while (rs.next()) {
 				System.out.println("A. " + rs.getString("schedule_id"));
 				System.out.println("B. " + rs.getString("plate_no"));
-				if(rs.getString("maintenance_schedule_id")== null) {
+				if (rs.getString("maintenance_schedule_id") == null) {
 					System.out.println("C. Repair-" + rs.getInt("rid"));
-				}
-				else {
+				} else {
 					System.out.println("C. Maintenance-" + rs.getString("m_type"));
 				}
 				System.out.println("D. " + rs.getString("name"));
 				System.out.println("E. " + rs.getString("start_time"));
-				System.out.println("F. To be calculated");
+				System.out.println("F. " + rs.getString("end_time"));
 				System.out.println("G. " + rs.getString("status"));
-				System.out.println(" " );
+				System.out.println(" ");
 			}
 			System.out.println("1. Go Back");
 			Scanner s = new Scanner(System.in);
@@ -362,8 +361,8 @@ public class MainApp {
 
 			if (selected_option.equals("1")) {
 				String s_type = functObject.getNextMaintenanceType(email, licensePlate, currMileage);
-				//insert check unreserved parts code
-				functObject.findMaintenanceScheduleDates(mechanicName,licensePlate,s_type);
+				// insert check unreserved parts code
+				functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, s_type);
 				functObject.getMaintenanceMissingParts(licensePlate, s_type);
 				customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName);
 				// find two earliest dates
@@ -624,16 +623,36 @@ public class MainApp {
 	// Customer Invoice
 	public static void customerInvoice() {
 		try {
-			// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+			ResultSet rs = functObject.viewInvoices(userInfoObject.email);
 			while (rs.next()) {
-				System.out.println("A. " + rs.getString("service_id"));
-				System.out.println("B. " + rs.getString("service_start_date"));
-				System.out.println("C. " + rs.getString("service_end_date"));
+				int totalCost = 0;
+				System.out.println("A. " + rs.getString("schedule_id"));
+				System.out.println("B. " + rs.getString("start_time"));
+				System.out.println("C. " + rs.getString("end_time"));
 				System.out.println("D. " + rs.getString("plate_no"));
-				System.out.println("E. " + rs.getString("service_type"));
-				System.out.println("E. " + rs.getString("mechanic_name"));
-				System.out.println("E. " + rs.getInt("total_service_cost"));
-				System.out.println("F. ");
+				int vehicleId = rs.getInt("vehicle_id");
+				if (rs.getString("maintenance_schedule_id") == null) {
+					int repairId = rs.getInt("rid");
+					System.out.println("E. Repair-" + repairId);
+					totalCost = functObject.getTotalCostForRepair(repairId);
+					ResultSet rs2 = functObject.getTotalPartsForRepair(repairId, vehicleId);
+					while (rs2.next()) {
+						int partCost = (rs2.getInt("quantity") * rs2.getInt("unit_price"));
+						totalCost = totalCost + partCost;
+					}
+				} else {
+					String mType = rs.getString("m_type");
+					System.out.println("E. Maintenance-" + mType);
+					totalCost = functObject.getTotalCostForMaintenance(vehicleId, mType);
+					ResultSet rs2 = functObject.getTotalPartsForMaintenance(mType, vehicleId);
+					while (rs2.next()) {
+						int partCost = (rs2.getInt("quantity") * rs2.getInt("unit_price"));
+						totalCost = totalCost + partCost;
+					}
+				}
+				System.out.println("F. " + rs.getString("name"));
+				System.out.println("H.Total Cost- " + totalCost);
+				System.out.println(" ");
 			}
 			System.out.println("1. View Invoice Details");
 			System.out.println("2. Go Back");
@@ -661,23 +680,48 @@ public class MainApp {
 			while (true) {
 				String service_id = s.nextLine();
 
-				// if (vaild(service_id)) {
-				// ResultSet rs = functObject.getCustomerServiceHistory(userInfoObject.email);
+				ResultSet rs = functObject.viewInvoiceById(userInfoObject.email, service_id);
 				while (rs.next()) {
-					System.out.println("A. " + rs.getString("service_id"));
-					System.out.println("B. " + rs.getString("service_start_date"));
-					System.out.println("C. " + rs.getString("service_end_date"));
+					int totalCost = 0;
+					int totalPartCost = 0;
+					float totalTime = 0;
+					System.out.println("A. " + rs.getString("schedule_id"));
+					System.out.println("B. " + rs.getString("start_time"));
+					System.out.println("C. " + rs.getString("end_time"));
 					System.out.println("D. " + rs.getString("plate_no"));
-					System.out.println("E. " + rs.getString("service_type"));
-					System.out.println("E. " + rs.getString("mechanic_name"));
-					System.out.println("E. " + rs.getInt("total_service_cost"));
-					System.out.println("F. ");
+					int vehicleId = rs.getInt("vehicle_id");
+					if (rs.getString("maintenance_schedule_id") == null) {
+						int repairId = rs.getInt("rid");
+						System.out.println("E. Repair-" + repairId);
+						totalCost = functObject.getTotalCostForRepair(repairId);
+						totalTime=functObject.getTotalHoursForRepair(repairId);
+						ResultSet rs2 = functObject.getTotalPartsForRepair(repairId, vehicleId);
+						System.out.println("F. Parts-");
+						while (rs2.next()) {
+							int partCost = (rs2.getInt("quantity") * rs2.getInt("unit_price"));
+							totalCost = totalCost + partCost;
+							System.out.println(rs2.getString("name") + "-" + partCost + "$");
+						}
+					} else {
+						String mType = rs.getString("m_type");
+						System.out.println("E. Maintenance-" + mType);
+						totalCost = functObject.getTotalCostForMaintenance(vehicleId, mType);
+						totalTime=functObject.getTotalHoursForMaintenance(vehicleId, mType);
+						ResultSet rs2 = functObject.getTotalPartsForMaintenance(mType, vehicleId);
+						System.out.println("F. Parts-");
+						while (rs2.next()) {
+							int partCost = (rs2.getInt("quantity") * rs2.getInt("unit_price"));
+							totalCost = totalCost + partCost;
+							System.out.println(rs2.getString("name") + "-" + partCost + "$");
+						}
+					}
+					System.out.println("G. " + rs.getString("name"));
+					System.out.println("H. " + totalTime);
+					System.out.println("I. "+ rs.getString("wage"));
+					System.out.println("J.Total Cost- " + totalCost);
+					System.out.println(" ");
 				}
 				break;
-				// }
-				// else {
-				// System.out.println("Choose a valid option");
-				// }
 			}
 
 			System.out.println("1. Go Back");

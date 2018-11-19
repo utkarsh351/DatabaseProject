@@ -6,43 +6,53 @@ import java.util.Scanner;
 public class ManagerInvoice {
 
 	public void viewInvoice() {
-		/**
-		Display the following details for all the
-		services that are complete at this service center
-		followed by the menu.
-		A. Service ID
-		B. Customer Name
-		C. Service Start Date/Time
-		D. Service End Date/Time
-		E. License Plate
-		F. Service Type
-		G. Mechanic Name
-		H. Parts Used in service with cost of each part
-		I. Total labor hours
-		J. Labor wages per hour
-		K. Total Service Cost
-		*/
 		try {
-			ResultSet rs = MainApp.functObject.getInvoiceDetails();
+			ResultSet rs = MainApp.functObject.getInvoiceDetails(MainApp.userInfoObject.service_centre_id);
 			while (rs.next()) {
-				//TODO
-				System.out.println("A. " + rs.getString("service_id"));
-				System.out.println("B. " + rs.getString(""));
-				System.out.println("C. " + rs.getDate(""));
-				System.out.println("D. " + rs.getDate(""));
-				System.out.println("E. " + rs.getString(""));
-				System.out.println("F. " + rs.getString(""));
-				System.out.println("G. " + rs.getString(""));
-				System.out.println("H. " + rs.getString(""));
-				System.out.println("I. " + rs.getInt(""));
-				System.out.println("J. " + rs.getInt(""));
-				System.out.println("K. " + rs.getInt(""));
-			    
+				int totalCost = 0;
+				int totalPartCost = 0;
+				float totalTime = 0;
+				System.out.println("A. " + rs.getString("schedule_id"));
+				System.out.println("B. " + rs.getString("start_time"));
+				System.out.println("C. " + rs.getString("end_time"));
+				System.out.println("D. " + rs.getString("plate_no"));
+				int vehicleId = rs.getInt("vehicle_id");
+				if (rs.getString("maintenance_schedule_id") == null) {
+					int repairId = rs.getInt("rid");
+					System.out.println("E. Repair-" + repairId);
+					totalCost = MainApp.functObject.getTotalCostForRepair(repairId);
+					totalTime = MainApp.functObject.getTotalHoursForRepair(repairId);
+					ResultSet rs2 = MainApp.functObject.getTotalPartsForRepair(repairId, vehicleId);
+					System.out.println("F. Parts-");
+					while (rs2.next()) {
+						int partCost = (rs2.getInt("quantity") * rs2.getInt("unit_price"));
+						totalCost = totalCost + partCost;
+						System.out.println(rs2.getString("name") + "-" + partCost + "$");
+					}
+				} else {
+					String mType = rs.getString("m_type");
+					System.out.println("E. Maintenance-" + mType);
+					totalCost = MainApp.functObject.getTotalCostForMaintenance(vehicleId, mType);
+					totalTime = MainApp.functObject.getTotalHoursForMaintenance(vehicleId, mType);
+					ResultSet rs2 = MainApp.functObject.getTotalPartsForMaintenance(mType, vehicleId);
+					System.out.println("F. Parts-");
+					while (rs2.next()) {
+						int partCost = (rs2.getInt("quantity") * rs2.getInt("unit_price"));
+						totalCost = totalCost + partCost;
+						System.out.println(rs2.getString("name") + "-" + partCost + "$");
+					}
+				}
+				System.out.println("G. " + rs.getString("name"));
+				System.out.println("H. " + totalTime);
+				System.out.println("I. " + rs.getString("wage"));
+				System.out.println("J.Total Cost- " + totalCost);
+				System.out.println(" ");
 			}
+
 			System.out.println("1. Go Back");
-			Scanner s = new Scanner(System.in);
+			Scanner s2 = new Scanner(System.in);
 			while (true) {
-				String selected_option = s.nextLine();
+				String selected_option = s2.nextLine();
 
 				if (selected_option.equals("1")) {
 					MainApp.managerLandingPage();
@@ -53,7 +63,6 @@ public class ManagerInvoice {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 }
