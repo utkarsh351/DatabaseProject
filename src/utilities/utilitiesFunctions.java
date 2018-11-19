@@ -1074,7 +1074,7 @@ public class utilitiesFunctions {
 		}
 	}
 	
-	public static boolean dailyTaskUpdateInventory() {
+	public static boolean dailyTaskUpdateInventory(String users_service_centre_id) {
 		try {
 			java.util.Date utilDate = new java.util.Date();
 			Calendar cal = Calendar.getInstance();
@@ -1111,7 +1111,8 @@ public class utilitiesFunctions {
 									+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + "T11.sc_id=Inv.service_center_id");
 					while(rs2.next()) {
 						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - " 
-								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
+								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id")+" and "
+										+ "Inventory.service_center_id='"+users_service_centre_id+"'");
 					}
 					
 				} else {
@@ -1135,7 +1136,8 @@ public class utilitiesFunctions {
 							+ "T11.sc_id=Inv.service_center_id");
 					while(rs2.next()) {
 						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - " 
-								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
+								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id")+" and "
+								+ "Inventory.service_center_id='"+users_service_centre_id+"'");
 					}
 				}
 			}
