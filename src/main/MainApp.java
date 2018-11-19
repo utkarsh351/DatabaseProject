@@ -33,9 +33,25 @@ public class MainApp {
 			} else {
 				userInfoObject = new userInfo(functObject.getRole(username), username);
 				if (userInfoObject.role.equals("customer")) {
-					customerLandingPage();
+					try {
+						ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+						while (rs.next()) {
+							userInfoObject.service_centre_id = rs.getString("service_centre_id");
+						}
+						customerLandingPage();
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
 				} else if (userInfoObject.role.equals("receptionist")) {
-					receptionistLandingPage();
+					try {
+						ResultSet rs = functObject.getEmployeeInfo(userInfoObject.email);
+						while (rs.next()) {
+							userInfoObject.service_centre_id = rs.getString("service_centre_id");
+						}
+						receptionistLandingPage();
+					} catch (Throwable e) {
+						e.printStackTrace();
+					}
 				} else if (userInfoObject.role.equals("manager")) {
 					managerLandingPage();
 				}
@@ -947,7 +963,7 @@ public class MainApp {
 	}
 	
 	public static void dailyTaskUpdateInventoryReceptionist() {
-		boolean ans = functObject.dailyTaskUpdateInventory();
+		boolean ans = functObject.dailyTaskUpdateInventory(userInfoObject.service_centre_id);
 		
 		if(ans == true) {
 			System.out.println("Daily Task-Update Inventory Successful");
