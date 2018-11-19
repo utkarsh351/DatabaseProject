@@ -375,8 +375,27 @@ public class utilitiesFunctions {
 	}
 
 	public ResultSet getOrderHistory(String service_centre_id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			rs = connObject.selectQuery("SELECT  order_id,order_date,order_expected_delivery_date,order_delivery_date, "
+					+ "PM.parts_to_make_id,quantity,requester_center_inventory_id,D.distributor_id, "
+					+ "service_center_provider_id,make,P.part_id,unit_price,warranty,P.name AS part_name, "
+					+ "dname,SC.name AS sc_name,status,SC2.name AS purchaser_name,SC2.sc_id AS purchaser_id "
+					+ "FROM (SELECT O.order_id, order_date,order_expected_delivery_date,order_delivery_date, "
+					+ "parts_to_make_id,quantity,status, requester_center_inventory_id,distributor_id, "
+					+ "service_center_provider_id FROM Orders O "
+					+ "FULL OUTER JOIN Service_center_order SCO ON O.order_id=SCO.order_id "
+					+ "FULL OUTER JOIN Distributor_order DO ON O.order_id=DO.order_id) W "
+					+ "JOIN Parts_to_make PM ON PM.parts_to_make_id=W.parts_to_make_id "
+					+ "JOIN Parts P ON P.part_id=PM.part_id "
+					+ "FULL OUTER JOIN Distributor D ON D.distributor_id=W.distributor_id "
+					+ "FULL OUTER JOIN Service_center SC ON SC.sc_id =W.service_center_provider_id "
+					+ "JOIN Service_center SC2 ON SC2.sc_id =W.requester_center_inventory_id "
+					+ "WHERE SC2.sc_id='" + service_centre_id + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Service Center Id");
+			return rs;
+		}
 	}
 
 	public ResultSet getNotifications(String service_centre_id) {
@@ -593,8 +612,7 @@ public class utilitiesFunctions {
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
 						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3
-								+ " ORDER BY start_time DESC");
+								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
 				if (rs.next()) {
 					long diff = compareTwoTimeStamps(rs.getTimestamp("end_time"),
 							new java.sql.Timestamp(cal.getTimeInMillis()));
@@ -623,18 +641,19 @@ public class utilitiesFunctions {
 			return rs;
 		}
 	}
-	
-	public static ArrayList<Timestamp> findRepairScheduleDates(String mechanic_name, String plate_no, String repair_name) {
+
+	public static ArrayList<Timestamp> findRepairScheduleDates(String mechanic_name, String plate_no,
+			String repair_name) {
 		try {
 			ArrayList<Timestamp> arr = new ArrayList<>();
 			int day_increment = 1;
 			int mechanic_id = 0;
-			String s3="";
+			String s3 = "";
 			if (!mechanic_name.equals("")) {
 				rs = getMechanicByName(mechanic_name);
 				if (rs.next()) {
 					mechanic_id = rs.getInt("eid");
-					s3="AND mechanic_id='" + mechanic_id +"'";
+					s3 = "AND mechanic_id='" + mechanic_id + "'";
 				}
 			}
 
@@ -657,8 +676,7 @@ public class utilitiesFunctions {
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
 						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3
-								+ " ORDER BY start_time DESC");
+								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
 				if (rs.next()) {
 //					long diff = compareTwoTimeStamps(rs.getTimestamp("end_time"),
 //							new java.sql.Timestamp(cal.getTimeInMillis()));
@@ -666,7 +684,7 @@ public class utilitiesFunctions {
 							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
 //						addToSchedule(rs.getTimestamp("end_time"), plate_no, mechanic_id,
 //								new Timestamp(rs.getTimestamp("end_time").getTime() + (totalTime)));
-						if(date1==null) {
+						if (date1 == null) {
 							date1 = rs.getTimestamp("end_time");
 							day_increment = day_increment + 1;
 							continue;
@@ -683,7 +701,7 @@ public class utilitiesFunctions {
 //					Timestamp t2 = new java.sql.Timestamp(cal.getTimeInMillis());
 //					t2.setTime(t1.getTime() + totalTime);
 //					addToSchedule(t1, plate_no, mechanic_id, t2);
-					if(date1==null) {
+					if (date1 == null) {
 						date1 = t1;
 						day_increment = day_increment + 1;
 						continue;
@@ -695,10 +713,10 @@ public class utilitiesFunctions {
 				// apply scheduling instead of the current greedy approach
 
 			}
-			
+
 			arr.add(date1);
 			arr.add(date2);
-			
+
 			return arr;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
@@ -776,25 +794,33 @@ public class utilitiesFunctions {
 	}
 
 	public static int getTimeInMilliSecondsInSlots(float totalTime) {
-		int hours = (int)totalTime;	
-		float minutes = totalTime - (int)totalTime;
-		
-		if(minutes == 0.25) {
-			minutes = (float)0.50;
-		} else if(minutes == 0.75) {
+		int hours = (int) totalTime;
+		float minutes = totalTime - (int) totalTime;
+
+		if (minutes == 0.25) {
+			minutes = (float) 0.50;
+		} else if (minutes == 0.75) {
 			minutes = 0;
 			hours += hours;
 		}
-		
-		return (int)(((hours * 60 * 60) + (minutes * 60)) * 1000);
+
+		return (int) (((hours * 60 * 60) + (minutes * 60)) * 1000);
 	}
-	
+
 	public static int getTotalTimeForMaintenance(String plate_no, String m_type) {
 		try {
+			String s1 = "";
+			String s2 = "";
+			if (m_type == "B") {
+				s1 = " OR MU.m_type='B'";
+			} else if (m_type == "C") {
+				s1 = " OR MU.m_type='B'";
+				s2 = " OR MU.m_type='A'";
+			}
 			rs = connObject.selectQuery("Select sum(hours_to_complete) as sum from Service S, "
 					+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type FROM Owns O, Maintenance_uses MU, Vehicles V WHERE O.plate_no = '"
-					+ plate_no + "' AND O.vehicle_id = MU.vehicle_id AND MU.m_type='" + m_type
-					+ "' AND V.vehicle_id = O.vehicle_id ) T1  where S.sid = T1.sid");
+					+ plate_no + "' AND O.vehicle_id = MU.vehicle_id AND (MU.m_type='" + m_type + "'" + s1 + s2
+					+ ") AND V.vehicle_id = O.vehicle_id ) T1  where S.sid = T1.sid");
 			if (!rs.next()) {
 				return 0;
 			} else {
@@ -1057,16 +1083,19 @@ public class utilitiesFunctions {
 
 		return diff;
 	}
-	
+
 	public static ResultSet getDiagnosticReport(String plate_no, String repair_name) {
 		try {
-			rs = connObject.selectQuery("Select S.name as service_name, Z.name as part_Name, Z.quantity, Z.repair_name, Z.diagnostic_name from Service S,"
-					+ "(Select P.name, Y.quantity, Y.repair_name, Y.diagnostic_name, Y.sid from Parts P,"
-					+ "(Select I.part_id, I.quantity, T.sid, T.repair_name, T.rid, T.diagnostic_name from Involves I,"
-					+ "(Select RU.sid, R.repair_name, R.rid, R.diagnostic_name from Repair_uses RU, "
-					+ "(Select repair_name, rid, diagnostic_name from Repair where repair_name = '"+repair_name+"') R where R.rid= RU.rid) T,"
-					+ "(Select T1.vehicle_id, V.make from Vehicles V, (Select vehicle_id from Owns O where O.plate_no='"+plate_no+"') T1 where V.vehicle_id=T1.vehicle_id) X "
-					+ "where I.service_id=T.sid and I.vehicle_id = X.vehicle_id) Y where P.part_id=Y.part_id) Z where S.sid = Z.sid");
+			rs = connObject.selectQuery(
+					"Select S.name as service_name, Z.name as part_Name, Z.quantity, Z.repair_name, Z.diagnostic_name from Service S,"
+							+ "(Select P.name, Y.quantity, Y.repair_name, Y.diagnostic_name, Y.sid from Parts P,"
+							+ "(Select I.part_id, I.quantity, T.sid, T.repair_name, T.rid, T.diagnostic_name from Involves I,"
+							+ "(Select RU.sid, R.repair_name, R.rid, R.diagnostic_name from Repair_uses RU, "
+							+ "(Select repair_name, rid, diagnostic_name from Repair where repair_name = '"
+							+ repair_name + "') R where R.rid= RU.rid) T,"
+							+ "(Select T1.vehicle_id, V.make from Vehicles V, (Select vehicle_id from Owns O where O.plate_no='"
+							+ plate_no + "') T1 where V.vehicle_id=T1.vehicle_id) X "
+							+ "where I.service_id=T.sid and I.vehicle_id = X.vehicle_id) Y where P.part_id=Y.part_id) Z where S.sid = Z.sid");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Something Went Wrong");

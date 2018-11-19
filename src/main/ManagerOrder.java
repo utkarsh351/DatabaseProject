@@ -32,15 +32,22 @@ public class ManagerOrder {
 			ResultSet rs = MainApp.functObject.getOrderHistory(MainApp.userInfoObject.service_centre_id);
 			
 			while (rs.next()) {
-				System.out.println("A. " + rs.getInt("order_id"));
-				System.out.println("B. " + rs.getDate("order_date")); // Date
-				System.out.println("C. " + rs.getString("name")); // Part name
-				System.out.println("D. " + rs.getString("")); // Supplier Name
-				System.out.println("E. " + rs.getString("")); // Purchaser Name
-				System.out.println("F. " + rs.getInt("")); // Quantity 
-				System.out.println("G. " + rs.getFloat("")); // Unit Price
-				System.out.println("H. " + rs.getInt("")); // Total Cost
-				System.out.println("I. " + rs.getString("")); // Order Status
+				System.out.println("A. " + rs.getString("order_id"));
+				System.out.println("B. " + rs.getString("order_date"));
+				System.out.println("C. " + rs.getString("part_name"));
+				if (rs.getString("distributor_id") == null) {
+					System.out.println("D. Supplier- " + rs.getString("sc_name"));
+				} else {
+					System.out.println("D. Supplier- " + rs.getString("dname"));
+				}
+				System.out.println("G. Purchaser" + rs.getString("purchaser_name"));
+				int quantity=rs.getInt("quantity");
+				int unitPrice=rs.getInt("unit_price");
+				System.out.println("H. " + quantity);
+				System.out.println("I. " + unitPrice + "$");
+				System.out.println("J.Total Cost- " + (quantity * unitPrice));
+				System.out.println("H. " + rs.getString("status"));
+				System.out.println(" ");
 			}
 			
 			System.out.println("1. Go Back");
