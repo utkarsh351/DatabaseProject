@@ -935,7 +935,7 @@ public class MainApp {
 			} else if (selected_option.equals("7")) {
 				// add Stuff
 			} else if (selected_option.equals("8")) {
-				// add Stuff
+				dailyTaskUpdateInventoryReceptionist();
 			} else if (selected_option.equals("9")) {
 				// add Stuff
 			} else if (selected_option.equals("10")) {
@@ -944,6 +944,29 @@ public class MainApp {
 				System.out.println("Choose a valid option");
 			}
 		}
+	}
+	
+	public static void dailyTaskUpdateInventoryReceptionist() {
+		boolean ans = functObject.dailyTaskUpdateInventory();
+		
+		if(ans == true) {
+			System.out.println("Daily Task-Update Inventory Successful");
+		} else {
+			System.out.println("Daily Task-Update Inventory Was Not Successful");
+		}
+		
+		Scanner s = new Scanner(System.in);
+		System.out.println("1. Go Back");
+		
+		while(true) {
+			String option = s.nextLine();
+			if(option.equals("1")) {
+				receptionistLandingPage();
+			} else {
+				System.out.println("Choose a valid option");
+			}
+		}
+		
 	}
 
 	public static void receptionistRegisterCar() {
