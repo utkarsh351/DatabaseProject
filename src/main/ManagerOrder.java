@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class ManagerOrder {
 
-	public void managerOrdersPage() { 
+	public void managerOrdersPage() {
 		System.out.println("---MANAGER ORDERS---");
 		System.out.println("1. Order History");
 		System.out.println("2. New Order");
@@ -30,7 +30,7 @@ public class ManagerOrder {
 	public void viewOrderHistory() {
 		try {
 			ResultSet rs = MainApp.functObject.getOrderHistory(MainApp.userInfoObject.service_centre_id);
-			
+
 			while (rs.next()) {
 				System.out.println("A. " + rs.getString("order_id"));
 				System.out.println("B. " + rs.getString("order_date"));
@@ -41,15 +41,15 @@ public class ManagerOrder {
 					System.out.println("D. Supplier- " + rs.getString("dname"));
 				}
 				System.out.println("G. Purchaser" + rs.getString("purchaser_name"));
-				int quantity=rs.getInt("quantity");
-				int unitPrice=rs.getInt("unit_price");
+				int quantity = rs.getInt("quantity");
+				int unitPrice = rs.getInt("unit_price");
 				System.out.println("H. " + quantity);
 				System.out.println("I. " + unitPrice + "$");
 				System.out.println("J.Total Cost- " + (quantity * unitPrice));
 				System.out.println("H. " + rs.getString("status"));
 				System.out.println(" ");
 			}
-			
+
 			System.out.println("1. Go Back");
 			Scanner s = new Scanner(System.in);
 			while (true) {
@@ -65,27 +65,21 @@ public class ManagerOrder {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void newOrder() {
 		System.out.println("---MANAGER: NEW ORDER---");
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter Part ID:");
-		String part_id = s.nextLine();
+		String part_to_make_id = s.nextLine();
 		System.out.println("Enter Quantity:");
 		int quantity = s.nextInt();
-		
+
 		System.out.println("1. Place Order");
 		System.out.println("2. Go Back");
 
 		int option = s.nextInt();
-		if (option == 1) {  //Place order
-			//TODO
-			//new order record will be created to obtain the part from its authorized
-			//distributor. Details such as cost, order date, etc. should be
-			//automatically calculated and the order status must be
-			//set as “pending”. After placing the order, show a confirmation
-			//message with the order ID and estimated date of
-			//fulfillment before going back to Manager: Orders Page 
+		if (option == 1) { 
+			MainApp.functObject.newManagerOrder(part_to_make_id, quantity, MainApp.userInfoObject.service_centre_id);
 			managerOrdersPage();
 		} else {
 			managerOrdersPage();
