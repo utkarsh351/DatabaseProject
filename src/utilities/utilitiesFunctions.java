@@ -704,18 +704,19 @@ public class utilitiesFunctions {
 			Timestamp date2 = null;
 			while (day_increment <= 10) {
 				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-				cal.set(Calendar.HOUR_OF_DAY, 23);
+				cal.set(Calendar.HOUR_OF_DAY, 19);
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
-						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
+						"select S.start_time, S.end_time, S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '" + s1
+								+ "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
 				if (rs.next()) {
-					if (compareTwoTimeStamps(rs.getTimestamp("end_time"),
+					Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"), rs.getTimestamp("start_time"));
+					if (compareTwoTimeStamps(endTime,
 							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
 						if (date1 == null) {
-							date1 = rs.getTimestamp("end_time");
+							date1 = endTime;
 						} else {
-							date2 = rs.getTimestamp("end_time");
+							date2 = endTime;
 							break;
 						}
 					}
@@ -772,18 +773,19 @@ public class utilitiesFunctions {
 			Timestamp date2 = null;
 			while (day_increment <= 10) {
 				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-				cal.set(Calendar.HOUR_OF_DAY, 23);
+				cal.set(Calendar.HOUR_OF_DAY, 19);
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
-						"select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-								+ "' AND S.start_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
+						"select S.start_time,S.end_time,S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '" + s1
+								+ "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
 				if (rs.next()) {
-					if (compareTwoTimeStamps(rs.getTimestamp("end_time"),
+					Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"), rs.getTimestamp("start_time"));
+					if (compareTwoTimeStamps(endTime,
 							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
 						if (date1 == null) {
-							date1 = rs.getTimestamp("end_time");
+							date1 = endTime;
 						} else {
-							date2 = rs.getTimestamp("end_time");
+							date2 = endTime;
 							break;
 						}
 					}
@@ -978,18 +980,36 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static long getTimeInMilliSecondsInSlots(float totalTime) {
-		int hours = (int) totalTime;
-		float minutes = totalTime - (int) totalTime;
+	public static Timestamp getTimeInTimestampInSlots(Timestamp endTime, Timestamp startTime) {
+		long endTimeInMilliSeconds = endTime.getTime();
+		long startTimeInMilliSeconds = startTime.getTime();
+		
+		long diff = endTimeInMilliSeconds - startTimeInMilliSeconds;
+		
+		float min = diff / (60*1000);
+		float hours = diff / (60*60*1000);
+		
+		if(min>59) {
+			hours = (int)Math.floor(min/60);
+			min = min - (hours*60);
+		}
 
-		if (minutes == 0.25) {
-			minutes = (float) 0.50;
-		} else if (minutes == 0.75) {
-			minutes = 0;
+		if (min < 30 && min > 0) {
+			min = 30;
+		} else if (min > 30 && min <= 59) {
+			min = 0;
 			hours += 1;
 		}
 
-		return (long) (((hours * 60 * 60) + (minutes * 60)) * 1000);
+		long newTime = (long) (((hours * 60 * 60) + (min * 60)) * 1000) + startTimeInMilliSeconds;
+		return new java.sql.Timestamp(newTime);
+	}
+	
+	public static long getTimeInMilliSeconds(float totalTime) {
+		int hours = (int) totalTime;
+		float minutes = totalTime - (int) totalTime;
+
+		return (long) (((hours * 60 * 60) + (minutes * 60 * 60)) * 1000);
 	}
 
 	public static long getTotalTimeForMaintenance(String plate_no, String m_type) {
@@ -1009,7 +1029,7 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return getTimeInMilliSecondsInSlots(rs.getFloat("sum"));
+				return getTimeInMilliSeconds(rs.getFloat("sum"));
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -1209,7 +1229,7 @@ public class utilitiesFunctions {
 			if (!rs.next()) {
 				return 0;
 			} else {
-				return getTimeInMilliSecondsInSlots(rs.getFloat("sum"));
+				return getTimeInMilliSeconds(rs.getFloat("sum"));
 			}
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -1264,7 +1284,7 @@ public class utilitiesFunctions {
 		long milliseconds1 = oldTime.getTime();
 		long milliseconds2 = currentTime.getTime();
 
-		long diff = milliseconds2 - milliseconds1;
+		long diff = milliseconds1 - milliseconds2;
 
 		return diff;
 	}
@@ -1387,11 +1407,10 @@ public class utilitiesFunctions {
 							+ parts_to_make_id);
 				}
 			}
-
-			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<=Date '" + sqlDate
-					+ "' and " + "requester_center_inventory_id='" + users_service_center_id
-					+ "' and status <> 'complete'");
-			while (rs.next()) {
+			
+			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<Date '"+sqlDate+"' and "
+					+ "requester_center_inventory_id='"+users_service_center_id+"' and status <> 'complete'");
+			while(rs.next()) {
 				int orderId = rs.getInt("order_id");
 				connObject2.insertQuery("Update Orders Set status='delayed' where order_id=" + orderId);
 				connObject2.insertQuery(
