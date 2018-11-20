@@ -2229,7 +2229,7 @@ Values(
   35,
   'S0001',
   35,
-  42,
+  45,
   42,
   5
 );
@@ -5504,6 +5504,30 @@ for each row
 begin
   select Cust_id_seq.nextval
   into :new.id
+  from dual;
+end;
+/
+
+create sequence Vehicles_id_seq START WITH 7;
+
+create trigger trg_vehicle_id
+before insert on Vehicles
+for each row
+begin
+  select Vehicles_id_seq.nextval
+  into :new.vehicle_id 
+  from dual;
+end;
+/
+
+create sequence Involves_id_seq START WITH 200;
+
+create trigger trg_involves_id
+before insert on Involves
+for each row
+begin
+  select Involves_id_seq.nextval
+  into :new.involves_id 
   from dual;
 end;
 /
