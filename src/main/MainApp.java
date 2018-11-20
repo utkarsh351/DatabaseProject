@@ -393,6 +393,7 @@ public class MainApp {
 					customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName, sType);
 				} else {
 					System.out.println("Please try again after " + t);
+					customerScheduleService(userInfoObject.email);
 				}
 			} else if (selected_option.equals("2")) {
 				if (userInfoObject.role.equals("customer")) {
@@ -411,9 +412,6 @@ public class MainApp {
 		ArrayList<Timestamp> dates = functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, sType);
 		System.out.println("1. " + dates.toArray()[0]);
 		System.out.println("2. " + dates.toArray()[1]);
-		// Display
-		// 1. Date 1 available with Mechanic name selected(if selected)
-		// 2. Date 2 available with Mechanic name selected(if selected)
 		System.out.println("1. Schedule on Date");
 		System.out.println("2. Go Back");
 
@@ -424,13 +422,18 @@ public class MainApp {
 			if (selected_option.equals("1")) {
 				Scanner s2 = new Scanner(System.in);
 				while (true) {
+					System.out.println("Choose date option:");
 					String dateOption = s2.nextLine();
 
 					if (dateOption.equals("1")) {
-						// Schedule for date 1
+						functObject.addToMaintenanceSchedule((Timestamp)dates.toArray()[0], licensePlate, mechanicName,
+								(Timestamp)dates.toArray()[0],sType);
+						customerScheduleService(userInfoObject.email);
 
 					} else if (dateOption.equals("2")) {
-						// Schedule for date 2
+						functObject.addToMaintenanceSchedule((Timestamp)dates.toArray()[1], licensePlate, mechanicName,
+								(Timestamp)dates.toArray()[1],sType);
+						customerScheduleService(userInfoObject.email);
 					} else {
 						System.out.println("Choose a valid option");
 
@@ -496,18 +499,9 @@ public class MainApp {
 					customerScheduleRepairPage2(email, licensePlate, currMileage, mechanicName, selected_option);
 				} else {
 					System.out.println("Please try again after " + t);
+					customerScheduleService(userInfoObject.email);
 				}
 
-				// create and display diagnostic report showing list of causes and parts needed
-				// find two earliest dates
-				// send to repair page 2
-				// if repair date cannot be found due to insufficient parts, place an order
-				// show message to user to try after particular date calculated with expected
-				// date of delivery
-				// if an existing order can fulfill the requirement, but show a message to the
-				// user asking him to try again after a
-				// specific date. After showing the message, go back to Customer: Schedule
-				// Service page
 			} else if (selected_option.equals("2")) {
 				rs = functObject.getDiagnosticReport(licensePlate, "Car drifts in a particular direction");
 				showDiagnosticReport(rs);
@@ -542,10 +536,10 @@ public class MainApp {
 			String mechanicName, String repairId) {
 		rs = functObject.getDiagnosticReport(licensePlate, repairId);
 		showDiagnosticReport(rs);
-		ArrayList<Timestamp> arr = functObject.findRepairScheduleDates(mechanicName, licensePlate, "Engine knock");
-		
-		System.out.println("1. " + arr.toArray()[0]);
-		System.out.println("2. " + arr.toArray()[1]);
+		ArrayList<Timestamp> dates = functObject.findRepairScheduleDates(mechanicName, licensePlate, "Engine knock");
+
+		System.out.println("1. " + dates.toArray()[0]);
+		System.out.println("2. " + dates.toArray()[1]);
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -559,16 +553,17 @@ public class MainApp {
 			if (selected_option.equals("1")) {
 				Scanner s2 = new Scanner(System.in);
 				while (true) {
+					System.out.println("Choose date option:");
 					String dateOption = s2.nextLine();
 
 					if (dateOption.equals("1")) {
-						// Schedule for date 1
-						// create a new service record for repair service on the
-						// chosen date, and go back to Customer:Schedule Service page
+						functObject.addToRepairSchedule((Timestamp)dates.toArray()[0], licensePlate, mechanicName,
+								(Timestamp)dates.toArray()[0],repairId);
+						customerScheduleService(userInfoObject.email);
 					} else if (dateOption.equals("2")) {
-						// Schedule for date 2
-						// create a new service record for repair service on the
-						// chosen date, and go back to Customer:Schedule Service page
+						functObject.addToRepairSchedule((Timestamp)dates.toArray()[1], licensePlate, mechanicName,
+								(Timestamp)dates.toArray()[1],repairId);
+						customerScheduleService(userInfoObject.email);
 					} else {
 						System.out.println("Choose a valid option");
 					}
