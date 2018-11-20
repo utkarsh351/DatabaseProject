@@ -1292,11 +1292,11 @@ public class utilitiesFunctions {
 	public static ResultSet getDiagnosticReport(String plate_no, String repair_id) {
 		try {
 			rs = connObject.selectQuery(
-					"Select S.name as service_name, Z.name as part_Name, Z.quantity, Z.rid, Z.diagnostic_name from Service S,"
-							+ "(Select P.name, Y.quantity, Y.rid, Y.diagnostic_name, Y.sid from Parts P,"
-							+ "(Select I.part_id, I.quantity, T.sid, T.rid, T.diagnostic_name from Involves I,"
-							+ "(Select RU.sid, R.rid, R.diagnostic_name from Repair_uses RU, "
-							+ "(Select rid, diagnostic_name from Repair where rid = '" + repair_id
+					"Select S.name as service_name, Z.name as part_Name, Z.quantity, Z.rid,Z.repair_name, Z.diagnostic_name from Service S,"
+							+ "(Select P.name, Y.quantity, Y.rid,Y.repair_name, Y.diagnostic_name, Y.sid from Parts P,"
+							+ "(Select I.part_id, I.quantity, T.sid, T.rid,T.repair_name, T.diagnostic_name from Involves I,"
+							+ "(Select RU.sid, R.rid,R.repair_name, R.diagnostic_name from Repair_uses RU, "
+							+ "(Select repair_name, rid, diagnostic_name from Repair where rid = '" + repair_id
 							+ "') R where R.rid= RU.rid) T,"
 							+ "(Select T1.vehicle_id, V.make from Vehicles V, (Select vehicle_id from Owns O where O.plate_no='"
 							+ plate_no + "') T1 where V.vehicle_id=T1.vehicle_id) X "
