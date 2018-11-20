@@ -1502,7 +1502,7 @@ public class utilitiesFunctions {
 						if(rs4.next()) {
 							if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
 								int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
-								checkExistingOrders(rs4.getString("Parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
+								checkExistingOrders(rs4.getString("parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
 							}
 						}
 					}
@@ -1538,7 +1538,7 @@ public class utilitiesFunctions {
 							if(rs4.next()) {
 								if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
 									int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
-									checkExistingOrders(rs4.getString("Parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
+									checkExistingOrders(rs4.getString("parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
 								}
 							}
 						}
