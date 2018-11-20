@@ -7,6 +7,7 @@ import main.connection;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -750,7 +751,121 @@ public class utilitiesFunctions {
 			return new ArrayList<>();
 		}
 	}
+	
+	public static ArrayList<Timestamp> findMaintenanceScheduleDates2(String plate_no,
+			String m_type) {
+		try {
+			ArrayList<Timestamp> arr = new ArrayList<>();
+			int day_increment = 1;
+			String s3 = "";
 
+			long totalTime = 0;
+			if (m_type.equals("A")) {
+				totalTime = getTotalTimeForMaintenance(plate_no, "A");
+			} else if (m_type.equals("B")) {
+				totalTime = getTotalTimeForMaintenance(plate_no, "A") + getTotalTimeForMaintenance(plate_no, "B");
+			} else if (m_type.equals("C")) {
+				totalTime = getTotalTimeForMaintenance(plate_no, "A") + getTotalTimeForMaintenance(plate_no, "B")
+						+ getTotalTimeForMaintenance(plate_no, "C");
+			}
+
+			java.util.Date utilDate = new java.util.Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(utilDate);
+			cal.add(Calendar.DATE, day_increment);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			cal.set(Calendar.HOUR_OF_DAY, 4);
+			Timestamp date1 = null;
+			Timestamp date2 = null;
+			while (day_increment <= 10) {
+				Timestamp s_time = new java.sql.Timestamp(cal.getTimeInMillis());
+				String s1 = s_time.toString();
+				cal.set(Calendar.HOUR_OF_DAY, 19);
+				Timestamp e_time = new java.sql.Timestamp(cal.getTimeInMillis());
+				String s2 = e_time.toString();
+
+				float hours_already_used = getTotalHoursForSchedule(s_time, e_time);
+				if (hours_already_used <= 27.5) {
+					HashMap<Integer, ArrayList<String>> map = new HashMap<>();
+					rs = connObject.selectQuery("select E.eid, SB.max_end_time as end_time, SB.start_time from "
+					+ "(select S2.start_time, SA.max_end_time, SA.mechanic_id from "
+					+ "(select MAX(S.end_time) as max_end_time, S.mechanic_id from Schedule S "
+					+ "WHERE S.start_time>Date'2018-02-25' and S.start_time < Date'2018-02-26' group by S.mechanic_id) SA, "
+					+ "Schedule S2 where SA.mechanic_id = S2.mechanic_id and SA.max_end_time=S2.end_time) SB, "
+					+ "Employees E where E.eid=SB.mechanic_id AND E.service_centre_id='S0001' order by SB.max_end_time DESC");
+					
+					ArrayList<String> earliest_end_time = new ArrayList<>();
+					
+					while(rs.next()) {
+						Timestamp s =  rs.getTimestamp("start_time");
+						Timestamp e = rs.getTimestamp("end_time");
+						int m_id= rs.getInt("mechanic_id");
+						ArrayList<String>  a1 = new ArrayList<>();
+						a1.add(s.toString());
+						a1.add(e.toString());
+						map.put(m_id, a1);
+						earliest_end_time = new ArrayList<>();
+						earliest_end_time.add(m_id+"");
+						earliest_end_time.add(s.toString());
+						earliest_end_time.add(e.toString());
+					}
+					ArrayList<Integer> empIdList = new ArrayList<>();
+					
+					rs = connObject.selectQuery("select E.eid from Employees E where E.role='mechanic' and E.service_centre_id='S0001';");
+					
+					while(rs.next()) {
+						int eid= rs.getInt("eid");
+						empIdList.add(eid);
+					}
+					
+					if(map.size()<empIdList.size())
+					{
+						for(int i=0;i<empIdList.size();i++) {
+							if(!map.containsKey(empIdList.get(i))) {
+								//book slot for 8 am
+								break;
+							}
+						}
+					} else {
+						//create a schedule using earliest_end_time and check for last end time
+					}
+					
+					if (rs.next()) {
+						Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"),
+								rs.getTimestamp("start_time"));
+						if (compareTwoTimeStamps(endTime, new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
+							if (date1 == null) {
+								date1 = endTime;
+							} else {
+								date2 = endTime;
+								break;
+							}
+						}
+					} else {
+						cal.set(Calendar.HOUR_OF_DAY, 8);
+						Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
+						if (date1 == null) {
+							date1 = t1;
+						} else {
+							date2 = t1;
+							break;
+						}
+					}
+				}
+				cal.add(Calendar.DATE, day_increment);
+				// apply scheduling instead of the current greedy approach
+			}
+			arr.add(date1);
+			arr.add(date2);
+
+			return arr;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return new ArrayList<>();
+		}
+	}
 	public static ArrayList<Timestamp> findRepairScheduleDates(String mechanic_name, String plate_no,
 			String repair_id) {
 		try {
