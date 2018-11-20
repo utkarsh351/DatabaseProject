@@ -665,7 +665,7 @@ public class utilitiesFunctions {
 							+ "AND T3.quantity > Inv.uncommited_current_quantity");
 			while (rs.next()) {
 				hasMissingPart = true;
-				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage") > rs.getInt("min_inventory_thold") ? rs.getInt("shortage") : rs.getInt("min_inventory_thold"));
+				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage") > rs.getInt("min_order_quantity") ? rs.getInt("shortage") : rs.getInt("min_order_quantity"));
 				if (compareTwoTimeStamps(t, t2) > 0) {
 					t = t2; // t2 time is 0:0:0 here
 				}
@@ -702,7 +702,7 @@ public class utilitiesFunctions {
 							+ "T3.quantity > Inv.UNCOMMITED_CURRENT_QUANTITY");
 			while (rs.next()) {
 				hasMissingPart = true;
-				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage") > rs.getInt("min_inventory_thold") ? rs.getInt("shortage") : rs.getInt("min_inventory_thold"));
+				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage") > rs.getInt("min_order_quantity") ? rs.getInt("shortage") : rs.getInt("min_order_quantity"));
 				if (compareTwoTimeStamps(t, t2) > 0) {
 					t = t2;
 				}
