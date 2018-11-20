@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import utilities.utilitiesFunctions;
+import utilities.dateOptions;
 
 public class MainApp {
 
@@ -409,9 +410,10 @@ public class MainApp {
 
 	public static void customerScheduleMaintenancePage2(String email, String licensePlate, int currMileage,
 			String mechanicName, String sType) {
-		ArrayList<Timestamp> dates = functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, sType);
-		System.out.println("1. " + dates.toArray()[0]);
-		System.out.println("2. " + dates.toArray()[1]);
+		ArrayList<dateOptions> dates = functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, sType,
+				userInfoObject.service_centre_id);
+		System.out.println("1. " + dates.get(0).s_time);
+		System.out.println("2. " + dates.get(1).s_time);
 		System.out.println("1. Schedule on Date");
 		System.out.println("2. Go Back");
 
@@ -426,13 +428,15 @@ public class MainApp {
 					String dateOption = s2.nextLine();
 
 					if (dateOption.equals("1")) {
-						functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[0], licensePlate, mechanicName,
-								(Timestamp) dates.toArray()[0], sType);
+						functObject.addToMaintenanceSchedule(dates.get(0).s_time, licensePlate, mechanicName,
+								dates.get(0).s_time, sType);
+						functObject.updateMileage(licensePlate, currMileage);
 						customerScheduleService(userInfoObject.email);
 
 					} else if (dateOption.equals("2")) {
-						functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[1], licensePlate, mechanicName,
-								(Timestamp) dates.toArray()[1], sType);
+						functObject.addToMaintenanceSchedule(dates.get(1).s_time, licensePlate, mechanicName,
+								dates.get(1).s_time, sType);
+						functObject.updateMileage(licensePlate, currMileage);
 						customerScheduleService(userInfoObject.email);
 					} else {
 						System.out.println("Choose a valid option");
@@ -492,7 +496,7 @@ public class MainApp {
 		while (true) {
 			String selected_option = s.nextLine();
 
-			if (Integer.parseInt(selected_option)>=1 &&Integer.parseInt(selected_option)<=7) {
+			if (Integer.parseInt(selected_option) >= 1 && Integer.parseInt(selected_option) <= 7) {
 				Timestamp t = functObject.checkForPartsForRepairService(licensePlate, selected_option,
 						userInfoObject.service_centre_id);
 				if (t == null) {
@@ -518,10 +522,11 @@ public class MainApp {
 			String mechanicName, String repairId) {
 		rs = functObject.getDiagnosticReport(licensePlate, repairId);
 		showDiagnosticReport(rs);
-		ArrayList<Timestamp> dates = functObject.findRepairScheduleDates(mechanicName, licensePlate, repairId);
+		ArrayList<dateOptions> dates = functObject.findRepairScheduleDates(mechanicName, licensePlate, repairId,
+				userInfoObject.service_centre_id);
 
-		System.out.println("1. " + dates.toArray()[0]);
-		System.out.println("2. " + dates.toArray()[1]);
+		System.out.println("1. " + dates.get(0).s_time);
+		System.out.println("2. " + dates.get(1).s_time);
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -539,12 +544,12 @@ public class MainApp {
 					String dateOption = s2.nextLine();
 
 					if (dateOption.equals("1")) {
-						functObject.addToRepairSchedule((Timestamp) dates.toArray()[0], licensePlate, mechanicName,
-								(Timestamp) dates.toArray()[0], repairId);
+						functObject.addToRepairSchedule(dates.get(0).s_time, licensePlate, mechanicName,
+								dates.get(0).s_time, repairId);
 						customerScheduleService(userInfoObject.email);
 					} else if (dateOption.equals("2")) {
-						functObject.addToRepairSchedule((Timestamp) dates.toArray()[1], licensePlate, mechanicName,
-								(Timestamp) dates.toArray()[1], repairId);
+						functObject.addToRepairSchedule(dates.get(0).s_time, licensePlate, mechanicName,
+								dates.get(0).s_time, repairId);
 						customerScheduleService(userInfoObject.email);
 					} else {
 						System.out.println("Choose a valid option");
@@ -612,29 +617,31 @@ public class MainApp {
 
 	public static void customerRescheduleServicePage2(String email, String scheduleId) {
 		try {
-			ArrayList<Timestamp> dates = null;
+			ArrayList<dateOptions> dates = null;
 			String licensePlate = "";
 			String mechanicName = "";
 			String id = "";
 			String type = functObject.checkRescheduleType(scheduleId);
-			rs = functObject.findRecheduleDates(scheduleId,type);
+			rs = functObject.findRecheduleDates(scheduleId, type);
 			if (rs.next()) {
 				if (type == "M") {
 					licensePlate = rs.getString("customer_plate_no");
 					mechanicName = rs.getString("name");
 					id = rs.getString("m_type");
-					dates = functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, id);
+					dates = functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, id,
+							userInfoObject.service_centre_id);
 				} else if (type == "R") {
 					licensePlate = rs.getString("customer_plate_no");
 					mechanicName = rs.getString("name");
 					id = rs.getString("rid");
-					dates = functObject.findRepairScheduleDates(mechanicName, licensePlate, id);
+					dates = functObject.findRepairScheduleDates(mechanicName, licensePlate, id,
+							userInfoObject.service_centre_id);
 				}
 
 			}
 
-			System.out.println("1. " + dates.toArray()[0]);
-			System.out.println("2. " + dates.toArray()[1]);
+			System.out.println("1. " + dates.get(0).s_time);
+			System.out.println("2. " + dates.get(1).s_time);
 
 			System.out.println("1. Reschedule Date");
 			System.out.println("2. Go Back");
@@ -651,22 +658,22 @@ public class MainApp {
 
 						if (dateOption.equals("1")) {
 							if (type == "M") {
-								functObject.updateMaintenanceSchedule((Timestamp) dates.toArray()[0], scheduleId, id,
+								functObject.updateMaintenanceSchedule(dates.get(0).s_time, scheduleId, id,
 										licensePlate);
 								customerServicePage();
 							} else if (type == "R") {
-								functObject.updateRepairSchedule((Timestamp) dates.toArray()[0], scheduleId, id,
+								functObject.updateRepairSchedule(dates.get(0).s_time, scheduleId, id,
 										licensePlate);
 								customerServicePage();
 							}
 
 						} else if (dateOption.equals("2")) {
 							if (type == "M") {
-								functObject.updateMaintenanceSchedule((Timestamp) dates.toArray()[1], scheduleId, id,
+								functObject.updateMaintenanceSchedule(dates.get(1).s_time, scheduleId, id,
 										licensePlate);
 								customerServicePage();
 							} else if (type == "R") {
-								functObject.updateRepairSchedule((Timestamp) dates.toArray()[1], scheduleId, id,
+								functObject.updateRepairSchedule(dates.get(1).s_time, scheduleId, id,
 										licensePlate);
 								customerServicePage();
 							}
@@ -908,14 +915,15 @@ public class MainApp {
 				int employee_id = s2.nextInt();
 				if (functObject.doesEmployeeExists(employee_id)) {
 					ResultSet temp = functObject.getEmployeeInfoById(employee_id);
-					if(temp.next()) {
-						if(temp.getString("role").equals("manager") || temp.getString("role").equals("receptionist")) {
+					if (temp.next()) {
+						if (temp.getString("role").equals("manager") || temp.getString("role").equals("receptionist")) {
 							String name = temp.getString("name");
 							String units = "15";
 							ResultSet rs = functObject.getEmployeePayrollDetailsForRecepOrManager(employee_id);
 							while (rs.next()) {
 								System.out.println("A. Paycheck Date: " + rs.getString("end_date"));
-								System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+								System.out.println(
+										"B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
 								System.out.println("C. Employee ID: " + employee_id);
 								System.out.println("D. Employee Name: " + name);
 								System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
@@ -930,7 +938,8 @@ public class MainApp {
 							ResultSet rs = functObject.getEmployeePayrollDetailsForMechanic(employee_id);
 							while (rs.next()) {
 								System.out.println("A. Paycheck Date: " + rs.getString("end_date"));
-								System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+								System.out.println(
+										"B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
 								System.out.println("C. Employee ID: " + employee_id);
 								System.out.println("D. Employee Name: " + name);
 								System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
@@ -941,7 +950,7 @@ public class MainApp {
 								System.out.println();
 							}
 						}
-						
+
 						break;
 					}
 				} else {

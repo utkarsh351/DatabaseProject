@@ -284,10 +284,10 @@ public class utilitiesFunctions {
 			return rs;
 		}
 	}
-	
+
 	public static ResultSet getEmployeeInfoById(int id) {
 		try {
-			rs = connObject.selectQuery("Select * from Employees E where E.eid="+id);
+			rs = connObject.selectQuery("Select * from Employees E where E.eid=" + id);
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -425,15 +425,12 @@ public class utilitiesFunctions {
 
 	public ResultSet getNotifications(String service_centre_id) {
 		try {
-			rs = connObject.selectQuery(
-					"SELECT N.notification_id, N.notification_date, N.order_id,N.message, "
-					+ "D.dname AS supplier, O.order_expected_delivery_date AS expected_delivery,"
-					+ "DO.distributor_id "
-					+ "FROM Notification N "
-					+ "JOIN Orders O ON N.order_id=O.order_id "
+			rs = connObject.selectQuery("SELECT N.notification_id, N.notification_date, N.order_id,N.message, "
+					+ "D.dname AS supplier, O.order_expected_delivery_date AS expected_delivery," + "DO.distributor_id "
+					+ "FROM Notification N " + "JOIN Orders O ON N.order_id=O.order_id "
 					+ "JOIN Distributor_order DO ON DO.order_id=O.order_id "
-					+ "JOIN Distributor D ON D.distributor_id=DO.distributor_id "
-					+ "WHERE N.service_center_id='" + service_centre_id + "'");
+					+ "JOIN Distributor D ON D.distributor_id=DO.distributor_id " + "WHERE N.service_center_id='"
+					+ service_centre_id + "'");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Service Center ID");
@@ -441,90 +438,96 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public void addNewCar(String make, String model, String year, int milesA, String monthsA, String servicesA, int milesB,
-			String monthsB, String servicesB, int milesC, String monthsC, String servicesC, String quantA, String quantB, String quantC) {
+	public void addNewCar(String make, String model, String year, int milesA, String monthsA, String servicesA,
+			int milesB, String monthsB, String servicesB, int milesC, String monthsC, String servicesC, String quantA,
+			String quantB, String quantC) {
 		// TODO Auto-generated method stub
 		try {
 			String[] a = servicesA.split(",");
 			String[] qA = quantA.split(",");
-			
+
 			String[] b = servicesB.split(",");
 			String[] qB = quantB.split(",");
-			
+
 			String[] c = servicesC.split(",");
 			String[] qC = quantC.split(",");
 
-			for(int i=0;i<a.length;i++) {
+			for (int i = 0; i < a.length; i++) {
 				a[i] = a[i].trim();
 				qA[i] = qA[i].trim();
 			}
-			
-			for(int i=0;i<b.length;i++) {
+
+			for (int i = 0; i < b.length; i++) {
 				b[i] = b[i].trim();
 				qB[i] = qB[i].trim();
 			}
-			
-			for(int i=0;i<c.length;i++) {
+
+			for (int i = 0; i < c.length; i++) {
 				c[i] = c[i].trim();
 				qC[i] = qC[i].trim();
 			}
-			
-			connObject.insertQuery("Insert into Vehicles(vehicle_id, make, model) Values(1,'"+make+"','"+model+"')");
-			
-			ResultSet rs = connObject.selectQuery("SELECT * FROM Vehicles WHERE vehicle_id=(SELECT MAX(vehicle_id) FROM Vehicles)");
-			
-			int vehicle_id=0;
-			if(rs.next()) {
+
+			connObject.insertQuery(
+					"Insert into Vehicles(vehicle_id, make, model) Values(1,'" + make + "','" + model + "')");
+
+			ResultSet rs = connObject
+					.selectQuery("SELECT * FROM Vehicles WHERE vehicle_id=(SELECT MAX(vehicle_id) FROM Vehicles)");
+
+			int vehicle_id = 0;
+			if (rs.next()) {
 				vehicle_id = rs.getInt("vehicle_id");
-			
-				for(int i=0;i<a.length;i++) {
-					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) "
-							+ "Values("+a[i]+",'A',"+milesA+","+vehicle_id+")");
+
+				for (int i = 0; i < a.length; i++) {
+					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) " + "Values("
+							+ a[i] + ",'A'," + milesA + "," + vehicle_id + ")");
 				}
-				
-				for(int i=0;i<b.length;i++) {
-					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) "
-							+ "Values("+b[i]+",'B',"+milesB+","+vehicle_id+")");
+
+				for (int i = 0; i < b.length; i++) {
+					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) " + "Values("
+							+ b[i] + ",'B'," + milesB + "," + vehicle_id + ")");
 				}
-				
-				for(int i=0;i<c.length;i++) {
-					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) "
-							+ "Values("+c[i]+",'C',"+milesC+","+vehicle_id+")");
+
+				for (int i = 0; i < c.length; i++) {
+					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) " + "Values("
+							+ c[i] + ",'C'," + milesC + "," + vehicle_id + ")");
 				}
-				
-				for(int i=0;i<a.length;i++) {
-					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id="+a[i]);
+
+				for (int i = 0; i < a.length; i++) {
+					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id=" + a[i]);
 					int part_id = 0;
-					if(rs.next()) {
+					if (rs.next()) {
 						part_id = rs.getInt("part_id");
-						connObject.insertQuery("Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
-								+ "Values(1,"+a[i]+","+part_id+","+vehicle_id+","+qA[i]+")");
+						connObject.insertQuery(
+								"Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
+										+ "Values(1," + a[i] + "," + part_id + "," + vehicle_id + "," + qA[i] + ")");
 					}
 				}
-				
-				for(int i=0;i<b.length;i++) {
-					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id="+b[i]);
+
+				for (int i = 0; i < b.length; i++) {
+					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id=" + b[i]);
 					int part_id = 0;
-					if(rs.next()) {
+					if (rs.next()) {
 						part_id = rs.getInt("part_id");
-						connObject.insertQuery("Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
-								+ "Values(1,"+b[i]+","+part_id+","+vehicle_id+","+qB[i]+")");
+						connObject.insertQuery(
+								"Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
+										+ "Values(1," + b[i] + "," + part_id + "," + vehicle_id + "," + qB[i] + ")");
 					}
 				}
-				
-				for(int i=0;i<c.length;i++) {
-					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id="+c[i]);
+
+				for (int i = 0; i < c.length; i++) {
+					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id=" + c[i]);
 					int part_id = 0;
-					if(rs.next()) {
+					if (rs.next()) {
 						part_id = rs.getInt("part_id");
-						connObject.insertQuery("Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
-								+ "Values(1,"+c[i]+","+part_id+","+vehicle_id+","+qC[i]+")");
+						connObject.insertQuery(
+								"Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
+										+ "Values(1," + c[i] + "," + part_id + "," + vehicle_id + "," + qC[i] + ")");
 					}
 				}
 			} else {
 				System.out.println("Vehicle id not found");
 			}
-			
+
 		} catch (Throwable e) {
 			System.out.println("Error");
 			return;
@@ -663,7 +666,7 @@ public class utilitiesFunctions {
 				hasMissingPart = true;
 				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage"));
 				if (compareTwoTimeStamps(t, t2) > 0) {
-					t = t2; //t2 time is 0:0:0 here
+					t = t2; // t2 time is 0:0:0 here
 				}
 			}
 			if (!hasMissingPart) {
@@ -729,7 +732,7 @@ public class utilitiesFunctions {
 			}
 			rs = connObject2.selectQuery("SELECT service_center_id FROM Inventory I WHERE I.parts_to_make_id='"
 					+ parts_to_make_id + "' AND I.service_center_id <> '" + scId + "' AND I.current_quantity>1");
-			
+
 			if (rs.next()) {
 				supplierId = rs.getString("service_center_id");
 				int ans = connObject2.insertQuery("Insert into Orders Values(" + "1, " + "Date '" + sqlDate + "', "
@@ -751,7 +754,7 @@ public class utilitiesFunctions {
 
 			rs = connObject2.selectQuery("SELECT distributor_id FROM Supplies WHERE parts_to_make_id='"
 					+ parts_to_make_id + "' AND window IS NOT NULL");
-			
+
 			if (rs.next()) {
 				supplierId = rs.getString("distributor_id");
 				int ans = connObject2.insertQuery("Insert into Orders Values(" + "1, " + "Date '" + sqlDate + "', "
@@ -778,10 +781,10 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ArrayList<Timestamp> findMaintenanceScheduleDates(String mechanic_name, String plate_no,
-			String m_type) {
+	public static ArrayList<dateOptions> findMaintenanceScheduleDates(String mechanic_name, String plate_no,
+			String m_type, String scId) {
 		try {
-			ArrayList<Timestamp> arr = new ArrayList<>();
+			ArrayList<dateOptions> arr = new ArrayList<>();
 			int day_increment = 1;
 			int mechanic_id = 0;
 			String s3 = "";
@@ -789,7 +792,7 @@ public class utilitiesFunctions {
 				rs = getMechanicByName(mechanic_name);
 				if (rs.next()) {
 					mechanic_id = rs.getInt("eid");
-					s3 = "AND mechanic_id='" + mechanic_id + "'";
+					s3 = "AND E1.eid='" + mechanic_id + "'";
 				}
 			}
 
@@ -811,9 +814,10 @@ public class utilitiesFunctions {
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 			cal.set(Calendar.HOUR_OF_DAY, 4);
-			Timestamp date1 = null;
-			Timestamp date2 = null;
-			while (day_increment <= 10) {
+			dateOptions dateOption1 = null;
+			dateOptions dateOption2 = null;
+			boolean breakFlag=false;
+			while (day_increment <= 10 && !breakFlag) {
 				Timestamp s_time = new java.sql.Timestamp(cal.getTimeInMillis());
 				String s1 = s_time.toString();
 				cal.set(Calendar.HOUR_OF_DAY, 19);
@@ -822,37 +826,42 @@ public class utilitiesFunctions {
 
 				float hours_already_used = getTotalHoursForSchedule(s_time, e_time);
 				if (hours_already_used <= 27.5) {
-					rs = connObject.selectQuery(
-							"select S.start_time, S.end_time, S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '"
-									+ s1 + "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3
-									+ " ORDER BY start_time DESC");
-					if (rs.next()) {
-						Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"),
-								rs.getTimestamp("start_time"));
-						if (compareTwoTimeStamps(endTime, new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
-							if (date1 == null) {
-								date1 = endTime;
+					cal.set(Calendar.HOUR_OF_DAY, 8);
+					Timestamp end_of_day_time = new java.sql.Timestamp(cal.getTimeInMillis() + (11 * 1000 * 60 * 60));
+					int minuteIncrement = 30;
+					Timestamp s_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+					Timestamp e_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+					e_window_time.setTime(s_window_time.getTime() + totalTime);
+					while (compareTwoTimeStamps(e_window_time, end_of_day_time) >= 0) {
+
+						rs = connObject.selectQuery(
+								"SELECT E1.eid from schedule S, employees E1 where NOT((S.start_time > TIMESTAMP '"
+										+ s_window_time + "' AND S.start_time<TIMESTAMP '"
+										+ getTimeInTimestampInSlots(e_window_time, s_window_time)
+										+ "') OR (S.end_time > TIMESTAMP '" + s_window_time
+										+ "' AND S.end_time<TIMESTAMP '"
+										+ getTimeInTimestampInSlots(e_window_time, s_window_time)
+										+ "')) AND E1.eid = S.mechanic_id and E1.service_centre_id='" + scId + "'" + s3
+										+ " GROUP BY E1.eid");
+						if (rs.next()) {
+							if (dateOption1 == null) {
+								dateOption1 = new dateOptions(s_window_time, e_window_time, rs.getString("eid"));
 							} else {
-								date2 = endTime;
+								dateOption2 = new dateOptions(s_window_time, e_window_time, rs.getString("eid"));
+								breakFlag=true;
 								break;
 							}
 						}
-					} else {
-						cal.set(Calendar.HOUR_OF_DAY, 8);
-						Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
-						if (date1 == null) {
-							date1 = t1;
-						} else {
-							date2 = t1;
-							break;
-						}
+						cal.add(Calendar.MINUTE, minuteIncrement);
+						s_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+						e_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+						e_window_time.setTime(s_window_time.getTime() + totalTime);
 					}
 				}
 				cal.add(Calendar.DATE, day_increment);
-				// apply scheduling instead of the current greedy approach
 			}
-			arr.add(date1);
-			arr.add(date2);
+			arr.add(dateOption1);
+			arr.add(dateOption2);
 
 			return arr;
 		} catch (Throwable e) {
@@ -860,125 +869,11 @@ public class utilitiesFunctions {
 			return new ArrayList<>();
 		}
 	}
-	
-	public static ArrayList<Timestamp> findMaintenanceScheduleDates2(String plate_no,
-			String m_type) {
+
+	public static ArrayList<dateOptions> findRepairScheduleDates(String mechanic_name, String plate_no,
+			String repair_id,String scId) {
 		try {
-			ArrayList<Timestamp> arr = new ArrayList<>();
-			int day_increment = 1;
-			String s3 = "";
-
-			long totalTime = 0;
-			if (m_type.equals("A")) {
-				totalTime = getTotalTimeForMaintenance(plate_no, "A");
-			} else if (m_type.equals("B")) {
-				totalTime = getTotalTimeForMaintenance(plate_no, "A") + getTotalTimeForMaintenance(plate_no, "B");
-			} else if (m_type.equals("C")) {
-				totalTime = getTotalTimeForMaintenance(plate_no, "A") + getTotalTimeForMaintenance(plate_no, "B")
-						+ getTotalTimeForMaintenance(plate_no, "C");
-			}
-
-			java.util.Date utilDate = new java.util.Date();
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(utilDate);
-			cal.add(Calendar.DATE, day_increment);
-			cal.set(Calendar.MINUTE, 0);
-			cal.set(Calendar.SECOND, 0);
-			cal.set(Calendar.MILLISECOND, 0);
-			cal.set(Calendar.HOUR_OF_DAY, 4);
-			Timestamp date1 = null;
-			Timestamp date2 = null;
-			while (day_increment <= 10) {
-				Timestamp s_time = new java.sql.Timestamp(cal.getTimeInMillis());
-				String s1 = s_time.toString();
-				cal.set(Calendar.HOUR_OF_DAY, 19);
-				Timestamp e_time = new java.sql.Timestamp(cal.getTimeInMillis());
-				String s2 = e_time.toString();
-
-				float hours_already_used = getTotalHoursForSchedule(s_time, e_time);
-				if (hours_already_used <= 27.5) {
-					HashMap<Integer, ArrayList<String>> map = new HashMap<>();
-					rs = connObject.selectQuery("select E.eid, SB.max_end_time as end_time, SB.start_time from "
-					+ "(select S2.start_time, SA.max_end_time, SA.mechanic_id from "
-					+ "(select MAX(S.end_time) as max_end_time, S.mechanic_id from Schedule S "
-					+ "WHERE S.start_time>Date'2018-02-25' and S.start_time < Date'2018-02-26' group by S.mechanic_id) SA, "
-					+ "Schedule S2 where SA.mechanic_id = S2.mechanic_id and SA.max_end_time=S2.end_time) SB, "
-					+ "Employees E where E.eid=SB.mechanic_id AND E.service_centre_id='S0001' order by SB.max_end_time DESC");
-					
-					ArrayList<String> earliest_end_time = new ArrayList<>();
-					
-					while(rs.next()) {
-						Timestamp s =  rs.getTimestamp("start_time");
-						Timestamp e = rs.getTimestamp("end_time");
-						int m_id= rs.getInt("mechanic_id");
-						ArrayList<String>  a1 = new ArrayList<>();
-						a1.add(s.toString());
-						a1.add(e.toString());
-						map.put(m_id, a1);
-						earliest_end_time = new ArrayList<>();
-						earliest_end_time.add(m_id+"");
-						earliest_end_time.add(s.toString());
-						earliest_end_time.add(e.toString());
-					}
-					ArrayList<Integer> empIdList = new ArrayList<>();
-					
-					rs = connObject.selectQuery("select E.eid from Employees E where E.role='mechanic' and E.service_centre_id='S0001';");
-					
-					while(rs.next()) {
-						int eid= rs.getInt("eid");
-						empIdList.add(eid);
-					}
-					
-					if(map.size()<empIdList.size())
-					{
-						for(int i=0;i<empIdList.size();i++) {
-							if(!map.containsKey(empIdList.get(i))) {
-								//book slot for 8 am
-								break;
-							}
-						}
-					} else {
-						//create a schedule using earliest_end_time and check for last end time
-					}
-					
-					if (rs.next()) {
-						Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"),
-								rs.getTimestamp("start_time"));
-						if (compareTwoTimeStamps(endTime, new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
-							if (date1 == null) {
-								date1 = endTime;
-							} else {
-								date2 = endTime;
-								break;
-							}
-						}
-					} else {
-						cal.set(Calendar.HOUR_OF_DAY, 8);
-						Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
-						if (date1 == null) {
-							date1 = t1;
-						} else {
-							date2 = t1;
-							break;
-						}
-					}
-				}
-				cal.add(Calendar.DATE, day_increment);
-				// apply scheduling instead of the current greedy approach
-			}
-			arr.add(date1);
-			arr.add(date2);
-
-			return arr;
-		} catch (Throwable e) {
-			System.out.println("Wrong License Plate");
-			return new ArrayList<>();
-		}
-	}
-	public static ArrayList<Timestamp> findRepairScheduleDates(String mechanic_name, String plate_no,
-			String repair_id) {
-		try {
-			ArrayList<Timestamp> arr = new ArrayList<>();
+			ArrayList<dateOptions> arr = new ArrayList<>();
 			int day_increment = 1;
 			int mechanic_id = 0;
 			String s3 = "";
@@ -986,7 +881,7 @@ public class utilitiesFunctions {
 				rs = getMechanicByName(mechanic_name);
 				if (rs.next()) {
 					mechanic_id = rs.getInt("eid");
-					s3 = "AND mechanic_id='" + mechanic_id + "'";
+					s3 = "AND E1.eid='" + mechanic_id + "'";
 				}
 			}
 
@@ -1001,43 +896,51 @@ public class utilitiesFunctions {
 			cal.set(Calendar.SECOND, 0);
 			cal.set(Calendar.MILLISECOND, 0);
 			cal.set(Calendar.HOUR_OF_DAY, 4);
-			Timestamp date1 = null;
-			Timestamp date2 = null;
-			while (day_increment <= 10) {
-				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+			dateOptions dateOption1 = null;
+			dateOptions dateOption2 = null;
+			boolean breakFlag=false;
+			while (day_increment <= 10 && !breakFlag) {
+				Timestamp s_time = new java.sql.Timestamp(cal.getTimeInMillis());
+				String s1 = s_time.toString();
 				cal.set(Calendar.HOUR_OF_DAY, 19);
-				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-				rs = connObject.selectQuery(
-						"select S.start_time,S.end_time,S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '"
-								+ s1 + "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
-				if (rs.next()) {
-					Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"),
-							rs.getTimestamp("start_time"));
-					if (compareTwoTimeStamps(endTime, new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
-						if (date1 == null) {
-							date1 = endTime;
-						} else {
-							date2 = endTime;
-							break;
-						}
-					}
-				} else {
+				Timestamp e_time = new java.sql.Timestamp(cal.getTimeInMillis());
+				String s2 = e_time.toString();
+
 					cal.set(Calendar.HOUR_OF_DAY, 8);
-					Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
-					if (date1 == null) {
-						date1 = t1;
-					} else {
-						date2 = t1;
-						break;
+					Timestamp end_of_day_time = new java.sql.Timestamp(cal.getTimeInMillis() + (11 * 1000 * 60 * 60));
+					int minuteIncrement = 30;
+					Timestamp s_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+					Timestamp e_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+					e_window_time.setTime(s_window_time.getTime() + totalTime);
+					while (compareTwoTimeStamps(e_window_time, end_of_day_time) >= 0) {
+
+						rs = connObject.selectQuery(
+								"SELECT E1.eid from schedule S, employees E1 where NOT((S.start_time > TIMESTAMP '"
+										+ s_window_time + "' AND S.start_time<TIMESTAMP '"
+										+ getTimeInTimestampInSlots(e_window_time, s_window_time)
+										+ "') OR (S.end_time > TIMESTAMP '" + s_window_time
+										+ "' AND S.end_time<TIMESTAMP '"
+										+ getTimeInTimestampInSlots(e_window_time, s_window_time)
+										+ "')) AND E1.eid = S.mechanic_id and E1.service_centre_id='" + scId + "'" + s3
+										+ " GROUP BY E1.eid");
+						if (rs.next()) {
+							if (dateOption1 == null) {
+								dateOption1 = new dateOptions(s_window_time, e_window_time, rs.getString("eid"));
+							} else {
+								dateOption2 = new dateOptions(s_window_time, e_window_time, rs.getString("eid"));
+								breakFlag=true;
+								break;
+							}
+						}
+						cal.add(Calendar.MINUTE, minuteIncrement);
+						s_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+						e_window_time = new java.sql.Timestamp(cal.getTimeInMillis());
+						e_window_time.setTime(s_window_time.getTime() + totalTime);
 					}
-				}
 				cal.add(Calendar.DATE, day_increment);
-				// apply scheduling instead of the current greedy approach
-
 			}
-
-			arr.add(date1);
-			arr.add(date2);
+			arr.add(dateOption1);
+			arr.add(dateOption2);
 
 			return arr;
 		} catch (Throwable e) {
@@ -1471,7 +1374,10 @@ public class utilitiesFunctions {
 
 				Long duration = (long) (totalTime);
 				time.setTime(time.getTime() + duration);
-				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'"); // check if working toString() here
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'"); // check if
+																											// working
+																											// toString()
+																											// here
 				return true;
 			}
 		} catch (Throwable e) {
@@ -1530,7 +1436,10 @@ public class utilitiesFunctions {
 
 				Long duration = (long) (totalTime);
 				time.setTime(time.getTime() + duration);
-				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'"); // check if working toString() here
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'"); // check if
+																											// working
+																											// toString()
+																											// here
 				return true;
 			}
 		} catch (Throwable e) {
@@ -1595,7 +1504,7 @@ public class utilitiesFunctions {
 									+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
 									+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
 									+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
-									+ "WHERE O.plate_no = '"+plate_no+"' AND " + "O.vehicle_id = MU.vehicle_id AND "
+									+ "WHERE O.plate_no = '" + plate_no + "' AND " + "O.vehicle_id = MU.vehicle_id AND "
 									+ "MU.m_type='" + type_name + "' AND " + "V.vehicle_id = O.vehicle_id) T1 "
 									+ "WHERE I.service_id = T1.sid AND " + "T1.vehicle_id = I.vehicle_id) T2 "
 									+ "WHERE T2.part_id=Pm.part_id AND " + "T2.make = PM.make) T3, "
@@ -1604,11 +1513,11 @@ public class utilitiesFunctions {
 									+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND "
 									+ "T11.sc_id=Inv.service_center_id");
 					while (rs2.next()) {
-						int ans = connObject3.insertQuery(
-								"Update Inventory SET current_quantity=current_quantity - " + rs2.getInt("quantity") 
-										+ ",uncommited_current_quantity=uncommited_current_quantity - " + rs2.getInt("quantity")
-										+ " where Inventory.parts_to_make_id=" + rs2.getInt("Parts_to_make_id")
-										+ " and " + "Inventory.service_center_id='" + users_service_centre_id + "'");
+						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - "
+								+ rs2.getInt("quantity") + ",uncommited_current_quantity=uncommited_current_quantity - "
+								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="
+								+ rs2.getInt("Parts_to_make_id") + " and " + "Inventory.service_center_id='"
+								+ users_service_centre_id + "'");
 					}
 
 				} else {
@@ -1622,7 +1531,7 @@ public class utilitiesFunctions {
 										+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.make FROM Involves I, "
 										+ "(SELECT RU.sid, V.make, O.vehicle_id from Repair_uses RU, Vehicles V, Owns O "
 										+ "Where " + "RU.rid=" + rid + " AND " + "V.vehicle_id = O.vehicle_id AND "
-										+ "O.plate_no = '"+plate_no+"') T1 " + "WHERE I.service_id = T1.sid AND "
+										+ "O.plate_no = '" + plate_no + "') T1 " + "WHERE I.service_id = T1.sid AND "
 										+ "T1.vehicle_id = I.vehicle_id) T2 " + "WHERE T2.part_id=Pm.part_id AND "
 										+ "T2.make = PM.make) T3, "
 										+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + plate_no
@@ -1630,10 +1539,10 @@ public class utilitiesFunctions {
 										+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND "
 										+ "T11.sc_id=Inv.service_center_id");
 						while (rs2.next()) {
-							int ans = connObject3
-									.insertQuery("Update Inventory SET current_quantity=current_quantity - "
-											+ rs2.getInt("quantity") + ",uncommited_current_quantity=uncommited_current_quantity - " + rs2.getInt("quantity") 
-											+ " where Inventory.parts_to_make_id="
+							int ans = connObject3.insertQuery(
+									"Update Inventory SET current_quantity=current_quantity - " + rs2.getInt("quantity")
+											+ ",uncommited_current_quantity=uncommited_current_quantity - "
+											+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="
 											+ rs2.getInt("Parts_to_make_id") + " and " + "Inventory.service_center_id='"
 											+ users_service_centre_id + "'");
 						}
@@ -1663,48 +1572,55 @@ public class utilitiesFunctions {
 					connObject2.insertQuery("Update Orders Set status='complete', order_delivery_date= Date '" + sqlDate
 							+ "' where order_id='" + orderId + "'");
 					connObject2.insertQuery("Update Inventory Set current_quantity = current_quantity + " + quant
-							+ ",uncommited_current_quantity=uncommited_current_quantity + "+ quant +" where service_center_id='" + users_service_center_id + "' and parts_to_make_id="
+							+ ",uncommited_current_quantity=uncommited_current_quantity + " + quant
+							+ " where service_center_id='" + users_service_center_id + "' and parts_to_make_id="
 							+ parts_to_make_id);
-					ResultSet rs3 = connObject2.selectQuery("select S.service_center_provider_id from Service_center_order S where S.order_id="+orderId);
-					if(rs3.next()) {
+					ResultSet rs3 = connObject2.selectQuery(
+							"select S.service_center_provider_id from Service_center_order S where S.order_id="
+									+ orderId);
+					if (rs3.next()) {
 						String supplier_id = rs3.getString("service_center_provider_id");
 						connObject2.insertQuery("Update Inventory Set current_quantity = current_quantity - " + quant
-								+ ",uncommited_current_quantity=uncommited_current_quantity - "+ quant +" where service_center_id='" + supplier_id + "' and parts_to_make_id="
+								+ ",uncommited_current_quantity=uncommited_current_quantity - " + quant
+								+ " where service_center_id='" + supplier_id + "' and parts_to_make_id="
 								+ parts_to_make_id);
 					}
 				}
 			}
-			
-			rs = connObject3.selectQuery("Select * from Orders where order_expected_delivery_date<Date '"+sqlDate+"' and "
-					+ "requester_center_inventory_id='"+users_service_center_id+"' and status <> 'complete'");
-			
-			while(rs.next()) {
+
+			rs = connObject3.selectQuery("Select * from Orders where order_expected_delivery_date<Date '" + sqlDate
+					+ "' and " + "requester_center_inventory_id='" + users_service_center_id
+					+ "' and status <> 'complete'");
+
+			while (rs.next()) {
 				int orderId = rs.getInt("order_id");
 				connObject2.insertQuery("Update Orders Set status='delayed' where order_id=" + orderId);
-				
+
 				int quantity = 0;
 				String part_name = "";
 				String supplier = "";
 				long total_delay = 0;
 				ResultSet rs3 = getOrderHistory(users_service_center_id);
-				while(rs3.next()) {
-					if(rs.getInt("order_id") == orderId) {
+				while (rs3.next()) {
+					if (rs.getInt("order_id") == orderId) {
 						quantity = rs.getInt("quantity");
 						part_name = rs.getString("part_name");
 						if (rs.getString("distributor_id") == null) {
 							supplier = rs.getString("sc_name");
 						} else {
 							supplier = rs.getString("dname");
-						} 
-						total_delay =  Math.abs((sqlDate.getTime()-rs.getDate("order_expected_delivery_date").getTime())/86400000);
+						}
+						total_delay = Math.abs(
+								(sqlDate.getTime() - rs.getDate("order_expected_delivery_date").getTime()) / 86400000);
 						break;
 					}
 				}
-				
+
 				connObject2.insertQuery(
 						"INSERT into Notification(notification_id,order_id,message,notification_date,service_center_id) "
-								+ "Values(1," + orderId + ",'"+quantity+" "+part_name+" from "+supplier+" delayed by "+total_delay+" business days',Date '" + sqlDate
-								+ "','" + users_service_center_id + "')");
+								+ "Values(1," + orderId + ",'" + quantity + " " + part_name + " from " + supplier
+								+ " delayed by " + total_delay + " business days',Date '" + sqlDate + "','"
+								+ users_service_center_id + "')");
 			}
 
 			return true;
@@ -1719,23 +1635,24 @@ public class utilitiesFunctions {
 			rs = connObject.selectQuery("select PC.start_date, PC.end_date, E.wage/2 as compensation, "
 					+ "E.freq as freq, ROUND((PC.end_date-Date '2018-01-01')*E.wage/30, 2) as earning_this_year,"
 					+ "ROUND((PC.end_date-E.s_date)*E.wage/30, 2) as earning_till_date from Payment_Cycle PC, "
-					+ "Employees E, (select CURRENT_TIMESTAMP as curr_time from dual) T1 where E.eid="+ empId +" and PC.end_date<T1.curr_time");
+					+ "Employees E, (select CURRENT_TIMESTAMP as curr_time from dual) T1 where E.eid=" + empId
+					+ " and PC.end_date<T1.curr_time");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
 			return rs;
 		}
 	}
-	
+
 	public ResultSet getEmployeePayrollDetailsForMechanic(int empId) {
 		try {
 			rs = connObject.selectQuery("select PC2.pcid, PC3.start_date, PC3.end_date, PC2.total_work_done, "
 					+ "(PC2.total_work_done)*E.wage as compensation, E.wage FROM "
 					+ "(select PC1.pcid, sum(S1.work_done_in_sch) as total_work_done from "
 					+ "(select extract(hour from end_time-start_time) as work_done_in_sch, "
-					+ "start_time from Schedule where mechanic_id= "+empId+") S1, Payment_cycle PC1 "
+					+ "start_time from Schedule where mechanic_id= " + empId + ") S1, Payment_cycle PC1 "
 					+ "WHERE PC1.start_date < S1.start_time and PC1.end_date>S1.start_time group by PC1.pcid) PC2, Payment_cycle PC3, "
-					+ "Employees E where PC3.pcid=PC2.pcid and E.eid = "+empId);
+					+ "Employees E where PC3.pcid=PC2.pcid and E.eid = " + empId);
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -1796,6 +1713,18 @@ public class utilitiesFunctions {
 		} catch (Throwable e) {
 			System.out.println("Wrong Input");
 			return rs;
+		}
+	}
+
+	public static int updateMileage(String licensePlate, int newMileage) {
+		try {
+
+			int ans = connObject.insertQuery("UPDATE Owns SET last_rec_mileage= '" + newMileage + "' "
+					+ "WHERE plate_no='" + licensePlate + "'");
+			return ans;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return -1;
 		}
 	}
 }
