@@ -492,7 +492,7 @@ public class MainApp {
 		while (true) {
 			String selected_option = s.nextLine();
 
-			if (selected_option.equals("1")) {
+			if (Integer.parseInt(selected_option)>=1 &&Integer.parseInt(selected_option)<=7) {
 				Timestamp t = functObject.checkForPartsForRepairService(licensePlate, selected_option,
 						userInfoObject.service_centre_id);
 				if (t == null) {
@@ -502,24 +502,6 @@ public class MainApp {
 					customerScheduleService(userInfoObject.email);
 				}
 
-			} else if (selected_option.equals("2")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "Car drifts in a particular direction");
-				showDiagnosticReport(rs);
-			} else if (selected_option.equals("3")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "Battery does not hold charge");
-				showDiagnosticReport(rs);
-			} else if (selected_option.equals("4")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "Black/unclean exhaust");
-				showDiagnosticReport(rs);
-			} else if (selected_option.equals("5")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "A/C-Heater not working");
-				showDiagnosticReport(rs);
-			} else if (selected_option.equals("6")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "Headlamps/Tail lamps not working");
-				showDiagnosticReport(rs);
-			} else if (selected_option.equals("7")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "Check engine light");
-				showDiagnosticReport(rs);
 			} else if (selected_option.equals("8")) {
 				if (userInfoObject.role.equals("customer")) {
 					customerScheduleService(userInfoObject.email);
@@ -534,8 +516,8 @@ public class MainApp {
 
 	public static void customerScheduleRepairPage2(String email, String licensePlate, int currMileage,
 			String mechanicName, String repairId) {
-		rs = functObject.getDiagnosticReport(licensePlate, repairId);
-		showDiagnosticReport(rs);
+		//rs = functObject.getDiagnosticReport(licensePlate, repairId);
+		//showDiagnosticReport(rs);
 		ArrayList<Timestamp> dates = functObject.findRepairScheduleDates(mechanicName, licensePlate, repairId);
 
 		System.out.println("1. " + dates.toArray()[0]);
@@ -671,21 +653,20 @@ public class MainApp {
 
 						if (dateOption.equals("1")) {
 							if (type == "M") {
-								functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[0], licensePlate, mechanicName,
-										(Timestamp) dates.toArray()[0], id);
+								functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[0], licensePlate,
+										mechanicName, (Timestamp) dates.toArray()[0], id);
 							} else if (type == "R") {
-								functObject.addToRepairSchedule((Timestamp) dates.toArray()[0], licensePlate, mechanicName,
-										(Timestamp) dates.toArray()[0], id);
+								functObject.addToRepairSchedule((Timestamp) dates.toArray()[0], licensePlate,
+										mechanicName, (Timestamp) dates.toArray()[0], id);
 							}
-
 
 						} else if (dateOption.equals("2")) {
 							if (type == "M") {
-								functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[1], licensePlate, mechanicName,
-										(Timestamp) dates.toArray()[1], id);
+								functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[1], licensePlate,
+										mechanicName, (Timestamp) dates.toArray()[1], id);
 							} else if (type == "R") {
-								functObject.addToRepairSchedule((Timestamp) dates.toArray()[1], licensePlate, mechanicName,
-										(Timestamp) dates.toArray()[1], id);
+								functObject.addToRepairSchedule((Timestamp) dates.toArray()[1], licensePlate,
+										mechanicName, (Timestamp) dates.toArray()[1], id);
 							}
 						} else {
 							System.out.println("Choose a valid option");

@@ -586,7 +586,7 @@ public class utilitiesFunctions {
 							+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + licensePlate
 							+ "' AND O1.email = C1.email) T11 " + "WHERE "
 							+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND " + "T11.sc_id=Inv.service_center_id AND "
-							+ "T3.quantity > Inv.UNCOMMITED_CURRENT_QUANTITY;");
+							+ "T3.quantity > Inv.UNCOMMITED_CURRENT_QUANTITY");
 			while (rs.next()) {
 				hasMissingPart = true;
 				Timestamp t2 = checkExistingOrders(rs.getString("parts_to_make_id"), scId, rs.getInt("shortage"));
@@ -911,9 +911,9 @@ public class utilitiesFunctions {
 				if (rs.next()) {
 					String scheduleId = rs.getString("schedule_id");
 
-					getTotalTimeForRepair(repairId);
+					updateEndTimeForRepairInSchedule(repairId,scheduleId);
 					ans = connObject.insertQuery(
-							"INSERT into Maintenance_schedule " + "Values('" + scheduleId + "', '" + repairId + "')");
+							"INSERT into Repair_schedule " + "Values('" + scheduleId + "', '" + repairId + "')");
 				}
 			}
 			return ans;
