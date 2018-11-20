@@ -1322,7 +1322,7 @@ public class utilitiesFunctions {
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 			rs = connObject
-					.selectQuery("select S.start_time, S.mechanic_id from Schedule S WHERE S.start_time > TIMESTAMP '"
+					.selectQuery("select * from Schedule S WHERE S.start_time > TIMESTAMP '"
 							+ s1 + "' AND S.start_time < TIMESTAMP '" + s2 + "'");
 			while (rs.next()) {
 				int sid = rs.getInt("schedule_id");
