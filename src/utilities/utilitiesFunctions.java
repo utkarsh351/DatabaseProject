@@ -646,7 +646,7 @@ public class utilitiesFunctions {
 			java.sql.Timestamp t = new java.sql.Timestamp(utilDate.getTime());
 			boolean hasMissingPart = false;
 			ResultSet rs = connObject.selectQuery(
-					"SELECT T3.quantity - Inv.current_quantity as shortage, Inv.uncommited_current_quantity,T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
+					"SELECT T3.quantity - Inv.uncommited_current_quantity as shortage, Inv.uncommited_current_quantity,T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
 							+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
 							+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
 							+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
@@ -660,9 +660,9 @@ public class utilitiesFunctions {
 							+ "AND T3.quantity > Inv.uncommited_current_quantity");
 			while (rs.next()) {
 				hasMissingPart = true;
-				Timestamp t2 = checkExistingOrders(rs.getString("parts_to_make_id"), scId, rs.getInt("shortage"));
+				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage"));
 				if (compareTwoTimeStamps(t, t2) > 0) {
-					t = t2;
+					t = t2; //t2 time is 0:0:0 here
 				}
 			}
 			if (!hasMissingPart) {
@@ -683,7 +683,7 @@ public class utilitiesFunctions {
 			java.sql.Timestamp t = new java.sql.Timestamp(utilDate.getTime());
 			boolean hasMissingPart = false;
 			ResultSet rs = connObject.selectQuery(
-					"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
+					"SELECT T3.quantity - Inv.uncommited_current_quantity as shortage, T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
 							+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
 							+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.make FROM Involves I, "
 							+ "(SELECT RU.sid, V.make, O.vehicle_id from Repair_uses RU, Vehicles V, Owns O " + "Where "
@@ -697,7 +697,7 @@ public class utilitiesFunctions {
 							+ "T3.quantity > Inv.UNCOMMITED_CURRENT_QUANTITY");
 			while (rs.next()) {
 				hasMissingPart = true;
-				Timestamp t2 = checkExistingOrders(rs.getString("parts_to_make_id"), scId, rs.getInt("shortage"));
+				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage"));
 				if (compareTwoTimeStamps(t, t2) > 0) {
 					t = t2;
 				}
@@ -728,8 +728,9 @@ public class utilitiesFunctions {
 			}
 			rs = connObject2.selectQuery("SELECT service_center_id FROM Inventory I WHERE I.parts_to_make_id='"
 					+ parts_to_make_id + "' AND I.service_center_id <> '" + scId + "' AND I.current_quantity>1");
-			supplierId = rs.getString("service_center_id");
+			
 			if (rs.next()) {
+				supplierId = rs.getString("service_center_id");
 				int ans = connObject2.insertQuery("Insert into Orders Values(" + "1, " + "Date '" + sqlDate + "', "
 						+ "Date '" + sqlDate + "' + interval '1' day, " + "Null, " + parts_to_make_id + ", " + shortage
 						+ ", " + "'pending', " + "'" + scId + "')");
@@ -749,8 +750,9 @@ public class utilitiesFunctions {
 
 			rs = connObject2.selectQuery("SELECT distributor_id FROM Supplies WHERE parts_to_make_id='"
 					+ parts_to_make_id + "' AND window IS NOT NULL");
-			supplierId = rs.getString("distributor_id");
+			
 			if (rs.next()) {
+				supplierId = rs.getString("distributor_id");
 				int ans = connObject2.insertQuery("Insert into Orders Values(" + "1, " + "Date '" + sqlDate + "', "
 						+ "Date '" + sqlDate + "' + interval '1' day, " + "Null, " + parts_to_make_id + ", " + shortage
 						+ ", " + "'pending', " + "'" + scId + "')");
@@ -1354,7 +1356,7 @@ public class utilitiesFunctions {
 
 				Long duration = (long) (totalTime);
 				time.setTime(time.getTime() + duration);
-				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'"); // check if working toString() here
 				return true;
 			}
 		} catch (Throwable e) {
@@ -1413,7 +1415,7 @@ public class utilitiesFunctions {
 
 				Long duration = (long) (totalTime);
 				time.setTime(time.getTime() + duration);
-				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'");
+				connObject.insertQuery("Update Schedule SET end_time=TIMESTAMP '" + time.toString() + "'"); // check if working toString() here
 				return true;
 			}
 		} catch (Throwable e) {
@@ -1464,7 +1466,7 @@ public class utilitiesFunctions {
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 			rs = connObject.selectQuery("select * from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
-					+ "' AND S.start_time < TIMESTAMP '" + s2 + "'");
+					+ "' AND S.end_time < TIMESTAMP '" + s2 + "'");
 			while (rs.next()) {
 				int sid = rs.getInt("schedule_id");
 				String plate_no = rs.getString("customer_plate_no");
@@ -1478,7 +1480,7 @@ public class utilitiesFunctions {
 									+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
 									+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
 									+ "(SELECT MU.sid, MU.vehicle_id, MU.m_type, V.make FROM Owns O, Maintenance_uses MU, Vehicles V "
-									+ "WHERE O.plate_no = 'IRM-1212' AND " + "O.vehicle_id = MU.vehicle_id AND "
+									+ "WHERE O.plate_no = '"+plate_no+"' AND " + "O.vehicle_id = MU.vehicle_id AND "
 									+ "MU.m_type='" + type_name + "' AND " + "V.vehicle_id = O.vehicle_id) T1 "
 									+ "WHERE I.service_id = T1.sid AND " + "T1.vehicle_id = I.vehicle_id) T2 "
 									+ "WHERE T2.part_id=Pm.part_id AND " + "T2.make = PM.make) T3, "
@@ -1488,7 +1490,8 @@ public class utilitiesFunctions {
 									+ "T11.sc_id=Inv.service_center_id");
 					while (rs2.next()) {
 						int ans = connObject3.insertQuery(
-								"Update Inventory SET current_quantity=current_quantity - " + rs2.getInt("quantity")
+								"Update Inventory SET current_quantity=current_quantity - " + rs2.getInt("quantity") 
+										+ ",uncommited_current_quantity=uncommited_current_quantity - " + rs2.getInt("quantity")
 										+ " where Inventory.parts_to_make_id=" + rs2.getInt("Parts_to_make_id")
 										+ " and " + "Inventory.service_center_id='" + users_service_centre_id + "'");
 					}
@@ -1497,14 +1500,14 @@ public class utilitiesFunctions {
 					rs2 = connObject2
 							.selectQuery("Select * from Repair_schedule where repair_schedule_id='" + sid + "'");
 					if (rs2.next()) {
-						int rid = rs2.getInt("repair_schedule_id");
+						int rid = rs2.getInt("rid");
 						rs2 = connObject2.selectQuery(
 								"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv,"
 										+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM,"
 										+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.make FROM Involves I, "
 										+ "(SELECT RU.sid, V.make, O.vehicle_id from Repair_uses RU, Vehicles V, Owns O "
-										+ "Where" + "RU.rid=" + rid + " AND " + "V.vehicle_id = O.vehicle_id AND "
-										+ "O.plate_no = 'IRM-1212') T1 " + "WHERE I.service_id = T1.sid AND "
+										+ "Where " + "RU.rid=" + rid + " AND " + "V.vehicle_id = O.vehicle_id AND "
+										+ "O.plate_no = '"+plate_no+"') T1 " + "WHERE I.service_id = T1.sid AND "
 										+ "T1.vehicle_id = I.vehicle_id) T2 " + "WHERE T2.part_id=Pm.part_id AND "
 										+ "T2.make = PM.make) T3, "
 										+ "(SELECT C1.sc_id from Customers C1, Owns O1 WHERE O1.plate_no = '" + plate_no
@@ -1514,7 +1517,8 @@ public class utilitiesFunctions {
 						while (rs2.next()) {
 							int ans = connObject3
 									.insertQuery("Update Inventory SET current_quantity=current_quantity - "
-											+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="
+											+ rs2.getInt("quantity") + ",uncommited_current_quantity=uncommited_current_quantity - " + rs2.getInt("quantity") 
+											+ " where Inventory.parts_to_make_id="
 											+ rs2.getInt("Parts_to_make_id") + " and " + "Inventory.service_center_id='"
 											+ users_service_centre_id + "'");
 						}
