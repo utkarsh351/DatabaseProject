@@ -170,6 +170,19 @@ public class utilitiesFunctions {
 		}
 	}
 
+	public static ResultSet getCustomerScheduleInfo(String email) {
+		try {
+			rs = connObject.selectQuery("SELECT * FROM(SELECT * FROM (SELECT * FROM Owns) W\r\n"
+					+ "JOIN Schedule S ON S.customer_plate_no=W.plate_no) X\r\n"
+					+ "FULL OUTER JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id=X.schedule_id\r\n"
+					+ "FULL OUTER JOIN Repair_schedule RS ON RS.repair_schedule_id=X.schedule_id\r\n" + "WHERE email='"
+					+ email + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
 //	update customer profile
 
 	public static ResultSet updateCustomerName(String email, String name) {
@@ -796,6 +809,50 @@ public class utilitiesFunctions {
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
 			return new ArrayList<>();
+		}
+	}
+
+	public static ResultSet findRecheduleDates(String schedule_id) {
+		try {
+			ResultSet rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id="
+					+ schedule_id + ") W " + "JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id= W.schedule_id"
+					+ "JOIN Employees E ON E.eid=W.mechanic_id");
+			if (rs.next()) {
+				return rs;
+			}
+
+			rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id=" + schedule_id
+					+ ") W " + "JOIN Repair_schedule RS ON RS.repair_schedule_id= W.schedule_id"
+					+ "JOIN Employees E ON E.eid=W.mechanic_id");
+			if (rs.next()) {
+				return rs;
+			}
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return rs;
+		}
+	}
+	
+	public static String checkRescheduleType(String schedule_id) {
+		try {
+			ResultSet rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id="
+					+ schedule_id + ") W " + "JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id= W.schedule_id"
+					+ "JOIN Employees E ON E.eid=W.mechanic_id");
+			if (rs.next()) {
+				return "M";
+			}
+
+			rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id=" + schedule_id
+					+ ") W " + "JOIN Repair_schedule RS ON RS.repair_schedule_id= W.schedule_id"
+					+ "JOIN Employees E ON E.eid=W.mechanic_id");
+			if (rs.next()) {
+				return "R";
+			}
+			return "";
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return "";
 		}
 	}
 
