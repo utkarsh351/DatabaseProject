@@ -24,7 +24,7 @@ public class MainApp {
 		System.out.println("1.Sign In");
 		System.out.println("2.Go Back");
 
-		while(true) {
+		while (true) {
 			int option = s.nextInt();
 			if (option == 1) {
 				boolean ans = functObject.validUser(username, password);
@@ -65,7 +65,6 @@ public class MainApp {
 		}
 	}
 
-	
 	public static void signup() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("Enter email:");
@@ -84,7 +83,7 @@ public class MainApp {
 		System.out.println("1.Sign Up");
 		System.out.println("2.Go Back");
 
-		while(true) {
+		while (true) {
 			int option = s.nextInt();
 
 			if (option == 1) {
@@ -246,20 +245,28 @@ public class MainApp {
 				Scanner s2 = new Scanner(System.in);
 
 				if (selected_option.equals("1")) {
+					System.out.println("Enter New Name:");
 					String updatedValue = s.nextLine();
 					functObject.updateCustomerName(userInfoObject.email, updatedValue);
+					customerProfilePage();
 
 				} else if (selected_option.equals("2")) {
+					System.out.println("Enter New Address:");
 					String updatedValue = s.nextLine();
 					functObject.updateCustomerAddress(userInfoObject.email, updatedValue);
+					customerProfilePage();
 
 				} else if (selected_option.equals("3")) {
+					System.out.println("Enter New Phone Number:");
 					String updatedValue = s.nextLine();
 					functObject.updateCustomerPhoneNumber(userInfoObject.email, updatedValue);
+					customerProfilePage();
 
 				} else if (selected_option.equals("4")) {
+					System.out.println("Enter New Password:");
 					String updatedValue = s.nextLine();
 					functObject.updateCustomerPassword(userInfoObject.email, updatedValue);
+					customerProfilePage();
 
 				} else if (selected_option.equals("5")) {
 					customerProfilePage();
@@ -379,12 +386,14 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
-				String s_type = functObject.getNextMaintenanceType(email, licensePlate, currMileage);
-				// insert check unreserved parts code
-				functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, s_type);
-				functObject.getMaintenanceMissingParts(licensePlate, s_type);
-				customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName);
-				// find two earliest dates
+				String sType = functObject.getNextMaintenanceType(email, licensePlate, currMileage);
+				Timestamp t = functObject.checkForPartsForMaintenanceService(licensePlate, sType,
+						userInfoObject.service_centre_id);
+				if (t == null) {
+					customerScheduleMaintenancePage2(email, licensePlate, currMileage, mechanicName, sType);
+				} else {
+					System.out.println("Please try again after " + t);
+				}
 			} else if (selected_option.equals("2")) {
 				if (userInfoObject.role.equals("customer")) {
 					customerScheduleService(userInfoObject.email);
@@ -398,7 +407,10 @@ public class MainApp {
 	}
 
 	public static void customerScheduleMaintenancePage2(String email, String licensePlate, int currMileage,
-			String mechanicName) {
+			String mechanicName, String sType) {
+		ArrayList<Timestamp> dates = functObject.findMaintenanceScheduleDates(mechanicName, licensePlate, sType);
+		System.out.println("1. " + dates.toArray()[0]);
+		System.out.println("2. " + dates.toArray()[1]);
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -460,7 +472,7 @@ public class MainApp {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Customer Repair Schedule
 	public static void customerScheduleRepairPage1(String email, String licensePlate, int currMileage,
 			String mechanicName) {
@@ -478,10 +490,14 @@ public class MainApp {
 			String selected_option = s.nextLine();
 
 			if (selected_option.equals("1")) {
-				rs = functObject.getDiagnosticReport(licensePlate, "Engine knock");
-				showDiagnosticReport(rs);
-				ArrayList<Timestamp> arr = functObject.findRepairScheduleDates(mechanicName, licensePlate, "Engine knock");
-				
+				Timestamp t = functObject.checkForPartsForRepairService(licensePlate, selected_option,
+						userInfoObject.service_centre_id);
+				if (t == null) {
+					customerScheduleRepairPage2(email, licensePlate, currMileage, mechanicName, selected_option);
+				} else {
+					System.out.println("Please try again after " + t);
+				}
+
 				// create and display diagnostic report showing list of causes and parts needed
 				// find two earliest dates
 				// send to repair page 2
@@ -523,7 +539,13 @@ public class MainApp {
 	}
 
 	public static void customerScheduleRepairPage2(String email, String licensePlate, int currMileage,
-			String mechanicName) {
+			String mechanicName, String repairId) {
+		rs = functObject.getDiagnosticReport(licensePlate, repairId);
+		showDiagnosticReport(rs);
+		ArrayList<Timestamp> arr = functObject.findRepairScheduleDates(mechanicName, licensePlate, "Engine knock");
+		
+		System.out.println("1. " + arr.toArray()[0]);
+		System.out.println("2. " + arr.toArray()[1]);
 		// Display
 		// 1. Date 1 available with Mechanic name selected(if selected)
 		// 2. Date 2 available with Mechanic name selected(if selected)
@@ -713,7 +735,7 @@ public class MainApp {
 						int repairId = rs.getInt("rid");
 						System.out.println("E. Repair-" + repairId);
 						totalCost = functObject.getTotalCostForRepair(repairId);
-						totalTime=functObject.getTotalHoursForRepair(repairId);
+						totalTime = functObject.getTotalHoursForRepair(repairId);
 						ResultSet rs2 = functObject.getTotalPartsForRepair(repairId, vehicleId);
 						System.out.println("F. Parts-");
 						while (rs2.next()) {
@@ -725,7 +747,7 @@ public class MainApp {
 						String mType = rs.getString("m_type");
 						System.out.println("E. Maintenance-" + mType);
 						totalCost = functObject.getTotalCostForMaintenance(vehicleId, mType);
-						totalTime=functObject.getTotalHoursForMaintenance(vehicleId, mType);
+						totalTime = functObject.getTotalHoursForMaintenance(vehicleId, mType);
 						ResultSet rs2 = functObject.getTotalPartsForMaintenance(mType, vehicleId);
 						System.out.println("F. Parts-");
 						while (rs2.next()) {
@@ -736,7 +758,7 @@ public class MainApp {
 					}
 					System.out.println("G. " + rs.getString("name"));
 					System.out.println("H. " + totalTime);
-					System.out.println("I. "+ rs.getString("wage"));
+					System.out.println("I. " + rs.getString("wage"));
 					System.out.println("J.Total Cost- " + totalCost);
 					System.out.println(" ");
 				}
@@ -863,7 +885,8 @@ public class MainApp {
 					// ResultSet rs = functObject.getEmployeePayrollDetails(userInfoObject.email);
 					while (rs.next()) {
 						System.out.println("A. Paycheck Date: " + rs.getString("paycheck_date"));
-						System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+						System.out.println(
+								"B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
 						System.out.println("C. Employee ID: " + rs.getInt("eid"));
 						System.out.println("D. Employee Name: " + rs.getString("e_name"));
 						System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
@@ -964,59 +987,59 @@ public class MainApp {
 			}
 		}
 	}
-	
+
 	public static void dailyTaskUpdateInventoryReceptionist() {
 		boolean ans = functObject.dailyTaskUpdateInventory(userInfoObject.service_centre_id);
-		
-		if(ans == true) {
+
+		if (ans == true) {
 			System.out.println("Daily Task-Update Inventory Successful");
 		} else {
 			System.out.println("Daily Task-Update Inventory Was Not Successful");
 		}
-		
+
 		Scanner s = new Scanner(System.in);
 		System.out.println("1. Go Back");
-		
-		while(true) {
+
+		while (true) {
 			String option = s.nextLine();
-			if(option.equals("1")) {
+			if (option.equals("1")) {
 				receptionistLandingPage();
 			} else {
 				System.out.println("Choose a valid option");
 			}
 		}
-		
+
 	}
-	
+
 	public static void dailyTaskRecordDeliveries() {
 		Scanner s = new Scanner(System.in);
 		System.out.println("1. Enter Comma Separated Order Ids");
 		System.out.println("2. Go Back");
-		while(true) {
+		while (true) {
 			String option = s.nextLine();
-			if(option.equals("1")) {
+			if (option.equals("1")) {
 				String orderIds = s.nextLine();
 				String[] arr = orderIds.split(",");
-				for(int i=0;i<arr.length;i++) {
+				for (int i = 0; i < arr.length; i++) {
 					arr[i] = arr[i].trim();
 				}
-				
+
 				boolean ans = functObject.dailyTaskRecordDeliveries(arr, userInfoObject.service_centre_id);
-				
-				if(ans == true) {
+
+				if (ans == true) {
 					System.out.println("Daily Task-Record Deliveries Successful");
 				} else {
 					System.out.println("Daily Task-Record Deliveries Was Not Successful");
 				}
-				
+
 				receptionistLandingPage();
-			} else if(option.equals("2")) {
+			} else if (option.equals("2")) {
 				receptionistLandingPage();
 			} else {
 				System.out.println("Choose a valid option");
 			}
 		}
-		
+
 	}
 
 	public static void receptionistRegisterCar() {
@@ -1108,7 +1131,7 @@ public class MainApp {
 							int repairId = rs.getInt("rid");
 							System.out.println("E. Repair-" + repairId);
 							totalCost = functObject.getTotalCostForRepair(repairId);
-							totalTime=functObject.getTotalHoursForRepair(repairId);
+							totalTime = functObject.getTotalHoursForRepair(repairId);
 							ResultSet rs2 = functObject.getTotalPartsForRepair(repairId, vehicleId);
 							System.out.println("F. Parts-");
 							while (rs2.next()) {
@@ -1120,7 +1143,7 @@ public class MainApp {
 							String mType = rs.getString("m_type");
 							System.out.println("E. Maintenance-" + mType);
 							totalCost = functObject.getTotalCostForMaintenance(vehicleId, mType);
-							totalTime=functObject.getTotalHoursForMaintenance(vehicleId, mType);
+							totalTime = functObject.getTotalHoursForMaintenance(vehicleId, mType);
 							ResultSet rs2 = functObject.getTotalPartsForMaintenance(mType, vehicleId);
 							System.out.println("F. Parts-");
 							while (rs2.next()) {
@@ -1131,7 +1154,7 @@ public class MainApp {
 						}
 						System.out.println("G. " + rs.getString("name"));
 						System.out.println("H. " + totalTime);
-						System.out.println("I. "+ rs.getString("wage"));
+						System.out.println("I. " + rs.getString("wage"));
 						System.out.println("J.Total Cost- " + totalCost);
 						System.out.println(" ");
 					}
@@ -1154,7 +1177,7 @@ public class MainApp {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Employee Profile
 	public static void employeeProfilePage() {
 		System.out.println("1. View Profile");
@@ -1227,25 +1250,30 @@ public class MainApp {
 				Scanner s2 = new Scanner(System.in);
 
 				if (selected_option.equals("1")) {
+					System.out.println("Enter New Name:");
 					String updatedValue = s.nextLine();
 					functObject.updateEmployeeName(userInfoObject.email, updatedValue);
-
+					employeeProfilePage();
 				} else if (selected_option.equals("2")) {
+					System.out.println("Enter New Address:");
 					String updatedValue = s.nextLine();
 					functObject.updateEmployeeAddress(userInfoObject.email, updatedValue);
-
+					employeeProfilePage();
 				} else if (selected_option.equals("3")) {
+					System.out.println("Enter New Email Address:");
 					String updatedValue = s.nextLine();
 					functObject.updateEmployeeEmail(userInfoObject.email, updatedValue);
-
+					employeeProfilePage();
 				} else if (selected_option.equals("4")) {
+					System.out.println("Enter New Phone Number:");
 					String updatedValue = s.nextLine();
 					functObject.updateEmployeePhoneNumber(userInfoObject.email, updatedValue);
-
+					employeeProfilePage();
 				} else if (selected_option.equals("5")) {
+					System.out.println("Enter New Password:");
 					String updatedValue = s.nextLine();
 					functObject.updateEmployeePassword(userInfoObject.email, updatedValue);
-
+					employeeProfilePage();
 				} else if (selected_option.equals("6")) {
 					employeeProfilePage();
 
@@ -1281,7 +1309,7 @@ public class MainApp {
 		System.out.println("2.Sign Up");
 		System.out.println("3.Exit");
 
-		while(true) {
+		while (true) {
 			int option = s.nextInt();
 			if (option == 1) {
 				login();
@@ -1293,7 +1321,7 @@ public class MainApp {
 				System.out.println("Wrong Input");
 			}
 		}
-		
+
 	}
 
 	public static void main(String[] args) {
@@ -1320,7 +1348,7 @@ public class MainApp {
 //			******************************************
 
 //			now do stuff
-		    
+
 			mainMenu();
 
 		} catch (Throwable e) {
