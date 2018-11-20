@@ -563,7 +563,6 @@ public class MainApp {
 		try {
 			ResultSet rs = functObject.getCustomerScheduleInfo(userInfoObject.email);
 			while (rs.next()) {
-				int totalCost = 0;
 				System.out.println("A. " + rs.getString("plate_no"));
 				System.out.println("B. " + rs.getString("schedule_id"));
 				System.out.println("C. " + rs.getString("start_time"));
@@ -578,8 +577,6 @@ public class MainApp {
 					System.out.println("D. Maintenance");
 					System.out.println("E. " + mType);
 				}
-				System.out.println("F. " + rs.getString("name"));
-				System.out.println("H.Total Cost- " + totalCost);
 				System.out.println(" ");
 			}
 			System.out.println("1. Pick a service");
@@ -615,12 +612,12 @@ public class MainApp {
 
 	public static void customerRescheduleServicePage2(String email, String scheduleId) {
 		try {
-			String type = functObject.checkRescheduleType(scheduleId);
-			rs = functObject.findRecheduleDates(scheduleId);
 			ArrayList<Timestamp> dates = null;
 			String licensePlate = "";
 			String mechanicName = "";
 			String id = "";
+			String type = functObject.checkRescheduleType(scheduleId);
+			rs = functObject.findRecheduleDates(scheduleId,type);
 			if (rs.next()) {
 				if (type == "M") {
 					licensePlate = rs.getString("customer_plate_no");
@@ -649,24 +646,29 @@ public class MainApp {
 				if (selected_option.equals("1")) {
 					Scanner s2 = new Scanner(System.in);
 					while (true) {
+						System.out.println("Choose date option:");
 						String dateOption = s2.nextLine();
 
 						if (dateOption.equals("1")) {
 							if (type == "M") {
-								functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[0], licensePlate,
-										mechanicName, (Timestamp) dates.toArray()[0], id);
+								functObject.updateMaintenanceSchedule((Timestamp) dates.toArray()[0], scheduleId, id,
+										licensePlate);
+								customerServicePage();
 							} else if (type == "R") {
-								functObject.addToRepairSchedule((Timestamp) dates.toArray()[0], licensePlate,
-										mechanicName, (Timestamp) dates.toArray()[0], id);
+								functObject.updateRepairSchedule((Timestamp) dates.toArray()[0], scheduleId, id,
+										licensePlate);
+								customerServicePage();
 							}
 
 						} else if (dateOption.equals("2")) {
 							if (type == "M") {
-								functObject.addToMaintenanceSchedule((Timestamp) dates.toArray()[1], licensePlate,
-										mechanicName, (Timestamp) dates.toArray()[1], id);
+								functObject.updateMaintenanceSchedule((Timestamp) dates.toArray()[1], scheduleId, id,
+										licensePlate);
+								customerServicePage();
 							} else if (type == "R") {
-								functObject.addToRepairSchedule((Timestamp) dates.toArray()[1], licensePlate,
-										mechanicName, (Timestamp) dates.toArray()[1], id);
+								functObject.updateRepairSchedule((Timestamp) dates.toArray()[1], scheduleId, id,
+										licensePlate);
+								customerServicePage();
 							}
 						} else {
 							System.out.println("Choose a valid option");

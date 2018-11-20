@@ -172,11 +172,12 @@ public class utilitiesFunctions {
 
 	public static ResultSet getCustomerScheduleInfo(String email) {
 		try {
-			rs = connObject.selectQuery("SELECT * FROM(SELECT * FROM (SELECT * FROM Owns) W\r\n"
-					+ "JOIN Schedule S ON S.customer_plate_no=W.plate_no) X\r\n"
-					+ "FULL OUTER JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id=X.schedule_id\r\n"
-					+ "FULL OUTER JOIN Repair_schedule RS ON RS.repair_schedule_id=X.schedule_id\r\n" + "WHERE email='"
-					+ email + "'");
+			rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM(SELECT * FROM (SELECT * FROM Owns) W "
+					+ "JOIN Schedule S ON S.customer_plate_no=W.plate_no) X "
+					+ "FULL OUTER JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id=X.schedule_id "
+					+ "FULL OUTER JOIN Repair_schedule RS ON RS.repair_schedule_id=X.schedule_id) Z "
+					+ "FULL OUTER JOIN Repair R ON R.rid=Z.rid " + "JOIN Employees E ON Z.mechanic_id=E.eid "
+					+ "WHERE Z.email='" + email + "' " + "AND (status='pending' OR status='delayed')");
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
@@ -703,31 +704,38 @@ public class utilitiesFunctions {
 			Timestamp date1 = null;
 			Timestamp date2 = null;
 			while (day_increment <= 10) {
-				String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
+				Timestamp s_time = new java.sql.Timestamp(cal.getTimeInMillis());
+				String s1 = s_time.toString();
 				cal.set(Calendar.HOUR_OF_DAY, 19);
-				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-				rs = connObject.selectQuery(
-						"select S.start_time, S.end_time, S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '" + s1
-								+ "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
-				if (rs.next()) {
-					Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"), rs.getTimestamp("start_time"));
-					if (compareTwoTimeStamps(endTime,
-							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
+				Timestamp e_time = new java.sql.Timestamp(cal.getTimeInMillis());
+				String s2 = e_time.toString();
+
+				float hours_already_used = getTotalHoursForSchedule(s_time, e_time);
+				if (hours_already_used <= 27.5) {
+					rs = connObject.selectQuery(
+							"select S.start_time, S.end_time, S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '"
+									+ s1 + "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3
+									+ " ORDER BY start_time DESC");
+					if (rs.next()) {
+						Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"),
+								rs.getTimestamp("start_time"));
+						if (compareTwoTimeStamps(endTime, new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
+							if (date1 == null) {
+								date1 = endTime;
+							} else {
+								date2 = endTime;
+								break;
+							}
+						}
+					} else {
+						cal.set(Calendar.HOUR_OF_DAY, 8);
+						Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
 						if (date1 == null) {
-							date1 = endTime;
+							date1 = t1;
 						} else {
-							date2 = endTime;
+							date2 = t1;
 							break;
 						}
-					}
-				} else {
-					cal.set(Calendar.HOUR_OF_DAY, 8);
-					Timestamp t1 = new java.sql.Timestamp(cal.getTimeInMillis());
-					if (date1 == null) {
-						date1 = t1;
-					} else {
-						date2 = t1;
-						break;
 					}
 				}
 				cal.add(Calendar.DATE, day_increment);
@@ -776,12 +784,12 @@ public class utilitiesFunctions {
 				cal.set(Calendar.HOUR_OF_DAY, 19);
 				String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 				rs = connObject.selectQuery(
-						"select S.start_time,S.end_time,S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '" + s1
-								+ "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
+						"select S.start_time,S.end_time,S.mechanic_id from Schedule S WHERE S.start_time >= TIMESTAMP '"
+								+ s1 + "' AND S.end_time < TIMESTAMP '" + s2 + "'" + s3 + " ORDER BY start_time DESC");
 				if (rs.next()) {
-					Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"), rs.getTimestamp("start_time"));
-					if (compareTwoTimeStamps(endTime,
-							new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
+					Timestamp endTime = getTimeInTimestampInSlots(rs.getTimestamp("end_time"),
+							rs.getTimestamp("start_time"));
+					if (compareTwoTimeStamps(endTime, new java.sql.Timestamp(cal.getTimeInMillis())) >= totalTime) {
 						if (date1 == null) {
 							date1 = endTime;
 						} else {
@@ -814,40 +822,39 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static ResultSet findRecheduleDates(String schedule_id) {
+	public static ResultSet findRecheduleDates(String schedule_id, String type) {
 		try {
-			ResultSet rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id="
-					+ schedule_id + ") W " + "JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id= W.schedule_id"
-					+ "JOIN Employees E ON E.eid=W.mechanic_id");
-			if (rs.next()) {
-				return rs;
+			ResultSet rs = null;
+			if (type == "M") {
+				rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id= '" + schedule_id
+						+ "') W " + "JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id= W.schedule_id "
+						+ "JOIN Employees E ON E.eid=W.mechanic_id");
+			} else if (type == "R") {
+				rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id='" + schedule_id
+						+ "') W " + "JOIN Repair_schedule RS ON RS.repair_schedule_id= W.schedule_id "
+						+ "JOIN Employees E ON E.eid=W.mechanic_id");
 			}
 
-			rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id=" + schedule_id
-					+ ") W " + "JOIN Repair_schedule RS ON RS.repair_schedule_id= W.schedule_id"
-					+ "JOIN Employees E ON E.eid=W.mechanic_id");
-			if (rs.next()) {
-				return rs;
-			}
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
 			return rs;
 		}
 	}
-	
+
 	public static String checkRescheduleType(String schedule_id) {
 		try {
-			ResultSet rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id="
-					+ schedule_id + ") W " + "JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id= W.schedule_id"
-					+ "JOIN Employees E ON E.eid=W.mechanic_id");
+			ResultSet rs = connObject
+					.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id= '" + schedule_id + "') W "
+							+ "JOIN Maintenance_schedule MS ON MS.maintenance_schedule_id= W.schedule_id "
+							+ " JOIN Employees E ON E.eid=W.mechanic_id");
 			if (rs.next()) {
 				return "M";
 			}
 
-			rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id=" + schedule_id
-					+ ") W " + "JOIN Repair_schedule RS ON RS.repair_schedule_id= W.schedule_id"
-					+ "JOIN Employees E ON E.eid=W.mechanic_id");
+			rs = connObject.selectQuery("SELECT * FROM (SELECT * FROM Schedule WHERE schedule_id='" + schedule_id
+					+ "') W " + "JOIN Repair_schedule RS ON RS.repair_schedule_id= W.schedule_id "
+					+ " JOIN Employees E ON E.eid=W.mechanic_id");
 			if (rs.next()) {
 				return "R";
 			}
@@ -911,11 +918,39 @@ public class utilitiesFunctions {
 				if (rs.next()) {
 					String scheduleId = rs.getString("schedule_id");
 
-					updateEndTimeForRepairInSchedule(repairId,scheduleId);
+					updateEndTimeForRepairInSchedule(repairId, scheduleId);
 					ans = connObject.insertQuery(
 							"INSERT into Repair_schedule " + "Values('" + scheduleId + "', '" + repairId + "')");
 				}
 			}
+			return ans;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return -1;
+		}
+	}
+
+	public static int updateMaintenanceSchedule(Timestamp new_start_time, String schedule_id, String mType,
+			String licensePlate) {
+		try {
+
+			int ans = connObject.insertQuery("UPDATE Schedule SET start_time=TIMESTAMP '" + new_start_time + "' "
+					+ "WHERE schedule_id='" + schedule_id + "'");
+			updateEndTimeForMaintenanceInSchedule(licensePlate, mType, schedule_id);
+			return ans;
+		} catch (Throwable e) {
+			System.out.println("Wrong License Plate");
+			return -1;
+		}
+	}
+
+	public static int updateRepairSchedule(Timestamp new_start_time, String schedule_id, String repairId,
+			String licensePlate) {
+		try {
+
+			int ans = connObject.insertQuery("UPDATE Schedule SET start_time=TIMESTAMP '" + new_start_time + "' "
+					+ "WHERE schedule_id='" + schedule_id + "'");
+			updateEndTimeForRepairInSchedule(repairId, schedule_id);
 			return ans;
 		} catch (Throwable e) {
 			System.out.println("Wrong License Plate");
@@ -983,15 +1018,15 @@ public class utilitiesFunctions {
 	public static Timestamp getTimeInTimestampInSlots(Timestamp endTime, Timestamp startTime) {
 		long endTimeInMilliSeconds = endTime.getTime();
 		long startTimeInMilliSeconds = startTime.getTime();
-		
+
 		long diff = endTimeInMilliSeconds - startTimeInMilliSeconds;
-		
-		float min = diff / (60*1000);
-		float hours = diff / (60*60*1000);
-		
-		if(min>59) {
-			hours = (int)Math.floor(min/60);
-			min = min - (hours*60);
+
+		float min = diff / (60 * 1000);
+		float hours = diff / (60 * 60 * 1000);
+
+		if (min > 59) {
+			hours = (int) Math.floor(min / 60);
+			min = min - (hours * 60);
 		}
 
 		if (min < 30 && min > 0) {
@@ -1004,7 +1039,7 @@ public class utilitiesFunctions {
 		long newTime = (long) (((hours * 60 * 60) + (min * 60)) * 1000) + startTimeInMilliSeconds;
 		return new java.sql.Timestamp(newTime);
 	}
-	
+
 	public static long getTimeInMilliSeconds(float totalTime) {
 		int hours = (int) totalTime;
 		float minutes = totalTime - (int) totalTime;
@@ -1321,9 +1356,8 @@ public class utilitiesFunctions {
 			String s1 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
 			cal.set(Calendar.HOUR_OF_DAY, 23);
 			String s2 = new java.sql.Timestamp(cal.getTimeInMillis()).toString();
-			rs = connObject
-					.selectQuery("select * from Schedule S WHERE S.start_time > TIMESTAMP '"
-							+ s1 + "' AND S.start_time < TIMESTAMP '" + s2 + "'");
+			rs = connObject.selectQuery("select * from Schedule S WHERE S.start_time > TIMESTAMP '" + s1
+					+ "' AND S.start_time < TIMESTAMP '" + s2 + "'");
 			while (rs.next()) {
 				int sid = rs.getInt("schedule_id");
 				String plate_no = rs.getString("customer_plate_no");
@@ -1407,10 +1441,11 @@ public class utilitiesFunctions {
 							+ parts_to_make_id);
 				}
 			}
-			
-			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<Date '"+sqlDate+"' and "
-					+ "requester_center_inventory_id='"+users_service_center_id+"' and status <> 'complete'");
-			while(rs.next()) {
+
+			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<Date '" + sqlDate
+					+ "' and " + "requester_center_inventory_id='" + users_service_center_id
+					+ "' and status <> 'complete'");
+			while (rs.next()) {
 				int orderId = rs.getInt("order_id");
 				connObject2.insertQuery("Update Orders Set status='delayed' where order_id=" + orderId);
 				connObject2.insertQuery(
@@ -1435,6 +1470,62 @@ public class utilitiesFunctions {
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+
+	public static float getTotalHoursForSchedule(Timestamp s_time, Timestamp e_time) {
+		try {
+			ResultSet rs = connObject2.selectQuery(
+					"SELECT SUM(ABC) AS total_hours FROM (SELECT (EXTRACT (DAY FROM (end_time-start_time))*24*60*60+\r\n"
+							+ "EXTRACT (HOUR FROM (end_time-start_time))*60*60+\r\n"
+							+ "EXTRACT (MINUTE FROM (end_time-start_time))*60+\r\n"
+							+ "EXTRACT (SECOND FROM (end_time-start_time)))/(60*60) AS ABC\r\n"
+							+ "FROM Schedule WHERE start_time >= TIMESTAMP '" + s_time + "' AND end_time < TIMESTAMP '"
+							+ e_time + "')");
+			if (!rs.next()) {
+				return 0;
+			} else {
+				return rs.getFloat("total_hours");
+			}
+		} catch (Throwable e) {
+			System.out.println("Wrong values");
+			return 0;
+		}
+	}
+
+	public static ResultSet newManagerOrder(String parts_to_make_id, int quantity, String sc_id) {
+		try {
+			java.util.Date utilDate = new java.util.Date();
+			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+			String distributorId = "";
+
+			rs = connObject2.selectQuery("SELECT distributor_id FROM Supplies WHERE parts_to_make_id='"
+					+ parts_to_make_id + "' AND window IS NOT NULL");
+			if (rs.next()) {
+				distributorId = rs.getString("distributor_id");
+			}
+
+			int ans = connObject2.insertQuery("Insert into Orders Values(" + "1, " + "Date '" + sqlDate + "', "
+					+ "Date '" + sqlDate + "' + interval '1' day, " + "Null, " + parts_to_make_id + ", " + quantity
+					+ ", " + "'pending', " + "'" + sc_id + "')");
+
+			rs = connObject2.selectQuery("SELECT O.order_id,O.order_expected_delivery_date FROM Orders O WHERE "
+					+ "O.order_date = Date '" + sqlDate + "' AND O.parts_to_make_id = '" + parts_to_make_id + "' AND "
+					+ "O.status = 'pending' AND " + "O.requester_center_inventory_id = '" + sc_id + "'");
+
+			if (rs.next()) {
+				int orderId = rs.getInt("order_id");
+				Date t = rs.getDate("order_expected_delivery_date");
+				connObject2.insertQuery(
+						"Insert into Distributor_order values(1, " + "'" + distributorId + "', " + orderId + ")");
+				System.out.println("Order with ID " + orderId + " has been placed");
+				System.out.println("Expected Delivery: " + t);
+			}
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Input");
 			return rs;
 		}
 	}
