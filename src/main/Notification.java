@@ -1,6 +1,7 @@
 package main;
 
 import java.sql.ResultSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Notification {
@@ -8,19 +9,22 @@ public class Notification {
 	public void notificationPage() {
 		try {
 			ResultSet rs = MainApp.functObject.getNotifications(MainApp.userInfoObject.service_centre_id);
-			
+
 			while (rs.next()) {
-				System.out.println("A. " + rs.getInt("notification_id"));
-				System.out.println("B. " + rs.getDate("")); // Notification Date/Time
-				System.out.println("C. " + rs.getInt("")); // OrderID
-				System.out.println("D. " + rs.getString("")); // Supplier Name
-				System.out.println("E. " + rs.getDate("")); // Expected DeliverDate
-				System.out.println("F. " + rs.getInt("")); // Delayed by(# of days)
+				System.out.println("A. Notification ID: " + rs.getInt("notification_id"));
+				System.out.println("B. Notification Date: " + rs.getDate("notification_date"));
+				System.out.println("C. Order ID: " + rs.getInt("order_id")); // OrderID
+				System.out.println("D. Supplier Name: " + rs.getString("supplier")); // Supplier Name
+				System.out.println("E. Expected Delivery Date: " + rs.getDate("expected_delivery")); 
+				String s = rs.getString("message");
+				String[] arr = s.split("delayed by");
+				System.out.println("F. Delayed by:" + arr[1]);
+				System.out.println();
 			}
-			
+
 			System.out.println("1. Order ID");
 			System.out.println("2. Go Back");
-			
+
 			Scanner s = new Scanner(System.in);
 			while (true) {
 				String selected_option = s.nextLine();
@@ -36,25 +40,47 @@ public class Notification {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void viewNotificationsDetailPage() {
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Enter Order ID: ");
+		int input;
+		while (true) {
+			try {
+				input = scan.nextInt();
+				break;
+			} catch (InputMismatchException e) {
+				System.out.print("Invalid input. Please reenter: ");
+				scan.nextLine();
+			}
+		}
+
 		try {
 			ResultSet rs = MainApp.functObject.getOrderHistory(MainApp.userInfoObject.service_centre_id);
-			
 			while (rs.next()) {
-				System.out.println("A. " + rs.getInt("order_id"));
-				System.out.println("B. " + rs.getDate("")); // Date
-				System.out.println("C. " + rs.getString("")); // Part name
-				System.out.println("D. " + rs.getString("")); // Supplier Name
-				System.out.println("E. " + rs.getString("")); // Purchaser Name
-				System.out.println("F. " + rs.getInt("")); // Quantity 
-				System.out.println("G. " + rs.getFloat("")); // Unit Price
-				System.out.println("H. " + rs.getInt("")); // Total Cost
-				System.out.println("I. " + rs.getString("")); // Order Status
+
+				if (rs.getInt("order_id") == input) {
+					System.out.println("A. Order ID: " + rs.getInt("order_id"));
+					System.out.println("B. Date: " + rs.getString("order_date"));
+					System.out.println("C. " + rs.getString("part_name"));
+					if (rs.getString("distributor_id") == null) {
+						System.out.println("D. Supplier- " + rs.getString("sc_name"));
+					} else {
+						System.out.println("D. Supplier- " + rs.getString("dname"));
+					}
+					System.out.println("G. Purchaser" + rs.getString("purchaser_name"));
+					int quantity = rs.getInt("quantity");
+					int unitPrice = rs.getInt("unit_price");
+					System.out.println("H. Quantity-" + quantity);
+					System.out.println("I. Unit Price- " + unitPrice + "$");
+					System.out.println("J.Total Cost- " + (quantity * unitPrice));
+					System.out.println("H. Status-" + rs.getString("status"));
+					System.out.println(" ");
+				}
 			}
-			
+
 			System.out.println("1. Go Back");
 			Scanner s = new Scanner(System.in);
 			while (true) {
