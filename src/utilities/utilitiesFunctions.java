@@ -282,6 +282,16 @@ public class utilitiesFunctions {
 			return rs;
 		}
 	}
+	
+	public static ResultSet getEmployeeInfoById(int id) {
+		try {
+			rs = connObject.selectQuery("Select * from Employees E where E.eid="+id);
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
 
 //	update employee profile
 
