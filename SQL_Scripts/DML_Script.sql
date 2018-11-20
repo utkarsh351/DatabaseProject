@@ -59,6 +59,9 @@ begin
 end;
 /
 
+
+
+
 /*
 create sequence Maintain_schedule_id_seq;
 
@@ -5323,6 +5326,154 @@ Date '2014-06-18',
 'S0001'
 );
 
+---Creating Payment Cycle
+Insert into Payment_cycle
+Values(
+  1,
+  Date '2018-01-01',
+  Date '2018-01-15'
+);
+
+Insert into Payment_cycle
+Values(
+  2,
+  Date '2018-01-15',
+  Date '2018-01-31'
+);
+
+Insert into Payment_cycle
+Values(
+  3,
+  Date '2018-02-1',
+  Date '2018-02-15'
+);
+
+Insert into Payment_cycle
+Values(
+  4,
+  Date '2018-02-15',
+  Date '2018-02-28'
+);
+Insert into Payment_cycle
+Values(
+  5,
+  Date '2018-03-1',
+  Date '2018-03-15'
+);
+Insert into Payment_cycle
+Values(
+  6,
+  Date '2018-03-15',
+  Date '2018-03-31'
+);
+Insert into Payment_cycle
+Values(
+  7,
+  Date '2018-04-1',
+  Date '2018-04-15'
+);
+Insert into Payment_cycle
+Values(
+  8,
+  Date '2018-04-15',
+  Date '2018-04-30'
+);
+Insert into Payment_cycle
+Values(
+  9,
+  Date '2018-05-1',
+  Date '2018-05-15'
+);
+Insert into Payment_cycle
+Values(
+  10,
+  Date '2018-05-15',
+  Date '2018-05-31'
+);
+Insert into Payment_cycle
+Values(
+  11,
+  Date '2018-06-1',
+  Date '2018-06-15'
+);
+Insert into Payment_cycle
+Values(
+  12,
+  Date '2018-06-15',
+  Date '2018-06-30'
+);
+Insert into Payment_cycle
+Values(
+  13,
+  Date '2018-07-1',
+  Date '2018-07-15'
+);
+Insert into Payment_cycle
+Values(
+  14,
+  Date '2018-07-15',
+  Date '2018-07-31'
+);
+Insert into Payment_cycle
+Values(
+  15,
+  Date '2018-08-1',
+  Date '2018-08-15'
+);
+Insert into Payment_cycle
+Values(
+  16,
+  Date '2018-08-15',
+  Date '2018-08-31'
+);
+Insert into Payment_cycle
+Values(
+  17,
+  Date '2018-09-1',
+  Date '2018-09-15'
+);
+Insert into Payment_cycle
+Values(
+  18,
+  Date '2018-09-15',
+  Date '2018-09-30'
+);
+Insert into Payment_cycle
+Values(
+  19,
+  Date '2018-10-1',
+  Date '2018-10-15'
+);
+Insert into Payment_cycle
+Values(
+  20,
+  Date '2018-10-15',
+  Date '2018-10-31'
+);
+Insert into Payment_cycle
+Values(
+  21,
+  Date '2018-11-1',
+  Date '2018-11-15'
+);
+Insert into Payment_cycle
+Values(
+  22,
+  Date '2018-11-15',
+  Date '2018-11-30'
+);
+Insert into Payment_cycle
+Values(
+  23,
+  Date '2018-12-1',
+  Date '2018-12-15'
+);
+Insert into Payment_cycle
+Values(
+  24,
+  Date '2018-12-15',
+  Date '2018-12-31'
+);
 ------------
 ALTER TABLE Inventory
   ADD uncommited_current_quantity INTEGER;
