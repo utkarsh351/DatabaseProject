@@ -907,19 +907,39 @@ public class MainApp {
 				if (functObject.doesEmployeeExists(employee_id)) {
 					ResultSet temp = functObject.getEmployeeInfoById(employee_id);
 					if(temp.next()) {
-						ResultSet rs = functObject.getEmployeePayrollDetails(temp.getString("email"));
-						while (rs.next()) {
-							System.out.println("A. Paycheck Date: " + rs.getString("paycheck_date"));
-							System.out.println(
-									"B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
-							System.out.println("C. Employee ID: " + rs.getInt("eid"));
-							System.out.println("D. Employee Name: " + rs.getString("e_name"));
-							System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
-							System.out.println("F. Frequency (monthly/hourly): " + rs.getString("freq"));
-							System.out.println("G. Units (# of hours/days): " + rs.getInt("units"));
-							System.out.println("H. Earnings (Current): " + rs.getInt("current_earnings"));
-							System.out.println("I. Earnings (Year-to-date): " + rs.getInt("year_earnings"));
+						if(temp.getString("role").equals("manager") || temp.getString("role").equals("receptionist")) {
+							String name = temp.getString("name");
+							String units = "15";
+							ResultSet rs = functObject.getEmployeePayrollDetailsForRecepOrManager(employee_id);
+							while (rs.next()) {
+								System.out.println("A. Paycheck Date: " + rs.getString("end_date"));
+								System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+								System.out.println("C. Employee ID: " + employee_id);
+								System.out.println("D. Employee Name: " + name);
+								System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
+								System.out.println("F. Frequency (monthly/hourly): " + rs.getString("freq"));
+								System.out.println("G. Units (# of hours/days): " + units);
+								System.out.println("H. Earnings (Current): " + rs.getInt("earning_till_date"));
+								System.out.println("I. Earnings (Year-to-date): " + rs.getInt("earning_this_year"));
+								System.out.println();
+							}
+						} else {
+							String name = temp.getString("name");
+							ResultSet rs = functObject.getEmployeePayrollDetailsForMechanic(employee_id);
+							while (rs.next()) {
+								System.out.println("A. Paycheck Date: " + rs.getString("end_date"));
+								System.out.println("B. Pay Period: " + rs.getDate("start_date") + " to " + rs.getDate("end_date"));
+								System.out.println("C. Employee ID: " + employee_id);
+								System.out.println("D. Employee Name: " + name);
+								System.out.println("E. Compensation ($): " + rs.getInt("compensation"));
+								System.out.println("F. Frequency (monthly/hourly): hourly");
+								System.out.println("G. Units (# of hours/days): " + rs.getInt("total_work_done"));
+								System.out.println("H. Earnings (Current): " + rs.getInt("compensation"));
+								System.out.println("I. Earnings (Year-to-date): " + rs.getInt("compensation"));
+								System.out.println();
+							}
 						}
+						
 						break;
 					}
 				} else {

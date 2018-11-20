@@ -422,14 +422,111 @@ public class utilitiesFunctions {
 	}
 
 	public ResultSet getNotifications(String service_centre_id) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			rs = connObject.selectQuery(
+					"SELECT N.notification_id, N.notification_date, N.order_id,N.message, "
+					+ "D.dname AS supplier, O.order_expected_delivery_date AS expected_delivery,"
+					+ "DO.distributor_id "
+					+ "FROM Notification N "
+					+ "JOIN Orders O ON N.order_id=O.order_id "
+					+ "JOIN Distributor_order DO ON DO.order_id=O.order_id "
+					+ "JOIN Distributor D ON D.distributor_id=DO.distributor_id "
+					+ "WHERE N.service_center_id='" + service_centre_id + "'");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Service Center ID");
+			return rs;
+		}
 	}
 
-	public void addNewCar(String make, String model, String year, int milesA, String monthsA, String partsA, int milesB,
-			String monthsB, String partsB, int milesC, String monthsC, String partsC) {
+	public void addNewCar(String make, String model, String year, int milesA, String monthsA, String servicesA, int milesB,
+			String monthsB, String servicesB, int milesC, String monthsC, String servicesC, String quantA, String quantB, String quantC) {
 		// TODO Auto-generated method stub
+		try {
+			String[] a = servicesA.split(",");
+			String[] qA = quantA.split(",");
+			
+			String[] b = servicesB.split(",");
+			String[] qB = quantB.split(",");
+			
+			String[] c = servicesC.split(",");
+			String[] qC = quantC.split(",");
 
+			for(int i=0;i<a.length;i++) {
+				a[i] = a[i].trim();
+				qA[i] = qA[i].trim();
+			}
+			
+			for(int i=0;i<b.length;i++) {
+				b[i] = b[i].trim();
+				qB[i] = qB[i].trim();
+			}
+			
+			for(int i=0;i<c.length;i++) {
+				c[i] = c[i].trim();
+				qC[i] = qC[i].trim();
+			}
+			
+			connObject.insertQuery("Insert into Vehicles(vehicle_id, make, model) Values(1,'"+make+"','"+model+"')");
+			
+			ResultSet rs = connObject.selectQuery("SELECT * FROM Vehicles WHERE vehicle_id=(SELECT MAX(vehicle_id) FROM Vehicles)");
+			
+			int vehicle_id=0;
+			if(rs.next()) {
+				vehicle_id = rs.getInt("vehicle_id");
+			
+				for(int i=0;i<a.length;i++) {
+					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) "
+							+ "Values("+a[i]+",'A',"+milesA+","+vehicle_id+")");
+				}
+				
+				for(int i=0;i<b.length;i++) {
+					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) "
+							+ "Values("+b[i]+",'B',"+milesB+","+vehicle_id+")");
+				}
+				
+				for(int i=0;i<c.length;i++) {
+					connObject.insertQuery("Insert into Maintenance_uses(sid, m_type, miles, vehicle_id) "
+							+ "Values("+c[i]+",'C',"+milesC+","+vehicle_id+")");
+				}
+				
+				for(int i=0;i<a.length;i++) {
+					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id="+a[i]);
+					int part_id = 0;
+					if(rs.next()) {
+						part_id = rs.getInt("part_id");
+						connObject.insertQuery("Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
+								+ "Values(1,"+a[i]+","+part_id+","+vehicle_id+","+qA[i]+")");
+					}
+				}
+				
+				for(int i=0;i<b.length;i++) {
+					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id="+b[i]);
+					int part_id = 0;
+					if(rs.next()) {
+						part_id = rs.getInt("part_id");
+						connObject.insertQuery("Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
+								+ "Values(1,"+b[i]+","+part_id+","+vehicle_id+","+qB[i]+")");
+					}
+				}
+				
+				for(int i=0;i<c.length;i++) {
+					rs = connObject.selectQuery("SELECT * FROM Involves WHERE service_id="+c[i]);
+					int part_id = 0;
+					if(rs.next()) {
+						part_id = rs.getInt("part_id");
+						connObject.insertQuery("Insert into Involves(involves_id, service_id, part_id, vehicle_id, quantity) "
+								+ "Values(1,"+c[i]+","+part_id+","+vehicle_id+","+qC[i]+")");
+					}
+				}
+			} else {
+				System.out.println("Vehicle id not found");
+			}
+			
+		} catch (Throwable e) {
+			System.out.println("Error");
+			return;
+		}
 	}
 
 	public ResultSet getCarServiceDetails() {
@@ -1398,7 +1495,7 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static boolean dailyTaskRecordDeliveries(String[] arr, String users_service_center_id) {
+	public boolean dailyTaskRecordDeliveries(String[] arr, String users_service_center_id) {
 		try {
 			java.util.Date utilDate = new java.util.Date();
 			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
@@ -1413,19 +1510,47 @@ public class utilitiesFunctions {
 					connObject2.insertQuery("Update Orders Set status='complete', order_delivery_date= Date '" + sqlDate
 							+ "' where order_id='" + orderId + "'");
 					connObject2.insertQuery("Update Inventory Set current_quantity = current_quantity + " + quant
-							+ " where service_center_id='" + users_service_center_id + "' and parts_to_make_id="
+							+ ",uncommited_current_quantity=uncommited_current_quantity + "+ quant +" where service_center_id='" + users_service_center_id + "' and parts_to_make_id="
 							+ parts_to_make_id);
+					ResultSet rs3 = connObject2.selectQuery("select S.service_center_provider_id from Service_center_order S where S.order_id="+orderId);
+					if(rs3.next()) {
+						String supplier_id = rs3.getString("service_center_provider_id");
+						connObject2.insertQuery("Update Inventory Set current_quantity = current_quantity - " + quant
+								+ ",uncommited_current_quantity=uncommited_current_quantity - "+ quant +" where service_center_id='" + supplier_id + "' and parts_to_make_id="
+								+ parts_to_make_id);
+					}
 				}
 			}
 			
-			rs = connObject.selectQuery("Select * from Orders where order_expected_delivery_date<Date '"+sqlDate+"' and "
+			rs = connObject3.selectQuery("Select * from Orders where order_expected_delivery_date<Date '"+sqlDate+"' and "
 					+ "requester_center_inventory_id='"+users_service_center_id+"' and status <> 'complete'");
+			
 			while(rs.next()) {
 				int orderId = rs.getInt("order_id");
 				connObject2.insertQuery("Update Orders Set status='delayed' where order_id=" + orderId);
+				
+				int quantity = 0;
+				String part_name = "";
+				String supplier = "";
+				long total_delay = 0;
+				ResultSet rs3 = getOrderHistory(users_service_center_id);
+				while(rs3.next()) {
+					if(rs.getInt("order_id") == orderId) {
+						quantity = rs.getInt("quantity");
+						part_name = rs.getString("part_name");
+						if (rs.getString("distributor_id") == null) {
+							supplier = rs.getString("sc_name");
+						} else {
+							supplier = rs.getString("dname");
+						} 
+						total_delay =  Math.abs((sqlDate.getTime()-rs.getDate("order_expected_delivery_date").getTime())/86400000);
+						break;
+					}
+				}
+				
 				connObject2.insertQuery(
 						"INSERT into Notification(notification_id,order_id,message,notification_date,service_center_id) "
-								+ "Values(1," + orderId + ",'Order with id " + orderId + " delayed',Date '" + sqlDate
+								+ "Values(1," + orderId + ",'"+quantity+" "+part_name+" from "+supplier+" delayed by "+total_delay+" business days',Date '" + sqlDate
 								+ "','" + users_service_center_id + "')");
 			}
 
@@ -1436,12 +1561,28 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public ResultSet getEmployeePayrollDetails(String email) {
+	public ResultSet getEmployeePayrollDetailsForRecepOrManager(int empId) {
 		try {
-			rs = connObject.selectQuery("SELECT E.eid, E.name AS e_name, E.wage AS compensation, "
-					+ "E.freq, PR.units, PC.start_date, PC.end_date "
-					+ "FROM Employees E JOIN Payment_record PR ON E.eid=PR.eid "
-					+ "JOIN Payment_cycle PC ON PR.pcid=PC.pcid WHERE email='" + email + "'");
+			rs = connObject.selectQuery("select PC.start_date, PC.end_date, E.wage/2 as compensation, "
+					+ "E.freq as freq, ROUND((PC.end_date-Date '2018-01-01')*E.wage/30, 2) as earning_this_year,"
+					+ "ROUND((PC.end_date-E.s_date)*E.wage/30, 2) as earning_till_date from Payment_Cycle PC, "
+					+ "Employees E, (select CURRENT_TIMESTAMP as curr_time from dual) T1 where E.eid="+ empId +" and PC.end_date<T1.curr_time");
+			return rs;
+		} catch (Throwable e) {
+			System.out.println("Wrong Email");
+			return rs;
+		}
+	}
+	
+	public ResultSet getEmployeePayrollDetailsForMechanic(int empId) {
+		try {
+			rs = connObject.selectQuery("select PC2.pcid, PC3.start_date, PC3.end_date, PC2.total_work_done, "
+					+ "(PC2.total_work_done)*E.wage as compensation, E.wage FROM "
+					+ "(select PC1.pcid, sum(S1.work_done_in_sch) as total_work_done from "
+					+ "(select extract(hour from end_time-start_time) as work_done_in_sch, "
+					+ "start_time from Schedule where mechanic_id= "+empId+") S1, Payment_cycle PC1 "
+					+ "WHERE PC1.start_date < S1.start_time and PC1.end_date>S1.start_time group by PC1.pcid) PC2, Payment_cycle PC3, "
+					+ "Employees E where PC3.pcid=PC2.pcid and E.eid = "+empId);
 			return rs;
 		} catch (Throwable e) {
 			System.out.println("Wrong Email");
