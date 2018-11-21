@@ -359,14 +359,20 @@ public class utilitiesFunctions {
 						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
 								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
 								+ "'," + "'" + wage + "', 'hour'," + "'" + role + "'," + "'" + sc_id + "')");
+				System.out.println("Employee Added Successfully");
 			} else if (role.equalsIgnoreCase("receptionist")) {
-				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
-				connObject.insertQuery(
-						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
-								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
-								+ "'," + "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
+				ResultSet rs = connObject.selectQuery("Select count(*) as count from Employees where service_centre_id='"+sc_id+"' and role='receptionist'");
+				if(rs.next()) {
+					System.out.println("Receptionist already exists");
+				} else {
+					connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
+					connObject.insertQuery(
+							"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
+									+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
+									+ "'," + "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
+					System.out.println("Employee Added Successfully");
+				}
 			}
-			System.out.println("Employee Added Successfully");
 		} catch (Throwable e) {
 			System.out.println("Error occured!");
 		}
