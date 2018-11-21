@@ -1000,18 +1000,11 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static int addToSchedule(Timestamp start_time, String licensePlate, String mechanic_name,
+	public static int addToSchedule(Timestamp start_time, String licensePlate, String mechanicId,
 			Timestamp end_time) {
 		try {
-			int mechanic_id = 0;
-			if (!mechanic_name.equals("")) {
-				rs = getMechanicByName(mechanic_name);
-				if (rs.next()) {
-					mechanic_id = rs.getInt("eid");
-				}
-			}
 			int ans = connObject.insertQuery("INSERT into Schedule " + "Values(" + "'1', " + "TIMESTAMP '" + start_time
-					+ "', " + "'" + licensePlate + "', " + mechanic_id + ", " + "'pending', " + "TIMESTAMP '" + end_time
+					+ "', " + "'" + licensePlate + "', " + mechanicId + ", " + "'pending', " + "TIMESTAMP '" + end_time
 					+ "')");
 			return ans;
 		} catch (Throwable e) {
@@ -1020,10 +1013,10 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static int addToMaintenanceSchedule(Timestamp start_time, String licensePlate, String mechanic_name,
+	public static int addToMaintenanceSchedule(Timestamp start_time, String licensePlate, String mechanicId,
 			Timestamp end_time, String mType) {
 		try {
-			int ans = addToSchedule(start_time, licensePlate, mechanic_name, end_time);
+			int ans = addToSchedule(start_time, licensePlate, mechanicId, end_time);
 			if (ans == 1) {
 				rs = connObject.selectQuery(
 						"SELECT * FROM Schedule WHERE schedule_id=(SELECT MAX(schedule_id) FROM Schedule)");
@@ -1043,10 +1036,10 @@ public class utilitiesFunctions {
 		}
 	}
 
-	public static int addToRepairSchedule(Timestamp start_time, String licensePlate, String mechanic_name,
+	public static int addToRepairSchedule(Timestamp start_time, String licensePlate, String mechanicId,
 			Timestamp end_time, String repairId) {
 		try {
-			int ans = addToSchedule(start_time, licensePlate, mechanic_name, end_time);
+			int ans = addToSchedule(start_time, licensePlate, mechanicId, end_time);
 			if (ans == 1) {
 				rs = connObject.selectQuery(
 						"SELECT * FROM Schedule WHERE schedule_id=(SELECT MAX(schedule_id) FROM Schedule)");

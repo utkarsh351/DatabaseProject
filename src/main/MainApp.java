@@ -428,13 +428,13 @@ public class MainApp {
 					String dateOption = s2.nextLine();
 
 					if (dateOption.equals("1")) {
-						functObject.addToMaintenanceSchedule(dates.get(0).s_time, licensePlate, mechanicName,
+						functObject.addToMaintenanceSchedule(dates.get(0).s_time, licensePlate, dates.get(0).mechanicId,
 								dates.get(0).s_time, sType);
 						functObject.updateMileage(licensePlate, currMileage);
 						customerScheduleService(userInfoObject.email);
 
 					} else if (dateOption.equals("2")) {
-						functObject.addToMaintenanceSchedule(dates.get(1).s_time, licensePlate, mechanicName,
+						functObject.addToMaintenanceSchedule(dates.get(1).s_time, licensePlate, dates.get(1).mechanicId,
 								dates.get(1).s_time, sType);
 						functObject.updateMileage(licensePlate, currMileage);
 						customerScheduleService(userInfoObject.email);
@@ -526,9 +526,7 @@ public class MainApp {
 
 		System.out.println("1. " + dates.get(0).s_time);
 		System.out.println("2. " + dates.get(1).s_time);
-		// Display
-		// 1. Date 1 available with Mechanic name selected(if selected)
-		// 2. Date 2 available with Mechanic name selected(if selected)
+
 		System.out.println("1. Repair on Date");
 		System.out.println("2. Go Back");
 
@@ -543,12 +541,12 @@ public class MainApp {
 					String dateOption = s2.nextLine();
 
 					if (dateOption.equals("1")) {
-						functObject.addToRepairSchedule(dates.get(0).s_time, licensePlate, mechanicName,
+						functObject.addToRepairSchedule(dates.get(0).s_time, licensePlate, dates.get(0).mechanicId,
 								dates.get(0).s_time, repairId);
 						customerScheduleService(userInfoObject.email);
 					} else if (dateOption.equals("2")) {
-						functObject.addToRepairSchedule(dates.get(0).s_time, licensePlate, mechanicName,
-								dates.get(0).s_time, repairId);
+						functObject.addToRepairSchedule(dates.get(1).s_time, licensePlate, dates.get(1).mechanicId,
+								dates.get(1).s_time, repairId);
 						customerScheduleService(userInfoObject.email);
 					} else {
 						System.out.println("Choose a valid option");
