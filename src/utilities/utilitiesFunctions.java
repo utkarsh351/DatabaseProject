@@ -915,7 +915,7 @@ public class utilitiesFunctions {
 					while (compareTwoTimeStamps(e_window_time, end_of_day_time) >= 0) {
 
 						rs = connObject.selectQuery(
-								"SELECT E1.eid,E1.name from schedule S, employees E1 where NOT((S.start_time > TIMESTAMP '"
+								"SELECT E1.eid from schedule S, employees E1 where NOT((S.start_time > TIMESTAMP '"
 										+ s_window_time + "' AND S.start_time<TIMESTAMP '"
 										+ getTimeInTimestampInSlots(e_window_time, s_window_time)
 										+ "') OR (S.end_time > TIMESTAMP '" + s_window_time
