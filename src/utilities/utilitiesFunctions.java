@@ -135,12 +135,13 @@ public class utilitiesFunctions {
 									+ "')");
 				}
 
-				if (ans != 1) {
-					System.out.println("Error occured while adding to vehicle table!");
-					return false;
-				} else {
-					return true;
-				}
+				return true;
+//				if (ans != 1) {
+//					System.out.println("Error occured while adding to vehicle table!");
+//					return false;
+//				} else {
+//					return true;
+//				}
 			}
 		} catch (Throwable e) {
 //			e.printStackTrace();

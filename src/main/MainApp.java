@@ -156,7 +156,11 @@ public class MainApp {
 				boolean ans = functObject.addCar(licensePlate, purchaseDate, make, model, year, currMilage,
 						lastServiceDate, userInfoObject.email);
 				if (ans) {
-					customerLandingPage();
+					if (userInfoObject.role.equals("customer")) {
+						customerLandingPage();
+					} else if (userInfoObject.role.equals("receptionist")) {
+						receptionistLandingPage();
+					}
 				} else {
 					System.out.println("Wrong Input");
 				}
@@ -308,7 +312,7 @@ public class MainApp {
 
 	public static void customerServiceHistoryPage(String email) {
 		try {
-			ResultSet rs = functObject.getServiceHistory(userInfoObject.email);
+			ResultSet rs = functObject.getServiceHistory(email);
 			while (rs.next()) {
 				System.out.println("A. " + rs.getString("schedule_id"));
 				System.out.println("B. " + rs.getString("plate_no"));
