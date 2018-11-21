@@ -440,7 +440,6 @@ public class MainApp {
 						customerScheduleService(userInfoObject.email);
 					} else {
 						System.out.println("Choose a valid option");
-
 					}
 				}
 			} else if (selected_option.equals("2")) {

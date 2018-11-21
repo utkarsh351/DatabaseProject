@@ -1524,6 +1524,8 @@ public class utilitiesFunctions {
 								+ "' and Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
 						
 						if(rs4.next()) {
+							int cq = rs4.getInt("current_quantity");
+							int minTH = rs4.getInt("min_inventory_thold");
 							if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
 								int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
 								checkExistingOrders(rs4.getString("parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
@@ -1603,16 +1605,6 @@ public class utilitiesFunctions {
 								+ ",uncommited_current_quantity=uncommited_current_quantity - " + quant
 								+ " where service_center_id='" + supplier_id + "' and parts_to_make_id="
 								+ parts_to_make_id);
-						
-						ResultSet rs4 = connObject3.selectQuery("Select * from Inventory where Inventory.service_center_id='"+users_service_center_id 
-								+ "' and Inventory.parts_to_make_id="+parts_to_make_id);
-						
-						if(rs4.next()) {
-							if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
-								int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
-								checkExistingOrders(parts_to_make_id+"", users_service_center_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
-							}
-						}
 					}
 				}
 			}
