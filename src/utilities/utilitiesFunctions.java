@@ -125,12 +125,12 @@ public class utilitiesFunctions {
 				if (lastServiceDate.equals("")) {
 					ans = connObject.insertQuery(
 							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
-									+ "Values('" + licensePlate + "'," + currMilage + ",NULL, Date '" + purchaseDate
+									+ "Values('" + licensePlate + "','" + currMilage + "',NULL, Date '" + purchaseDate
 									+ "','" + vehicle_id + "','" + email + "','" + make + "')");
 				} else {
 					ans = connObject.insertQuery(
 							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
-									+ "Values('" + licensePlate + "'," + currMilage + ", Date '" + lastServiceDate
+									+ "Values('" + licensePlate + "','" + currMilage + "', Date '" + lastServiceDate
 									+ "',Date '" + purchaseDate + "','" + vehicle_id + "','" + email + "','" + make
 									+ "')");
 				}
