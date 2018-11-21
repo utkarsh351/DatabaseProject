@@ -359,14 +359,20 @@ public class utilitiesFunctions {
 						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
 								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
 								+ "'," + "'" + wage + "', 'hour'," + "'" + role + "'," + "'" + sc_id + "')");
+				System.out.println("Employee Added Successfully");
 			} else if (role.equalsIgnoreCase("receptionist")) {
-				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
-				connObject.insertQuery(
-						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
-								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
-								+ "'," + "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
+				ResultSet rs = connObject.selectQuery("Select count(*) as count from Employees where service_centre_id='"+sc_id+"' and role='receptionist'");
+				if(rs.next()) {
+					System.out.println("Receptionist already exists");
+				} else {
+					connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
+					connObject.insertQuery(
+							"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
+									+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
+									+ "'," + "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
+					System.out.println("Employee Added Successfully");
+				}
 			}
-			System.out.println("Employee Added Successfully");
 		} catch (Throwable e) {
 			System.out.println("Error occured!");
 		}
@@ -1524,6 +1530,8 @@ public class utilitiesFunctions {
 								+ "' and Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
 						
 						if(rs4.next()) {
+							int cq = rs4.getInt("current_quantity");
+							int minTH = rs4.getInt("min_inventory_thold");
 							if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
 								int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
 								checkExistingOrders(rs4.getString("parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
@@ -1603,16 +1611,6 @@ public class utilitiesFunctions {
 								+ ",uncommited_current_quantity=uncommited_current_quantity - " + quant
 								+ " where service_center_id='" + supplier_id + "' and parts_to_make_id="
 								+ parts_to_make_id);
-						
-						ResultSet rs4 = connObject3.selectQuery("Select * from Inventory where Inventory.service_center_id='"+users_service_center_id 
-								+ "' and Inventory.parts_to_make_id="+parts_to_make_id);
-						
-						if(rs4.next()) {
-							if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
-								int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
-								checkExistingOrders(parts_to_make_id+"", users_service_center_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
-							}
-						}
 					}
 				}
 			}
