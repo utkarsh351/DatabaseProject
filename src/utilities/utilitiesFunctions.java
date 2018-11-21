@@ -126,12 +126,12 @@ public class utilitiesFunctions {
 					ans = connObject.insertQuery(
 							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
 									+ "Values('" + licensePlate + "','" + currMilage + "',NULL, Date '" + purchaseDate
-									+ "','" + vehicle_id + "','" + email + "','" + make + "')");
+									+ "','" + vehicle_id + "','" + email + "','" + year + "')");
 				} else {
 					ans = connObject.insertQuery(
 							"Insert into Owns(plate_no, last_rec_mileage, last_repair_date, purchase_date, vehicle_id, email, car_make_year) "
 									+ "Values('" + licensePlate + "','" + currMilage + "', Date '" + lastServiceDate
-									+ "',Date '" + purchaseDate + "','" + vehicle_id + "','" + email + "','" + make
+									+ "',Date '" + purchaseDate + "','" + vehicle_id + "','" + email + "','" + year
 									+ "')");
 				}
 
@@ -585,7 +585,7 @@ public class utilitiesFunctions {
 		try {
 			rs = connObject.selectQuery(
 					"SELECT plate_no,last_rec_mileage, last_repair_date,O.email, schedule_id, start_time,mechanic_id,status,name,service_centre_id,"
-							+ "m_type,maintenance_schedule_id,repair_schedule_id,rid,end_time, "
+							+ "m_type,maintenance_schedule_id,repair_schedule_id,rid,end_time "
 							+ "FROM Owns O JOIN (SELECT * FROM (Select * from Schedule S "
 							+ "JOIN Employees E ON S.mechanic_id= E.eid) W "
 							+ "FULL OUTER JOIN Maintenance_schedule MS "

@@ -154,7 +154,7 @@ public class MainApp {
 			int option = s.nextInt();
 			if (option == 1) {
 				boolean ans = functObject.addCar(licensePlate, purchaseDate, make, model, year, currMilage,
-						lastServiceDate, userInfoObject.email);
+						lastServiceDate, email);
 				if (ans) {
 					if (userInfoObject.role.equals("customer")) {
 						customerLandingPage();
