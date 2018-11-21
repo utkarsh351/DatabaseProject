@@ -277,7 +277,7 @@ public class utilitiesFunctions {
 	public static ResultSet getEmployeeInfo(String email) {
 		try {
 			rs = connObject.selectQuery(
-					"SELECT eid,s_date,service_centre_id,email,E.addr AS e_addr,E.tel AS e_tel ,wage,freq,E.name AS e_name,SC.name AS sc_name FROM Employees E JOIN Service_center SC ON E.service_centre_id=SC.sc_id WHERE email='"
+					"SELECT E.role as role, eid,s_date,service_centre_id,email,E.addr AS e_addr,E.tel AS e_tel ,wage,freq,E.name AS e_name,SC.name AS sc_name FROM Employees E JOIN Service_center SC ON E.service_centre_id=SC.sc_id WHERE email='"
 							+ email + "'");
 			return rs;
 		} catch (Throwable e) {
