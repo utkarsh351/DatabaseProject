@@ -16,6 +16,7 @@ public class utilitiesFunctions {
 	static connection connObject = new connection();
 	static connection connObject2 = new connection();
 	static connection connObject3 = new connection();
+	static connection connObject4 = new connection();
 
 	public static boolean validUser(String username, String password) {
 		try {
@@ -358,14 +359,20 @@ public class utilitiesFunctions {
 						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
 								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
 								+ "'," + "'" + wage + "', 'hour'," + "'" + role + "'," + "'" + sc_id + "')");
+				System.out.println("Employee Added Successfully");
 			} else if (role.equalsIgnoreCase("receptionist")) {
-				connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
-				connObject.insertQuery(
-						"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
-								+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
-								+ "'," + "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
+				ResultSet rs = connObject.selectQuery("Select count(*) as count from Employees where service_centre_id='"+sc_id+"' and role='receptionist'");
+				if(rs.next()) {
+					System.out.println("Receptionist already exists");
+				} else {
+					connObject.insertQuery("Insert into Users(email, password) " + "Values('" + email + "','12345678')");
+					connObject.insertQuery(
+							"Insert into Employees(name, email, tel, s_date, wage, freq, role, service_centre_id) "
+									+ "Values('" + name + "'," + "'" + email + "'," + "'" + tel + "', Date " + "'" + s_date
+									+ "'," + "'" + wage + "', 'month'," + "'" + role + "'," + "'" + sc_id + "')");
+					System.out.println("Employee Added Successfully");
+				}
 			}
-			System.out.println("Employee Added Successfully");
 		} catch (Throwable e) {
 			System.out.println("Error occured!");
 		}
@@ -664,7 +671,7 @@ public class utilitiesFunctions {
 							+ "AND T3.quantity > Inv.uncommited_current_quantity");
 			while (rs.next()) {
 				hasMissingPart = true;
-				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage"));
+				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage") > rs.getInt("min_order_quantity") ? rs.getInt("shortage") : rs.getInt("min_order_quantity"));
 				if (compareTwoTimeStamps(t, t2) > 0) {
 					t = t2; // t2 time is 0:0:0 here
 				}
@@ -701,7 +708,7 @@ public class utilitiesFunctions {
 							+ "T3.quantity > Inv.UNCOMMITED_CURRENT_QUANTITY");
 			while (rs.next()) {
 				hasMissingPart = true;
-				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage"));
+				Timestamp t2 = checkExistingOrders(rs.getString("Parts_to_make_id"), scId, rs.getInt("shortage") > rs.getInt("min_order_quantity") ? rs.getInt("shortage") : rs.getInt("min_order_quantity"));
 				if (compareTwoTimeStamps(t, t2) > 0) {
 					t = t2;
 				}
@@ -709,6 +716,7 @@ public class utilitiesFunctions {
 			if (!hasMissingPart) {
 				t = null;
 			}
+			
 			return t;
 		} catch (Throwable e) {
 			System.out.println("Wrong values");
@@ -731,7 +739,7 @@ public class utilitiesFunctions {
 				return new java.sql.Timestamp(rs.getDate("order_expected_delivery_date").getTime());
 			}
 			rs = connObject2.selectQuery("SELECT service_center_id FROM Inventory I WHERE I.parts_to_make_id='"
-					+ parts_to_make_id + "' AND I.service_center_id <> '" + scId + "' AND I.current_quantity>1");
+					+ parts_to_make_id + "' AND I.service_center_id <> '" + scId + "' AND I.uncommited_current_quantity>I.min_inventory_thold+"+shortage);
 
 			if (rs.next()) {
 				supplierId = rs.getString("service_center_id");
@@ -1492,7 +1500,7 @@ public class utilitiesFunctions {
 						.selectQuery("Select * from Maintenance_schedule where maintenance_schedule_id='" + sid + "'");
 				if (rs2.next()) {
 					type_name = rs2.getString("m_type");
-					rs2 = connObject2.selectQuery(
+					rs2 = connObject4.selectQuery(
 							"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv, "
 									+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM, "
 									+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.m_type, T1.make FROM Involves I, "
@@ -1506,11 +1514,22 @@ public class utilitiesFunctions {
 									+ "T3.Parts_to_make_id = Inv.Parts_to_make_id AND "
 									+ "T11.sc_id=Inv.service_center_id");
 					while (rs2.next()) {
-						int ans = connObject3.insertQuery("Update Inventory SET current_quantity=current_quantity - "
-								+ rs2.getInt("quantity") + ",uncommited_current_quantity=uncommited_current_quantity - "
-								+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="
-								+ rs2.getInt("Parts_to_make_id") + " and " + "Inventory.service_center_id='"
-								+ users_service_centre_id + "'");
+						int ans = connObject3.insertQuery(
+								"Update Inventory SET current_quantity=current_quantity - " + rs2.getInt("quantity") 
+										+ ",uncommited_current_quantity=uncommited_current_quantity - " + rs2.getInt("quantity")
+										+ " where Inventory.parts_to_make_id=" + rs2.getInt("Parts_to_make_id")
+										+ " and " + "Inventory.service_center_id='" + users_service_centre_id + "'");
+						ResultSet rs4 = connObject3.selectQuery("Select * from Inventory where Inventory.service_center_id='"+users_service_centre_id 
+								+ "' and Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
+						
+						if(rs4.next()) {
+							int cq = rs4.getInt("current_quantity");
+							int minTH = rs4.getInt("min_inventory_thold");
+							if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
+								int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
+								checkExistingOrders(rs4.getString("parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
+							}
+						}
 					}
 
 				} else {
@@ -1518,7 +1537,7 @@ public class utilitiesFunctions {
 							.selectQuery("Select * from Repair_schedule where repair_schedule_id='" + sid + "'");
 					if (rs2.next()) {
 						int rid = rs2.getInt("rid");
-						rs2 = connObject2.selectQuery(
+						rs2 = connObject4.selectQuery(
 								"SELECT T11.sc_id, T3.part_id, T3.Parts_to_make_id, Inv.current_quantity, Inv.min_inventory_thold, Inv.min_order_quantity, T3.quantity FROM Inventory Inv,"
 										+ "(SELECT PM.Parts_to_make_id, T2.part_id, T2.quantity FROM Parts_to_make PM,"
 										+ "(SELECT I.part_id, I.quantity, I.vehicle_id, T1.make FROM Involves I, "
@@ -1538,6 +1557,15 @@ public class utilitiesFunctions {
 											+ rs2.getInt("quantity") + " where Inventory.parts_to_make_id="
 											+ rs2.getInt("Parts_to_make_id") + " and " + "Inventory.service_center_id='"
 											+ users_service_centre_id + "'");
+							ResultSet rs4 = connObject3.selectQuery("Select * from Inventory where Inventory.service_center_id='"+users_service_centre_id 
+									+ "' and Inventory.parts_to_make_id="+rs2.getInt("Parts_to_make_id"));
+							
+							if(rs4.next()) {
+								if(rs4.getInt("current_quantity")<rs4.getInt("min_inventory_thold")) {
+									int shortage = rs4.getInt("min_inventory_thold") - rs4.getInt("current_quantity");
+									checkExistingOrders(rs4.getString("parts_to_make_id"), users_service_centre_id, shortage > rs4.getInt("min_order_quantity") ? shortage : rs4.getInt("min_order_quantity"));
+								}
+							}
 						}
 					}
 				}
@@ -1568,10 +1596,9 @@ public class utilitiesFunctions {
 							+ ",uncommited_current_quantity=uncommited_current_quantity + " + quant
 							+ " where service_center_id='" + users_service_center_id + "' and parts_to_make_id="
 							+ parts_to_make_id);
-					ResultSet rs3 = connObject2.selectQuery(
-							"select S.service_center_provider_id from Service_center_order S where S.order_id="
-									+ orderId);
-					if (rs3.next()) {
+					
+					ResultSet rs3 = connObject2.selectQuery("select S.service_center_provider_id from Service_center_order S where S.order_id="+orderId);
+					if(rs3.next()) {
 						String supplier_id = rs3.getString("service_center_provider_id");
 						connObject2.insertQuery("Update Inventory Set current_quantity = current_quantity - " + quant
 								+ ",uncommited_current_quantity=uncommited_current_quantity - " + quant

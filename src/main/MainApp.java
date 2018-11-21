@@ -440,7 +440,6 @@ public class MainApp {
 						customerScheduleService(userInfoObject.email);
 					} else {
 						System.out.println("Choose a valid option");
-
 					}
 				}
 			} else if (selected_option.equals("2")) {
@@ -897,6 +896,7 @@ public class MainApp {
 		int option = s.nextInt();
 		if (option == 1) {
 			functObject.addEmpolyee(emp_name, addr, email, tel, role, s_date, wage, userInfoObject.service_centre_id);
+			managerLandingPage();
 		} else if (option == 2) {
 			managerLandingPage();
 		} else {
